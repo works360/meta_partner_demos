@@ -1,0 +1,177 @@
+/* BODY WRAPPER */
+.single-product-body {
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding-bottom: 120px; /* space for footer */
+  display: flex;
+  justify-content: center;
+}
+
+/* MAIN WRAPPER */
+.product-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 40px auto;
+  border-radius: 12px;
+  padding: 40px;
+}
+
+/* HEADER */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #007bff;
+  background: transparent;
+  border: 1.5px solid #007bff;
+  border-radius: 50px;
+  padding: 5px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+/* PRODUCT LAYOUT */
+.product-card {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* LEFT SECTION → SLIDER */
+.left-section {
+  width: 100%;
+}
+
+/* MAIN IMAGE */
+.main-image-box {
+  width: 88%;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+}
+
+.main-image {
+  width: 100%;
+  height: 420px;
+  object-fit: contain;
+}
+
+/* HORIZONTAL SLIDER */
+.gallery {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gallery::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.gallery .thumb {
+  flex: 0 0 auto;
+  width: 90px;
+  height: 90px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.gallery .thumb:hover {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.gallery .thumb.selected {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+/* RIGHT SECTION */
+.right-section h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.right-section {
+    margin-left: -62px;
+}
+
+.right-section p {
+  font-size: 16px;
+  margin: 10px 0;
+  color: #444;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1024px) {
+  .product-card {
+    grid-template-columns: 1fr;
+  }
+
+  .main-image {
+    height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .product-wrapper {
+    padding: 20px;
+  }
+
+  .main-image {
+    height: 280px;
+  }
+
+  .gallery .thumb {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-image {
+    height: 240px;
+  }
+}
+
+/* FIXED FOOTER */
+.fixed-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 15px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+}

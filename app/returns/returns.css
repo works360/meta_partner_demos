@@ -1,0 +1,128 @@
+/* ========= Returns Page Styling ========= */
+
+
+/* Full layout container */
+.returns-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Card styling */
+.returns-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 40px 60px;
+  width: 90%;
+  max-width: 1000px;
+}
+
+/* Title */
+.returns-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 35px;
+  background: linear-gradient(to right, #e7f0ff, #f8fbff);
+  padding: 15px 0;
+  border-radius: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Form layout */
+.returns-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 25px;
+}
+
+/* Label */
+.returns-form label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+/* Inputs & selects */
+.returns-form input,
+.returns-form select,
+.returns-form textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 15px;
+  background-color: #fff;
+  transition: 0.2s ease;
+}
+
+.returns-form input[readonly],
+.returns-form textarea[readonly] {
+  background-color: #f7f7f7;
+}
+
+/* Focus state */
+.returns-form input:focus,
+.returns-form select:focus,
+.returns-form textarea:focus {
+  outline: none;
+  border-color: #0057ff;
+  box-shadow: 0 0 0 2px rgba(0, 87, 255, 0.15);
+}
+
+/* Conditional sections */
+.returns-form .conditional {
+  grid-column: span 2;
+}
+
+/* Notes spans both columns */
+.returns-form textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* Submit button */
+.returns-form button[type="submit"] {
+  grid-column: span 2;
+  justify-self: center;
+  background: #0066FF;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 85px;
+  font-weight: 500;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.returns-form button:hover {
+  background: transparent;
+  border: 1px solid rgb(0, 102, 255);
+  color: rgb(0, 102, 255) !important;
+  scale: (1.05);
+  cursor: pointer;
+  box-shadow: rgba(0, 102, 255, 0.2) 0 4px 12px;
+  transition: 0.3s;
+}
+
+.returns-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.returns-footer {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 30px;
+  padding: 20px 0;
+  border-top: 1px solid #e5e7eb;
+}
