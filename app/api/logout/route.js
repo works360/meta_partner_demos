@@ -1,12 +1,10 @@
-// app/api/logout/route.js
 import { serialize } from "cookie";
 
 export async function GET() {
   const cookie = serialize("sessionUser", "", {
     httpOnly: true,
     path: "/",
-    maxAge: 0,                            // Expire immediately
-    expires: new Date(0),                 // Force delete
+    maxAge: 0,                 // DELETE COOKIE
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   });
@@ -18,10 +16,7 @@ export async function GET() {
     }),
     {
       status: 200,
-      headers: {
-        "Set-Cookie": cookie,
-        "Content-Type": "application/json",
-      },
+      headers: { "Set-Cookie": cookie },
     }
   );
 }

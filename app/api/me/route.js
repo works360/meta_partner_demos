@@ -1,8 +1,11 @@
+// app/api/me/route.js
+
+import { db } from "@/lib/db";
+
 export async function GET(req) {
   const session = req.cookies.get("sessionUser");
 
-  // ⬅️ FIX: If cookie is missing or empty → logged out
-  if (!session || !session.value) {
+  if (!session) {
     return new Response(JSON.stringify({ loggedIn: false }), { status: 200 });
   }
 
