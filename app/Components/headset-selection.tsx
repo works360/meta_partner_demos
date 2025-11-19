@@ -75,7 +75,7 @@ export default function HeadsetSelection() {
             <img src="/back-arrow.png" alt="Back" width={18} /> Back
           </button>
           <button className="stepper-nav-btn" onClick={handleNext}>
-            Next <img src="/Arrow.png" alt="Next" width={18} />
+            Next <img src="/arrow.png" alt="Next" width={18} />
           </button>
         </div>
         <div className="stepper">
