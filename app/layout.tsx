@@ -13,8 +13,6 @@ import { Navbar } from "./Components/navbar";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
-import KitSessionGuard from "./Components/KitSessionGuard";
-
 config.autoAddCss = false;
 
 const geist = Geist({ subsets: ["latin"] });
@@ -38,13 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geist.className} font-sans antialiased`}>
-        <Navbar />
-
-        {/* ✅ WRAPPED WITH SESSION GUARD */}
-        <KitSessionGuard>
+        <Navbar />       
           {children}
-        </KitSessionGuard>
-
+      
         <Footer />
         <Analytics />
 
