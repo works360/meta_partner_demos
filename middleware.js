@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import proxy from "./proxy.js";
-
 /**
  * 🔒 Route protection for Next.js 15+
  * This replaces middleware.js and runs before all requests.
