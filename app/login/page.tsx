@@ -74,7 +74,7 @@ export default function Login() {
           <div className="col-lg-6 col-md-12 d-flex flex-column justify-content-center" style={{ marginTop:"5rem", }}>
             <h1
               className="mb-4"
-              style={{ fontSize: "1.6rem", fontWeight: "700", }}
+              style={{ fontSize: "1.9rem", fontWeight: "600", }}
             >
               Welcome,{" "}
               <span style={{ color: "#0066FF" }}>Meta</span> Elite & Premier
@@ -89,7 +89,7 @@ export default function Login() {
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }}
                 >
                   Partner Portal / Resource Centre
@@ -98,7 +98,7 @@ export default function Login() {
             </div>
 
             <div className="mb-4">
-              <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
+              <p style={{ fontSize: "1.1rem", lineHeight: "0" }}>
                 Complete the Partner{" "}
                 <a
                   href="https://meta.highspot.com/signin#/training/learner"
@@ -106,7 +106,7 @@ export default function Login() {
                     
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }}
                 >
                   Meta Demo Certification Training
@@ -118,7 +118,7 @@ export default function Login() {
             </div>
 
             <div>
-              <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
+              <p style={{ fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "30px" }}>
                 Once both steps are complete, please reach out to your Meta
                 point of contact or{" "}
                 <a
@@ -126,7 +126,7 @@ export default function Login() {
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }}
                 >
                   submit a request through our Support Page
@@ -142,7 +142,7 @@ export default function Login() {
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "600",
+                    fontWeight: "700",
                   }}
                 >
                   Meta Demo Certification Training
@@ -161,8 +161,8 @@ export default function Login() {
                 borderRadius: "12px",
                 boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
                 marginTop:"3rem",
-                width:"90%",
-    
+                width:"75%",
+
               }}
             >
               <h2

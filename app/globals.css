@@ -1218,10 +1218,11 @@ section .container h1 {
 
 .step-line {
   height: 3px;
-  width: 80px;
+  width: 70px;
   background: #e9ecef;
   margin: 0 0.5rem;
   transition: all 0.3s ease;
+  margin-top: -27px;
 }
 
 .step-line.completed {
