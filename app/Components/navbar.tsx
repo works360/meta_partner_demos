@@ -55,7 +55,7 @@ export function Navbar() {
             <Link href="/create-kit" className="nav-item">Create Demo Kit</Link>
             <Link href="/returns" className="nav-item">Returns</Link>
             <Link href="/support" className="nav-item">Support</Link>
-            <Link href="/t&c" className="nav-item">T&C's</Link>
+            <Link href="/t&c" className="nav-item">T&C</Link>
             {/* <Link href="/dashboard" className="nav-item">360Dashboard</Link> */}
           </nav>
 

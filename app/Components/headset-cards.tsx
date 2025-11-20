@@ -54,7 +54,7 @@ export function HeadsetCards() {
 
                     <div className="learn-more-section" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       <div>
-                        <img src="/arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+                        <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
                       </div>
                       <Link href={`/single-product?id=${headset.productId}`} className="learn-more">
                         Learn More
