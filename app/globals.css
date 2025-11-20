@@ -151,6 +151,58 @@ h1.bannerhead {
     margin-bottom: 27px;
 }
 
+.create-kit {
+  background: #0066ff !important;
+  color: #fff !important;
+  border-radius: 30px;
+  padding: 10px 22px;
+  transition: transform 0.25s ease, 
+              background-color 0.25s ease, 
+              color 0.25s ease, 
+              box-shadow 0.25s ease,
+              border 0.25s ease;
+  transform: translateZ(0); 
+  display: inline-block;   
+}
+.create-kit:hover {
+  background: #fff !important;
+  color: #0066ff !important;
+  border: 1px solid #0066ff !important;
+  transform: scale(1.05) translateZ(0); /* <— smooth scaling */
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
+}
+.create-kit {
+  border: 1px solid transparent !important;   /* <— keeps size stable */
+}
+.create-kit:hover {
+  border: 1px solid #0066ff !important;       /* <— border now changes color only */
+}
+@media (min-width: 1400px) {
+  .banner .container {
+    max-width: 1600px !important; /* use more space on 1600p screens */
+  }
+}
+
+@media (min-width: 1700px) {
+  .banner .container {
+    max-width: 1800px !important; /* expand but keep centered */
+  }
+}
+
+@media (min-width: 1920px) {
+  .banner .container {
+    max-width: 2000px !important; /* perfect for full HD / 4K */
+  }
+}
+
+/* Optional: ensure content never touches edges */
+.banner .container {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+
+
+
 /* === Headset Section === */
 .headset-section {
   padding: 60px 0;
@@ -215,19 +267,29 @@ h1.bannerhead {
 
 .btn-get-started {
   background: #0066ff;
-  color: #ffffff;
-  padding: 10px 28px;
+  color: white;
+  padding: 10px 24px;
   border-radius: 30px;
-  font-weight: 600;
-  font-size: 15px;
+  display: inline-block;
+  border: 1px solid transparent;         /* prevents layout shift */
+  transition: 
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  transform: translateZ(0);
   text-decoration: none;
-  transition: all 0.3s ease;
 }
 
 .btn-get-started:hover {
-  background: #0052d6;
-  box-shadow: 0 4px 10px rgba(0, 102, 255, 0.3);
+  background: transparent;
+  color: #0066ff;
+  border: 1px solid #0066ff;             /* same border width */
+  transform: scale(1.05) translateZ(0);   /* smooth popup */
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
 }
+
 
 /* === Learn More === */
 .learn-more-section {
@@ -297,14 +359,44 @@ h1.bannerhead {
 /* --- Navbar container --- */
 .navbar-container {
   position: fixed;
-  top: 0;
   width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
   background-color: #fff;
   z-index: 1000;
   box-shadow: none;
   transition: all 0.3s ease;
   padding: 12px 0;
 }
+/* Default navbar behaves the same (do NOT change anything) */
+.navbar-container .container,
+.navbar-container .container-fluid {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* Widen navbar content for large screens: 1400px+ */
+@media (min-width: 1400px) {
+  .navbar-container .container {
+    max-width: 1600px !important;
+  }
+}
+
+/* Even wider for 1700px+ screens */
+@media (min-width: 1700px) {
+  .navbar-container .container {
+    max-width: 1800px !important;
+  }
+}
+
+/* Perfect layout for 1920px+ screens */
+@media (min-width: 1920px) {
+  .navbar-container .container {
+    max-width: 2000px !important;
+  }
+}
+
 
 .navbar-container.scrolled {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
@@ -1037,14 +1129,14 @@ section .container h1 {
 }
 
 .stepper-nav-btn {
-  color: #06f;
+  color: #2e2e2e;
     cursor: pointer;
     background: #fff;
-    border: 1.5px solid #06f;
+    border: 1.3px solid #06f;
     border-radius: 30px;
     align-items: center;
-    gap: .5rem;
-    padding: 5px 16px;
+    gap: .3rem;
+    padding: 7px 23px;
     font-weight: 500;
     transition: all .3s;
     display: flex;

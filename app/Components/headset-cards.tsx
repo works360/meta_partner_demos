@@ -48,7 +48,7 @@ export function HeadsetCards() {
 
                   {/* Buttons */}
                   <div className="headset-buttons">
-                    <Link href="/create-kit" className="btn-get-started">
+                    <Link href="/create-kit" className="btn-get-started ">
                       Get Started
                     </Link>
 
