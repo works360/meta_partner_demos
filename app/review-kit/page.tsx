@@ -17,6 +17,8 @@ interface App {
 }
 
 export default function ReviewKitPage() {
+  const router = useRouter(); // ⬅️ move this to the top
+
   const [headsets, setHeadsets] = useState<Headset[]>([]);
   const [offlineApps, setOfflineApps] = useState<App[]>([]);
   const [onlineApps, setOnlineApps] = useState<App[]>([]);
@@ -42,27 +44,6 @@ export default function ReviewKitPage() {
     setLoaded(true);
   }, []);
 
-  // 🗑️ Remove headset
-  const removeHeadset = (id: string) => {
-    const updated = headsets.filter((h) => h.id !== id);
-    setHeadsets(updated);
-    localStorage.setItem("selectedHeadsets", JSON.stringify(updated));
-  };
-
-  // ❌ Remove offline app
-  const removeOfflineApp = (id: string) => {
-    const updated = offlineApps.filter((a) => a.id !== id);
-    setOfflineApps(updated);
-    localStorage.setItem("selectedOfflineApps", JSON.stringify(updated));
-  };
-
-  // ❌ Remove online app
-  const removeOnlineApp = (id: string) => {
-    const updated = onlineApps.filter((a) => a.id !== id);
-    setOnlineApps(updated);
-    localStorage.setItem("selectedOnlineApps", JSON.stringify(updated));
-  };
-
   if (!loaded)
     return (
       <div className="flex justify-center items-center min-h-screen text-gray-500 text-lg">
@@ -70,12 +51,18 @@ export default function ReviewKitPage() {
       </div>
     );
 
-        const router = useRouter();
+  function handleNext(event: React.MouseEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    router.push("/checkout");
+  }
 
-        function handleNext(event: React.MouseEvent<HTMLButtonElement>): void {
-          event.preventDefault();
-          router.push("/checkout");
-        }
+  function removeOfflineApp(id: string): void {
+    throw new Error("Function not implemented.");
+  }
+
+  function removeOnlineApp(id: string): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div className="app-demos-page p-6 bg-gray-50 min-h-screen font-sans">
@@ -152,6 +139,10 @@ export default function ReviewKitPage() {
           {headsets.length > 0 ? (
             headsets.map((headset) => {
               const skuValue = headset.sku || "Not available";
+
+              function removeHeadset(id: string): void {
+                throw new Error("Function not implemented.");
+              }
 
               return (
                 <div

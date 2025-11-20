@@ -3,6 +3,11 @@
 import React, { useState, useEffect } from "react";
 
 export default function CheckoutPage() {
+
+  const [selectedHeadsets, setSelectedHeadsets] = useState<any[]>([]);
+  const [selectedOffline, setSelectedOffline] = useState<any[]>([]);
+  const [selectedOnline, setSelectedOnline] = useState<any[]>([]);
+  
   const [formData, setFormData] = useState({
     sales_executive: "",
     sales_email: "",
@@ -126,10 +131,16 @@ export default function CheckoutPage() {
       const result = await response.json();
 
       if (result.success) {
+        // ✅ Clear kit selection only on success
+        localStorage.removeItem("selectedHeadsets");
+        localStorage.removeItem("selectedOfflineApps");
+        localStorage.removeItem("selectedOnlineApps");
+
         localStorage.setItem("orderConfirmation", JSON.stringify(result.order));
         setSubmitStatus("✅ Order submitted successfully!");
         setTimeout(() => (window.location.href = "/thank-you"), 1500);
-      } else {
+      }
+      else {
         setSubmitStatus("❌ Failed: " + (result.message || "Unknown error"));
       }
     } catch (err) {
@@ -155,6 +166,32 @@ export default function CheckoutPage() {
       input.max = format(endDate);
     }
   }, []);
+
+  useEffect(() => {
+  if (typeof window === "undefined") return;
+
+  try {
+    const headsets = JSON.parse(localStorage.getItem("selectedHeadsets") || "[]");
+    const offline = JSON.parse(localStorage.getItem("selectedOfflineApps") || "[]");
+    const online = JSON.parse(localStorage.getItem("selectedOnlineApps") || "[]");
+
+    console.log("💾 Checkout loaded:", { headsets, offline, online });
+
+    // If nothing is selected, send user back to create-kit
+    if (!headsets.length && !offline.length && !online.length) {
+      alert("Your kit is empty. Please create a kit first.");
+      window.location.href = "/create-kit";
+      return;
+    }
+
+    setSelectedHeadsets(headsets);
+    setSelectedOffline(offline);
+    setSelectedOnline(online);
+  } catch (err) {
+    console.error("Error reading localStorage on checkout:", err);
+  }
+}, []);
+
 
   return (
     <div className="app-demos-page p-6 bg-gray-50 min-h-screen font-sans">
