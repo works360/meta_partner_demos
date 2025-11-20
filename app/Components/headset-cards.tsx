@@ -48,13 +48,13 @@ export function HeadsetCards() {
 
                   {/* Buttons */}
                   <div className="headset-buttons">
-                    <Link href="/create-kit" className="btn-get-started">
+                    <Link href="/create-kit" className="btn-get-started ">
                       Get Started
                     </Link>
 
                     <div className="learn-more-section" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       <div>
-                        <img src="/arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+                        <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
                       </div>
                       <Link href={`/single-product?id=${headset.productId}`} className="learn-more">
                         Learn More

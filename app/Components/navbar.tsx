@@ -36,7 +36,7 @@ export function Navbar() {
     <>
       {/* NAVBAR */}
       <header className={`navbar-container ${scrolled ? "scrolled" : ""}`}>
-        <div className="container d-flex justify-content-between align-items-center">
+  <div className="container d-flex justify-content-between align-items-center">
 
           {/* Logo */}
           <Link href="/" className="navbar-logo d-flex align-items-center">
@@ -56,7 +56,7 @@ export function Navbar() {
             <Link href="/returns" className="nav-item">Returns</Link>
             <Link href="/support" className="nav-item">Support</Link>
             <Link href="/t&c" className="nav-item">T&C</Link>
-            <Link href="/dashboard" className="nav-item">360Dashboard</Link>
+            {/* <Link href="/dashboard" className="nav-item">360Dashboard</Link> */}
           </nav>
 
           {/* Mobile Hamburger Button */}
