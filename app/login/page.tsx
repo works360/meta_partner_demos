@@ -74,7 +74,7 @@ export default function Login() {
           <div className="col-lg-6 col-md-12 d-flex flex-column justify-content-center" style={{ marginTop:"5rem", }}>
             <h1
               className="mb-4"
-              style={{ fontSize: "1.6rem", fontWeight: "700" }}
+              style={{ fontSize: "1.6rem", fontWeight: "700", }}
             >
               Welcome,{" "}
               <span style={{ color: "#0066FF" }}>Meta</span> Elite & Premier

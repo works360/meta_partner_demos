@@ -194,14 +194,17 @@ h1.bannerhead {
     max-width: 2000px !important; /* perfect for full HD / 4K */
   }
 }
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .banner .container {
+    max-width: 1240px !important;
+  }
+}
 
 /* Optional: ensure content never touches edges */
 .banner .container {
   padding-left: 40px !important;
   padding-right: 40px !important;
 }
-
-
 
 /* === Headset Section === */
 .headset-section {
@@ -261,14 +264,14 @@ h1.bannerhead {
 .headset-buttons {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 13px;
   flex-wrap: wrap;
 }
 
 .btn-get-started {
   background: #0066ff;
   color: white;
-  padding: 10px 24px;
+  padding: 8px 24px;
   border-radius: 30px;
   display: inline-block;
   border: 1px solid transparent;         /* prevents layout shift */
@@ -397,6 +400,13 @@ h1.bannerhead {
   }
 }
 
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .navbar-container .container {
+    max-width: 1200px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
 
 .navbar-container.scrolled {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
@@ -662,6 +672,7 @@ h1.bannerhead {
   text-decoration: none;
   color: #033c29;
   transition: color 0.3s ease;
+  text-decoration: underline;
 }
 
 .option-desc {
