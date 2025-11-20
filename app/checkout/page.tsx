@@ -2,12 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 
-export default function CheckoutPage() {
+import Select from "react-select";
 
-  const [selectedHeadsets, setSelectedHeadsets] = useState<any[]>([]);
-  const [selectedOffline, setSelectedOffline] = useState<any[]>([]);
-  const [selectedOnline, setSelectedOnline] = useState<any[]>([]);
-  
+const useCaseOptions = [
+  { value: "Creativity & Design", label: "Creativity & Design" },
+  { value: "Learning & Training", label: "Learning & Training" },
+  { value: "Meetings & Collaboration", label: "Meetings & Collaboration" },
+  { value: "Building Community", label: "Building Community" },
+  { value: "Education", label: "Education" },
+  { value: "Other", label: "Other" },
+]
+
+export default function CheckoutPage() {
   const [formData, setFormData] = useState({
     sales_executive: "",
     sales_email: "",
@@ -131,16 +137,10 @@ export default function CheckoutPage() {
       const result = await response.json();
 
       if (result.success) {
-        // ✅ Clear kit selection only on success
-        localStorage.removeItem("selectedHeadsets");
-        localStorage.removeItem("selectedOfflineApps");
-        localStorage.removeItem("selectedOnlineApps");
-
         localStorage.setItem("orderConfirmation", JSON.stringify(result.order));
         setSubmitStatus("✅ Order submitted successfully!");
         setTimeout(() => (window.location.href = "/thank-you"), 1500);
-      }
-      else {
+      } else {
         setSubmitStatus("❌ Failed: " + (result.message || "Unknown error"));
       }
     } catch (err) {
@@ -166,32 +166,6 @@ export default function CheckoutPage() {
       input.max = format(endDate);
     }
   }, []);
-
-  useEffect(() => {
-  if (typeof window === "undefined") return;
-
-  try {
-    const headsets = JSON.parse(localStorage.getItem("selectedHeadsets") || "[]");
-    const offline = JSON.parse(localStorage.getItem("selectedOfflineApps") || "[]");
-    const online = JSON.parse(localStorage.getItem("selectedOnlineApps") || "[]");
-
-    console.log("💾 Checkout loaded:", { headsets, offline, online });
-
-    // If nothing is selected, send user back to create-kit
-    if (!headsets.length && !offline.length && !online.length) {
-      alert("Your kit is empty. Please create a kit first.");
-      window.location.href = "/create-kit";
-      return;
-    }
-
-    setSelectedHeadsets(headsets);
-    setSelectedOffline(offline);
-    setSelectedOnline(online);
-  } catch (err) {
-    console.error("Error reading localStorage on checkout:", err);
-  }
-}, []);
-
 
   return (
     <div className="app-demos-page p-6 bg-gray-50 min-h-screen font-sans">
@@ -247,7 +221,7 @@ export default function CheckoutPage() {
           <div className="mb-4 p-3 border rounded">
             <div className="row g-3">
               <div className="col-md-6">
-                <label className="form-label">Sales Executive *</label>
+                <label className="form-label">Sales Executive</label>
                 <input
                   name="sales_executive"
                   type="text"
@@ -259,7 +233,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div className="col-md-6">
-                <label className="form-label">Sales Executive Email *</label>
+                <label className="form-label">Sales Executive Email</label>
                 <input
                   name="sales_email"
                   type="email"
@@ -271,7 +245,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div className="col-md-6">
-                <label className="form-label">Reseller *</label>
+                <label className="form-label">Reseller</label>
                 <input
                   name="reseller"
                   type="text"
@@ -292,7 +266,7 @@ export default function CheckoutPage() {
         <div className="mb-4 p-3 border rounded">
           <div className="row g-3">
             <div className="col-md-6">
-              <label className="form-label">Demo Purpose *</label>
+              <label className="form-label">Demo Purpose</label>
               <select
                 name="demo_purpose"
                 className="form-select"
@@ -309,7 +283,7 @@ export default function CheckoutPage() {
 
             <div className="col-md-6">
               <label className="form-label">
-                Expected number of demos to be done? *
+                Expected number of demos to be done?
               </label>
               <input
                 name="expected_demos"
@@ -324,7 +298,7 @@ export default function CheckoutPage() {
             {/* Intended Audience */}
             {showDemoAudience && (
               <div className="col-md-6">
-                <label className="form-label">Intended demo audience? *</label>
+                <label className="form-label">Intended demo audience?</label>
                 <select
                   name="intended_audience"
                   className="form-select"
@@ -343,7 +317,7 @@ export default function CheckoutPage() {
             {showMeetingFields && (
               <>
                 <div className="col-md-6">
-                  <label className="form-label">Company *</label>
+                  <label className="form-label">Company</label>
                   <input
                     name="company"
                     type="text"
@@ -355,7 +329,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label">Expected Opportunity Size *</label>
+                  <label className="form-label">Expected Opportunity Size</label>
                   <input
                     name="opportunity_size"
                     type="number"
@@ -367,7 +341,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label">Revenue Opportunity Size *</label>
+                  <label className="form-label">Revenue Opportunity Size</label>
                   <input
                     name="revenue_size"
                     type="number"
@@ -378,27 +352,30 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Expected Use Case(s) *</label>
-                  <select
-                    name="use_case"
-                    multiple
-                    size={6}
-                    className="form-select"
-                    required
-                    onChange={handleUseCaseChange}
-                  >
-                    <option value="Creativity & Design">Creativity & Design</option>
-                    <option value="Learning & Training">Learning & Training</option>
-                    <option value="Meetings & Collaboration">Meetings & Collaboration</option>
-                    <option value="Building Community">Building Community</option>
-                    <option value="Education">Education</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
+              
+
+<div className="col-md-6">
+  <label className="form-label">Expected Use Case(s)</label>
+
+  <Select
+    isMulti
+    name="use_case"
+    options={useCaseOptions}
+    className="basic-multi-select"
+    classNamePrefix="select"
+    onChange={(selected) =>
+      setFormData((prev) => ({
+        ...prev,
+        use_case: selected.map((s) => s.value),
+      }))
+    }
+  />
+</div>
+
+
 
                 <div className="col-md-6">
-                  <label className="form-label">Is the deal registered with Meta? *</label>
+                  <label className="form-label">Is the deal registered with Meta?</label>
                   <select
                     name="meta_registered"
                     className="form-select"
@@ -431,7 +408,7 @@ export default function CheckoutPage() {
             )}
 
             <div className="col-md-6">
-              <label className="form-label">Expected Return Date *</label>
+              <label className="form-label">Expected Return Date</label>
               <input
                 name="return_date"
                 id="return_date"
@@ -452,7 +429,7 @@ export default function CheckoutPage() {
         <div className="mb-4 p-3 border rounded">
           <div className="row g-3">
             <div className="col-md-6">
-              <label className="form-label">Point of Contact *</label>
+              <label className="form-label">Point of Contact</label>
               <input
                 name="contact"
                 type="text"
@@ -463,7 +440,7 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">Email *</label>
+              <label className="form-label">Email</label>
               <input
                 name="contact_email"
                 type="email"
@@ -474,7 +451,7 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">Address *</label>
+              <label className="form-label">Address</label>
               <input
                 name="address"
                 type="text"
@@ -485,7 +462,7 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">State *</label>
+              <label className="form-label">State</label>
             <select
               name="state"
               className="form-select"
@@ -548,7 +525,7 @@ export default function CheckoutPage() {
             </select>
             </div>
             <div className="col-md-6">
-              <label className="form-label">City *</label>
+              <label className="form-label">City</label>
               <input
                 name="city"
                 type="text"
@@ -559,7 +536,7 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">Zip *</label>
+              <label className="form-label">Zip</label>
               <input
                 name="zip"
                 type="text"
@@ -593,7 +570,7 @@ export default function CheckoutPage() {
     <a 
       href="/t&c" 
       target="_blank"
-      style={{ color: "#0066ff", textDecoration: "none", fontWeight: 500 }}
+      style={{ color: "#0066ff", textDecoration: "underline", fontWeight: 500 }}
     >
       Terms & Conditions
     </a>.
