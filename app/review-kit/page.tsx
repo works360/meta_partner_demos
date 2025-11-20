@@ -56,13 +56,27 @@ export default function ReviewKitPage() {
     router.push("/checkout");
   }
 
-  function removeOfflineApp(id: string): void {
-    throw new Error("Function not implemented.");
-  }
+ // 🟦 Remove Headset
+function removeHeadset(id: string) {
+  const updated = headsets.filter((h) => h.id !== id);
+  setHeadsets(updated);
+  localStorage.setItem("selectedHeadsets", JSON.stringify(updated));
+}
 
-  function removeOnlineApp(id: string): void {
-    throw new Error("Function not implemented.");
-  }
+// 🟦 Remove Offline App
+function removeOfflineApp(id: string) {
+  const updated = offlineApps.filter((a) => a.id !== id);
+  setOfflineApps(updated);
+  localStorage.setItem("selectedOfflineApps", JSON.stringify(updated));
+}
+
+// 🟦 Remove Online App
+function removeOnlineApp(id: string) {
+  const updated = onlineApps.filter((a) => a.id !== id);
+  setOnlineApps(updated);
+  localStorage.setItem("selectedOnlineApps", JSON.stringify(updated));
+}
+
 
   return (
     <div className="app-demos-page p-6 bg-gray-50 min-h-screen font-sans">
@@ -140,10 +154,7 @@ export default function ReviewKitPage() {
             headsets.map((headset) => {
               const skuValue = headset.sku || "Not available";
 
-              function removeHeadset(id: string): void {
-                throw new Error("Function not implemented.");
-              }
-
+            
               return (
                 <div
                   key={headset.id}
@@ -201,14 +212,11 @@ export default function ReviewKitPage() {
                         }}
                       />
                       <i
-                        className="fa-solid fa-trash"
-                        style={{
-                          color: "#bbb",
-                          cursor: "pointer",
-                        }}
-                        title="Remove headset"
-                        onClick={() => removeHeadset(headset.id)}
-                      ></i>
+  className="fa-solid fa-trash"
+  style={{ color: "#bbb", cursor: "pointer" }}
+  title="Remove headset"
+  onClick={() => removeHeadset(headset.id)}
+></i>
                     </div>
                   </div>
                 </div>
@@ -255,18 +263,13 @@ export default function ReviewKitPage() {
                   >
                     {app.name}
                     <button
-                      onClick={() => removeOfflineApp(app.id)}
-                      style={{
-                        color: "#999",
-                        cursor: "pointer",
-                        border: "none",
-                        background: "transparent",
-                        fontSize: "0.9rem",
-                      }}
-                      title="Remove app"
-                    >
-                      ✕
-                    </button>
+  onClick={() => removeOfflineApp(app.id)}
+  style={{ color: "#999", cursor: "pointer", border: "none", background: "transparent", fontSize: "0.9rem" }}
+  title="Remove app"
+>
+  ✕
+</button>
+
                   </span>
                 ))}
               </div>
@@ -310,18 +313,13 @@ export default function ReviewKitPage() {
                   >
                     {app.name}
                     <button
-                      onClick={() => removeOnlineApp(app.id)}
-                      style={{
-                        color: "#777",
-                        cursor: "pointer",
-                        border: "none",
-                        background: "transparent",
-                        fontSize: "0.9rem",
-                      }}
-                      title="Remove app"
-                    >
-                      ✕
-                    </button>
+  onClick={() => removeOnlineApp(app.id)}
+  style={{ color: "#777", cursor: "pointer", border: "none", background: "transparent", fontSize: "0.9rem" }}
+  title="Remove app"
+>
+  ✕
+</button>
+
                   </span>
                 ))}
               </div>
