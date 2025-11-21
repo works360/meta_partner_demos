@@ -56,7 +56,7 @@ export function HeadsetCards() {
                       <div>
                         <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
                       </div>
-                      <Link href={`/single-product?id=${headset.productId}`} className="learn-more">
+                      <Link href={`/single-product?id=${headset.productId}`} className="learn-more hover-underline-animation left">
                         Learn More
                       </Link>
                     </div>

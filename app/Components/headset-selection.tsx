@@ -197,19 +197,18 @@ export default function HeadsetSelection() {
                       {headset.specs}
                     </p>
 
-               <a
-  href={`/single-product?id=${headset.id}`}
-  style={{
-    color: "#0064e0",
-    textDecoration: "none",
-    fontWeight: "600",
-    fontSize: "0.95rem",
-    cursor: "pointer",
-    alignSelf: "flex-start",
-  }}
->
-  Learn More →
-</a>
+               <a className="hover-underline-animation left" 
+                  href={`/single-product?id=${headset.id}`}
+                  style={{
+                    color: "#0066ff",
+                    textDecoration: "none",
+                    fontWeight: "500",
+                    fontSize: "0.95rem",
+                    cursor: "pointer",
+                    alignSelf: "flex-start",
+                    }}>
+                    Learn More <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+                </a>
 
                   </div>
 

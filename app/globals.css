@@ -670,13 +670,13 @@ h1.bannerhead {
 .option-title {
   font-size: 22px;
   font-weight: 600;
-  color: #033c29;
+  color: #141414;
   margin-bottom: 12px;
 }
 
 .option-link {
   text-decoration: none;
-  color: #033c29;
+  color: #1a1a1a;
   transition: color 0.3s ease;
   text-decoration: underline;
 }
@@ -1065,15 +1065,39 @@ section .container h1 {
 
 /* Learn More link */
 .learn-more {
-  color: #0064e0;
+  color: #0066FF;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.95rem;
 }
-.learn-more:hover {
-  text-decoration: underline;
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
 }
 
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #0066FF;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+}
+
+.hover-underline-animation.left::after {
+  transform-origin: bottom right;
+}
+
+.hover-underline-animation.left:hover::after {
+  transform-origin: bottom left;
+}
 /* Responsive */
 @media (max-width: 1024px) {
   .headset-header h1 {
