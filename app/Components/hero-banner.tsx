@@ -30,26 +30,26 @@ export function HeroBanner() {
     </div>
 
       <div className="d-md-none mobilebanner text-center text-white">
-  <div className="container conmobile">
-    <img
-      src="/Meta-logo-white.png"
-      alt="Meta Logo"
-      className="meta-logo"
-    />
-    <h1 className="bannerhead">
-      Let's Put Mixed
-      <br />
-      Reality To Work
-    </h1>
-    <p className="banner-text">
-      Bring your business to life with fully immersive content and blended experiences, supported by security and
-      privacy features you can trust. Create a Demo Kit for your prospect meeting, event or training session.
-    </p>
-    <Link href="/create-kit" className="btn btn-primary">
-      Create Demo Kit
-    </Link>
-  </div>
-</div>
+        <div className="container conmobile">
+          <img
+            src="/Meta-logo-white.png"
+            alt="Meta Logo"
+            className="meta-logo"
+          />
+          <h1 className="bannerhead">
+            Let's Put Mixed
+            <br />
+            Reality To Work
+          </h1>
+          <p className="banner-text">
+            Bring your business to life with fully immersive content and blended experiences, supported by security and
+            privacy features you can trust. Create a Demo Kit for your prospect meeting, event or training session.
+          </p>
+          <Link href="/create-kit" className="btn btn-primary">
+            Create Demo Kit
+          </Link>
+        </div>
+      </div>
     </>
   )
 }
