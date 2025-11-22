@@ -104,10 +104,7 @@ export default function SingleProductPage() {
           <div className="right-section">
              <h2>{product.product_name}</h2>
             <p><strong>SKU:</strong> {product.product_sku}</p>
-            <p><strong>Quantity:</strong> {product.product_qty}</p>
-            <p><strong>Total Inventory:</strong> {product.total_inventory}</p>
-            <p><strong>Usecase:</strong> {product.usecase}</p>
-            <p><strong>Level:</strong> {product.level}</p>
+         
             <p><strong>Description:</strong> {product.description}</p>
           </div>
         </div>
