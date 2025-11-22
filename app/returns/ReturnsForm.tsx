@@ -37,16 +37,21 @@ export default function ReturnsForm() {
     fetch("/api/me")
       .then((res) => res.json())
       .then((data) => {
-        if (data.loggedIn) setUserEmail(data.user.email);
-      });
+        // /api/me returns { loggedIn, email, ... }
+        if (data?.loggedIn && data?.email) {
+          setUserEmail(data.email);
+        }
+      })
+      .catch((err) => console.error("Error fetching /api/me:", err));
   }, []);
 
   // Fetch user orders
   useEffect(() => {
     if (!userEmail) return;
-    fetch(`/api/returns/orders?email=${userEmail}`)
+    fetch(`/api/returns/orders?email=${encodeURIComponent(userEmail)}`)
       .then((res) => res.json())
-      .then(setOrders);
+      .then(setOrders)
+      .catch((err) => console.error("Error fetching orders:", err));
   }, [userEmail]);
 
   // Fetch order details
@@ -90,23 +95,34 @@ export default function ReturnsForm() {
       notes,
     };
 
-    const res = await fetch("/api/returns/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch("/api/returns/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    const json = await res.json();
-    alert(json.success ? "✅ Return submitted successfully!" : `❌ ${json.error}`);
-    setLoading(false);
+      const json = await res.json();
+      alert(
+        json.success
+          ? "✅ Return submitted successfully!"
+          : `❌ ${json.error || "Something went wrong"}`
+      );
+    } catch (err) {
+      console.error("Error submitting return:", err);
+      alert("❌ Network error while submitting return.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    
     <form onSubmit={handleSubmit} className="returns-form">
       {/* Submitted By */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Submitted by:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Submitted by:
+        </label>
         <input
           type="email"
           value={userEmail}
@@ -117,7 +133,9 @@ export default function ReturnsForm() {
 
       {/* Order Reference Number */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Order Reference Number:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Order Reference Number:
+        </label>
         <select
           value={selectedOrder}
           onChange={(e) => setSelectedOrder(e.target.value)}
@@ -135,7 +153,9 @@ export default function ReturnsForm() {
 
       {/* Products Demod */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Products Demod:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Products Demod:
+        </label>
         <textarea
           value={details.products || ""}
           readOnly
@@ -145,7 +165,9 @@ export default function ReturnsForm() {
 
       {/* Return From */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Initiate Return Order from:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Initiate Return Order from:
+        </label>
         <input
           type="text"
           value={details.address || ""}
@@ -156,7 +178,9 @@ export default function ReturnsForm() {
 
       {/* Ship To */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Ship Return Order to:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Ship Return Order to:
+        </label>
         <input
           type="text"
           value="15345 Anacapa Rd Unit A Victorville, CA 92392"
@@ -167,7 +191,9 @@ export default function ReturnsForm() {
 
       {/* Demo Purpose */}
       <div>
-        <label className="block text-[15px] font-medium mb-1">Demo Purpose:</label>
+        <label className="block text-[15px] font-medium mb-1">
+          Demo Purpose:
+        </label>
         <select
           value={demoPurpose}
           onChange={(e) => setDemoPurpose(e.target.value)}
@@ -183,89 +209,98 @@ export default function ReturnsForm() {
 
       {/* Conditional Sections */}
       {demoPurpose === "Prospect/Meeting" && (
-  <div className="conditional">
-    <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-      <div>
-        <label>Actual # of demos done:</label>
-        <input
-          type="number"
-          value={demoCount}
-          onChange={(e) => setDemoCount(e.target.value)}
-        />
-      </div>
+        <div className="conditional">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+            <div>
+              <label>Actual # of demos done:</label>
+              <input
+                type="number"
+                value={demoCount}
+                onChange={(e) => setDemoCount(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-2.5"
+              />
+            </div>
 
-      <div>
-        <label>Is this opportunity still ongoing?</label>
-        <select
-          value={isOngoing}
-          onChange={(e) => setIsOngoing(e.target.value)}
-        >
-          <option value="">Select</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
-      </div>
-    </div>
+            <div>
+              <label>Is this opportunity still ongoing?</label>
+              <select
+                value={isOngoing}
+                onChange={(e) => setIsOngoing(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-2.5"
+              >
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
 
-    {isOngoing === "yes" && (
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
-        <div>
-          <label>How many units is your customer looking to purchase?</label>
+          {isOngoing === "yes" && (
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
+              <div>
+                <label>
+                  How many units is your customer looking to purchase?
+                </label>
+                <input
+                  type="number"
+                  value={unitCount}
+                  onChange={(e) => setUnitCount(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2.5"
+                />
+              </div>
+
+              <div>
+                <label>Estimated Opportunity Value</label>
+                <input
+                  type="text"
+                  value={estimatedValue}
+                  onChange={(e) => setEstimatedValue(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2.5"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
+            <div>
+              <label>Is this opportunity/deal now registered?</label>
+              <select
+                value={isRegistered}
+                onChange={(e) => setIsRegistered(e.target.value)}
+                className="w-full border border-gray-300 rounded-md p-2.5"
+              >
+                <option value="">Select</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            {isRegistered === "yes" && (
+              <div>
+                <label>If yes, provide deal reg number</label>
+                <input
+                  type="text"
+                  value={dealRegNumber}
+                  onChange={(e) => setDealRegNumber(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2.5"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {(demoPurpose === "Event" || demoPurpose === "Other") && (
+        <div className="conditional">
+          <label>How many demos did you actually do?</label>
           <input
             type="number"
-            value={unitCount}
-            onChange={(e) => setUnitCount(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Estimated Opportunity Value</label>
-          <input
-            type="text"
-            value={estimatedValue}
-            onChange={(e) => setEstimatedValue(e.target.value)}
-          />
-        </div>
-      </div>
-    )}
-
-    <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
-      <div>
-        <label>Is this opportunity/deal now registered?</label>
-        <select
-          value={isRegistered}
-          onChange={(e) => setIsRegistered(e.target.value)}
-        >
-          <option value="">Select</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
-      </div>
-
-      {isRegistered === "yes" && (
-        <div>
-          <label>If yes, provide deal reg number</label>
-          <input
-            type="text"
-            value={dealRegNumber}
-            onChange={(e) => setDealRegNumber(e.target.value)}
+            value={eventDemoCount}
+            onChange={(e) => setEventDemoCount(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2.5"
           />
         </div>
       )}
-    </div>
-  </div>
-)}
-
-      {(demoPurpose === "Event" || demoPurpose === "Other") && (
-  <div className="conditional">
-    <label>How many demos did you actually do?</label>
-    <input
-      type="number"
-      value={eventDemoCount}
-      onChange={(e) => setEventDemoCount(e.target.value)}
-    />
-  </div>
-)}
 
       {/* Notes */}
       <div className="conditional">
