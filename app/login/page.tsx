@@ -74,7 +74,7 @@ export default function Login() {
           <div className="col-lg-6 col-md-12 d-flex flex-column justify-content-center" style={{ marginTop:"5rem", }}>
             <h1
               className="mb-4"
-              style={{ fontSize: "1.9rem", fontWeight: "600", }}
+              style={{ fontSize: "1.9rem", fontWeight: "500", fontFamily: "poppins", letterSpacing: "-0.10rem" }}
             >
               Welcome,{" "}
               <span style={{ color: "#0066FF" }}>Meta</span> Elite & Premier
@@ -82,14 +82,14 @@ export default function Login() {
             </h1>
 
             <div className="mb-4">
-              <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins", }}>
                 Register on our{" "}
                 <a
                   href="https://view-su2.highspot.com/viewer/78dd45d6490a4b2f7294515b1762ef2f"
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "700",
+                    fontWeight: "600",
                   }}
                 >
                   Partner Portal / Resource Centre
@@ -98,7 +98,7 @@ export default function Login() {
             </div>
 
             <div className="mb-4">
-              <p style={{ fontSize: "1.1rem", lineHeight: "0" }}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins"}}>
                 Complete the Partner{" "}
                 <a
                   href="https://meta.highspot.com/signin#/training/learner"
@@ -106,19 +106,19 @@ export default function Login() {
                     
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "700",
+                    fontWeight: "600",
                   }}
                 >
                   Meta Demo Certification Training
                 </a>
               </p>
-              <p>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins", lineHeight: "0.6"}}>
                 (a short 10-15 minute module) available on the Partner Portal
               </p>
             </div>
 
             <div>
-              <p style={{ fontSize: "1.1rem", lineHeight: "1.6", marginBottom: "30px" }}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins", paddingBottom: "1.5rem"}}>
                 Once both steps are complete, please reach out to your Meta
                 point of contact or{" "}
                 <a
@@ -126,7 +126,7 @@ export default function Login() {
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "700",
+                    fontWeight: "600",
                   }}
                 >
                   submit a request through our Support Page
@@ -135,14 +135,14 @@ export default function Login() {
               </p>
             </div>
             <div>
-              <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins"}}>
                 Only users that have completed the{" "}
                 <a
                   href="https://meta.highspot.com/signin#/training/learner"
                   style={{
                     color: "#0066FF",
                     textDecoration: "underline",
-                    fontWeight: "700",
+                    fontWeight: "600",
                   }}
                 >
                   Meta Demo Certification Training
@@ -165,7 +165,7 @@ export default function Login() {
 
               }}
             >
-              <h2
+              {/* <h2
                 className="mb-4"
                 style={{
                   fontSize: "1.5rem",
@@ -174,7 +174,7 @@ export default function Login() {
                 }}
               >
                 Login
-              </h2>
+              </h2> */}
 
               <form onSubmit={handleLogin}>
                 <div className="mb-4">
@@ -250,23 +250,12 @@ export default function Login() {
                     Keep me signed in
                   </label>
                 </div>
-
-                <button
-                  type="submit"
-                  className="btn w-100 mb-3"
-                  style={{
-                    backgroundColor: "#0066FF",
-                    color: "white",
-                    padding: "0.75rem",
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                    border: "none",
-                    borderRadius: "50px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Login
+                  
+              <div style={{ textAlign: "center"}}>
+                <button type="submit" className="login-popup-btn mb-3">
+                    Login
                 </button>
+              </div>
 
                 <div style={{ textAlign: "center" }}>
                   <a
