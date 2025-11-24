@@ -70,14 +70,12 @@ export function Navbar() {
           {/* Desktop User Dropdown */}
           <div className="navbar-user d-none d-md-block">
             <button
-              className="user-icon-btn"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
+              className="user-icon-btn">
               <i className="bi bi-person"></i>
               <i className="bi bi-caret-down-fill dropdown-arrow"></i>
             </button>
 
-            {dropdownOpen && (
+           
               <div className="user-dropdown">
                 {!isLoggedIn ? (
                   <Link href="/login" className="dropdown-item">Login</Link>
@@ -89,7 +87,7 @@ export function Navbar() {
                   </>
                 )}
               </div>
-            )}
+            
           </div>
         </div>
       </header>

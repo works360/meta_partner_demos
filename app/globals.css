@@ -154,13 +154,13 @@ h1.bannerhead {
   border-radius: 30px !important;
   padding: 10px 30px !important;
   border: 1px solid transparent !important;
-  display: inline-block;
+  display: inline-block !important;
   transition: 
     background-color 0.25s ease,
     color 0.25s ease,
     border 0.25s ease,
     transform 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease !important;
 }
 
 .create-kit:hover {
@@ -467,6 +467,14 @@ h1.bannerhead {
 .user-icon-btn .dropdown-arrow {
   font-size: 12px;
   margin-left: 4px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.user-icon-btn:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+.user-icon-btn.active .dropdown-arrow {
+  transform: rotate(180deg);
 }
 
 /* ====== User Dropdown (Hover Based) ====== */
@@ -543,8 +551,8 @@ h1.bannerhead {
 
 /* Hover states */
 .dropdown-item:hover {
-  background-color: #0064E0 !important;
-  color: #fff !important;
+  background-color: #f3f7ff !important;
+  color: #007bff !important;
 }
 
 /* Logout color */
@@ -801,8 +809,8 @@ section .container h1 {
   position: absolute;
   right: 0;
   bottom: 0;
-  background: #0066ff;
-  color: #ffffff;
+  background: #f3f7ff;
+  color: #007bff;
   width: 50px;
   height: 50px;
   border-radius: 15px 0 20px 0;
@@ -881,7 +889,7 @@ section .container h1 {
 .main-heading {
   color: #2e2e2e;
   font-size: 28px;
-  font-weight: 400;
+  font-weight: 500;
   padding: 0px 180px 0 0px;
   line-height: 1.3;
 }
@@ -1070,32 +1078,44 @@ section .container h1 {
   font-weight: 500;
   font-size: 0.95rem;
 }
+/* Base wrapper (no underline here) */
 .hover-underline-animation {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   position: relative;
+  text-decoration: none;
 }
 
-.hover-underline-animation::after {
+/* Apply underline animation ONLY to span.text */
+.hover-underline-animation .underline-text {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-underline-animation .underline-text::after {
   content: '';
   position: absolute;
   width: 100%;
   transform: scaleX(0);
   height: 2px;
-  bottom: 0;
+  bottom: -2px;
   left: 0;
   background-color: #0066FF;
   transition: transform 0.25s ease-out;
 }
 
-.hover-underline-animation:hover::after {
+/* Hover expands underline */
+.hover-underline-animation:hover .underline-text::after {
   transform: scaleX(1);
 }
 
-.hover-underline-animation.left::after {
+/* LEFT origin animation */
+.hover-underline-animation.left .underline-text::after {
   transform-origin: bottom right;
 }
 
-.hover-underline-animation.left:hover::after {
+.hover-underline-animation.left:hover .underline-text::after {
   transform-origin: bottom left;
 }
 /* Responsive */
@@ -1170,17 +1190,18 @@ section .container h1 {
 }
 
 .stepper-nav-btn {
-  color: #2e2e2e;
-    cursor: pointer;
+  color: #383838;
+    cursor: pointer !important;
     background: #fff;
     border: 1.3px solid #06f;
     border-radius: 30px;
     align-items: center;
-    gap: .3rem;
-    padding: 7px 23px;
+    gap: .2rem !important;
+    padding: 7px 20px;
     font-weight: 500;
     transition: all .3s;
     display: flex;
+    font-size: 15px !important;
 }
 
 .stepper-nav-btn:hover {

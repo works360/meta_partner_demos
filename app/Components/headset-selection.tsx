@@ -197,7 +197,8 @@ export default function HeadsetSelection() {
                       {headset.specs}
                     </p>
 
-               <a className="hover-underline-animation left" 
+               <a
+                  className="hover-underline-animation left"
                   href={`/single-product?id=${headset.id}`}
                   style={{
                     color: "#0066ff",
@@ -206,9 +207,12 @@ export default function HeadsetSelection() {
                     fontSize: "0.95rem",
                     cursor: "pointer",
                     alignSelf: "flex-start",
-                    }}>
-                    Learn More <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+                  }}
+                >
+                  <span className="underline-text">Learn More</span>
+                  <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
                 </a>
+
                   </div>
                   
                   {/* Divider */}

@@ -15,9 +15,6 @@ export function TechnologyPartners() {
         <div className="row flex flex-col md:flex-row items-center w-full">
           {/* Left text section */}
           <div className="col-lg-6 col-md-7 text-section w-full md:w-1/2 md:text-left px-4">
-            <h6 className="subheading text-blue-600 uppercase text-sm sm:text-base tracking-widest mb-3">
-              TECHNOLOGY PARTNERS
-            </h6>
             <h2 className="main-heading text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug max-w-xl mx-auto md:mx-0">
               Solve your most important organizational challenges with our ecosystem of technology partners
             </h2>
