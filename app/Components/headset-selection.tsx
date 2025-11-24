@@ -209,9 +209,8 @@ export default function HeadsetSelection() {
                     }}>
                     Learn More <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
                 </a>
-
                   </div>
-
+                  
                   {/* Divider */}
                   {!isLast && (
                     <div
