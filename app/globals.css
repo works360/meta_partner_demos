@@ -335,17 +335,14 @@ h1.bannerhead {
   font-size: 18px;
 }
 
-.learn-more {
+/* .learn-more {
   color: #000;
   text-decoration: none;
   font-weight: 400;
   font-size: 15px;
   transition: color 0.3s ease;
-}
+} */
 
-.learn-more:hover {
-  color: #0066ff;
-}
 
 /* === Responsive === */
 @media (max-width: 991px) {
