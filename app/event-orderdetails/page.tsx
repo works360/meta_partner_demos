@@ -51,7 +51,7 @@ export default function EventOrderDetailsPage() {
   // ✅ Fetch orders
   const fetchOrders = async () => {
     try {
-      const res = await fetch("/api/event-orders");
+      const res = await fetch("/api/event-orders/");
       const data = await res.json();
       setOrders(data);
     } catch (err) {

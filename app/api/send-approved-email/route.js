@@ -138,15 +138,15 @@ export async function GET(req) {
                 <table width="100%" style="table-layout:fixed;">
                   <tr>
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
                                   line-height:36px;font-weight:700;display:inline-block;">1</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Approved</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">New Order</div>
                     </td>
 
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
                                   line-height:36px;font-weight:700;">2</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Preparing Shipment</div>
+                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Approved</div>
                     </td>
 
                     <td align="center">
@@ -158,10 +158,13 @@ export async function GET(req) {
                     <td align="center">
                       <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
                                   line-height:36px;font-weight:700;">4</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Delivered</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Returned</div>
                     </td>
                   </tr>
                 </table>
+                <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
+                  <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">Approved</span>
+                </div>
               </td>
             </tr>
 

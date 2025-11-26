@@ -106,73 +106,16 @@ export async function GET(req) {
             <!-- TITLE -->
             <tr>
               <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;">
-                <div style="font-size:20px;font-weight:700;color:#b91c1c;">
-                  Your Order #${orderId} Was Not Approved
+                <div style="font-size:16px;font-weight:700;color:#fff;">
+                  Hello ${salesExec},
                 </div>
-                <div style="margin-top:6px;font-size:12px;color:#6b7b86;">
-                  Placed on ${placedOn}
+                <div style="margin-top:6px;font-size:14px;color:#6b7b86;">
+                Meta Partner Demos Order #${orderId} has been Rejected<br><br>
+                 Order #${orderId} (${placedOn})
                 </div>
               </td>
             </tr>
-
-            <!-- INTRO -->
-            <tr>
-              <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;line-height:20px;color:#334b59;">
-                Hello <strong>${shipName}</strong>,<br><br>
-
-                We regret to inform you that your demo kit request for 
-                <strong>Order #${orderId}</strong> has been 
-                <strong style="color:#b91c1c;">rejected</strong>.<br><br>
-
-                This decision may be due to missing information, eligibility requirements, inventory limits, 
-                or additional verification needed.<br><br>
-
-                If you believe this was in error or wish to make changes, please reach out to us at:<br>
-                <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">
-                  support@metapartnerdemos.com
-                </a>.
-              </td>
-            </tr>
-
-            <!-- ORDER PROGRESS -->
-            <tr>
-              <td style="padding:24px 24px 4px;">
-                <div style="font-size:16px;font-weight:700;color:#0b1f2a;text-align:center;margin-bottom:30px;">
-                  Order Progress
-                </div>
-
-                <table width="100%" style="table-layout:fixed;">
-                  <tr>
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#b91c1c;color:#fff;
-                                  line-height:36px;font-weight:700;">✕</div>
-                      <div style="font-size:12px;color:#b91c1c;margin-top:6px;">
-                        Rejected
-                      </div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e5e7eb;color:#9ca3af;
-                                  line-height:36px;font-weight:700;">2</div>
-                      <div style="font-size:12px;color:#9ca3af;margin-top:6px;">Review Halted</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e5e7eb;color:#9ca3af;
-                                  line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;color:#9ca3af;margin-top:6px;">Not Shipped</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e5e7eb;color:#9ca3af;
-                                  line-height:36px;font-weight:700;">4</div>
-                      <div style="font-size:12px;color:#9ca3af;margin-top:6px;">Closed</div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-
+            
             <!-- REQUESTOR DETAILS -->
             <tr>
               <td style="padding:14px 24px 0;">

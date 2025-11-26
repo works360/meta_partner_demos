@@ -7,6 +7,15 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+function formatDate(date) {
+  if (!date) return "N/A";
+  const d = new Date(date);
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${month}/${day}/${year}`;
+}
+
 // Escape helper
 function esc(s) {
   if (!s) return "";
@@ -18,6 +27,123 @@ function esc(s) {
     .replace(/'/g, "&#39;");
 }
 
+// =======================================================
+// ⭐ RESTORE PRODUCT STOCK WHEN ORDER IS RETURNED
+// =======================================================
+async function restoreStock(orderId) {
+  const [items] = await db.query(
+    `SELECT product_id, quantity 
+     FROM order_items 
+     WHERE order_id = ?`,
+    [orderId]
+  );
+
+  for (const item of items) {
+    await db.query(
+      `UPDATE products 
+       SET product_qty = product_qty + ? 
+       WHERE id = ?`,
+      [item.quantity, item.product_id]
+    );
+  }
+
+  console.log(`Stock restored for order #${orderId}`);
+}
+
+// =======================================================
+// PRODUCT HELPERS
+// =======================================================
+async function fetchItemsForOrder(orderId) {
+  const sql = `
+    SELECT p.product_name, p.category, p.product_sku, oi.quantity
+    FROM order_items oi
+    JOIN products p ON p.id = oi.product_id
+    WHERE oi.order_id = ?
+  `;
+  const [rows] = await db.query(sql, [orderId]);
+  return rows;
+}
+
+function buildHeadsetAndAppGroups(items) {
+  const headsets = [];
+  const onlineApps = [];
+  const offlineApps = [];
+
+  for (const row of items) {
+    const name = row.product_name || "";
+    const cat = row.category || "";
+    const sku = row.product_sku || "—";
+    const qty = Number(row.quantity || 0);
+
+    if (!name || qty <= 0) continue;
+
+    if (cat === "Headset") {
+      headsets.push({ name, sku, qty });
+    } else if (cat === "Online Apps") {
+      onlineApps.push(name);
+    } else if (cat === "Offline Apps") {
+      offlineApps.push(name);
+    } else {
+      onlineApps.push(name);
+    }
+  }
+
+  return { headsets, onlineApps, offlineApps };
+}
+
+function buildChipList(apps) {
+  const chipStyle =
+    "display:inline-block;margin:4px 0;padding:4px;font-size:12px;";
+  const separator = '<span style="font-size:12px;">, </span>';
+
+  if (!apps || apps.length === 0)
+    return '<span style="color:#6b7b86;">None</span>';
+
+  return apps
+    .map((app) => `<span style="${chipStyle}">${esc(app)}</span>`)
+    .join(separator);
+}
+
+function buildHeadsetRows(headsets) {
+  if (!headsets || headsets.length === 0) {
+    return `<tr><td style="padding:16px;color:#7b8a95;">No headsets</td><td></td></tr>`;
+  }
+
+  let html = "";
+
+  headsets.forEach((h, idx) => {
+    const name = esc(h.name);
+    const sku = esc(h.sku);
+    const qty = Number(h.qty);
+
+    html += `
+      <tr>
+        <td style="padding:16px;">
+          <div style="border-left:3px solid Blue;padding-left:10px;">
+            <div style="font-weight:700;font-size:17px;">${name}</div>
+            <div style="font-size:11px;color:#7b8a95;">SKU: ${sku}</div>
+          </div>
+        </td>
+        <td align="right" style="padding:16px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:#eef3ff;
+                      color:#0b1f2a;line-height:34px;text-align:center;font-weight:700;">
+            ${qty}
+          </div>
+        </td>
+      </tr>
+    `;
+
+    if (idx < headsets.length - 1) {
+      html += `<tr><td colspan="2" style="height:1px;background:#eef3f7;"></td></tr>`;
+    }
+  });
+
+  return html;
+}
+
+// =======================================================
+// MAIN API ROUTE
+// =======================================================
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -42,7 +168,14 @@ export async function GET(req) {
       );
     }
 
-    // Prepare fields
+    // ====================================================
+    // ⭐ RESTORE STOCK HERE ⭐
+    // ====================================================
+    await restoreStock(orderId);
+
+    // ====================================================
+    // PREPARE EMAIL DATA
+    // ====================================================
     const shipName = esc(order.contact);
     const shipEmail = esc(order.contact_email);
     const shipAddress = esc(
@@ -69,9 +202,20 @@ export async function GET(req) {
     const usecase = esc(order.use_case || "");
     const metaReg = esc(order.meta_registered || "");
     const dealId = esc(order.deal_id || "");
-
+    const returnDate = formatDate(order.return_date);
     const returnTracking = esc(order.return_tracking || "");
     const returnTrackingLink = esc(order.return_tracking_link || "#");
+
+    // PRODUCTS
+    const items = await fetchItemsForOrder(orderId);
+    const { headsets, onlineApps, offlineApps } =
+      buildHeadsetAndAppGroups(items);
+
+    const headsetsHtml = buildHeadsetRows(headsets);
+    const offlineList = buildChipList(offlineApps);
+    const onlineList = buildChipList(onlineApps);
+
+
 
     // ===========================================================
     // FULL HTML TEMPLATE (MATCHING APPROVED + REJECTED LAYOUT)
@@ -114,23 +258,9 @@ export async function GET(req) {
               </td>
             </tr>
 
-            <!-- INTRO -->
-            <tr>
-              <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;line-height:20px;color:#334b59;">
-                Hi <strong>${shipName}</strong>,<br><br>
+            
 
-                We are pleased to confirm that your demo kit for 
-                <strong>Order #${orderId}</strong> has been successfully 
-                <strong style="color:#059669;">returned</strong>.<br><br>
-
-                Thank you for your participation in the Meta Partner Demos program. 
-                Your involvement helps us provide a best-in-class experience.<br><br>
-
-                Below is your return information and order summary.
-              </td>
-            </tr>
-
-            <!-- ORDER PROGRESS -->
+                <!-- ORDER PROGRESS -->
             <tr>
               <td style="padding:24px 24px 4px;">
                 <div style="font-size:16px;font-weight:700;color:#0b1f2a;text-align:center;margin-bottom:30px;">
@@ -140,32 +270,45 @@ export async function GET(req) {
                 <table width="100%" style="table-layout:fixed;">
                   <tr>
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
-                                  line-height:36px;font-weight:700;">1</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Approved</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;display:inline-block;">1</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">New Order</div>
                     </td>
 
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
                                   line-height:36px;font-weight:700;">2</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Shipped</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Approved</div>
+                    </td>
+
+                    <td align="center">
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">3</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Shipped</div>
                     </td>
 
                     <td align="center">
                       <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
-                                  line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Delivered</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#059669;color:#fff;
                                   line-height:36px;font-weight:700;">4</div>
-                      <div style="font-size:12px;color:#059669;margin-top:6px;">Returned</div>
+                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">Returned</div>
                     </td>
                   </tr>
                 </table>
+                <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
+                  <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">Returned</span>
+                </div>
               </td>
             </tr>
+
+             <!-- INTRO -->
+            <tr>
+              <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;line-height:20px;color:#334b59;">
+                Hello <strong>${salesExec}</strong>,<br><br>
+                Your order has been returned. 
+                
+              </td>
+            </tr>
+
 
             <!-- RETURN TRACKING -->
             <tr>
@@ -190,6 +333,62 @@ export async function GET(req) {
                 </table>
               </td>
             </tr>
+
+            <!-- ORDER DETAILS -->
+<tr>
+  <td style="padding:12px 24px 2px;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" 
+           style="border:1px solid #e7edf2;border-radius:12px;overflow:hidden;">
+
+      <tr>
+        <td colspan="2" style="padding:12px 16px;font-weight:700;font-size:18px;">
+          Order Details
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:12px 16px;font-weight:700;border-bottom:1px solid #eeeeee;">
+          Product
+        </td>
+        <td align="right" style="padding:12px 16px;font-weight:700;border-bottom:1px solid #eeeeee;">
+          Quantity
+        </td>
+      </tr>
+
+      <!-- HEADSETS -->
+      ${headsetsHtml}
+
+      <!-- APPS BOXES -->
+      <tr>
+        <td colspan="2" style="padding:0 16px 16px;">
+
+          <!-- OFFLINE APPS -->
+          <table width="100%" style="margin:8px 0;border:1px solid #dbe7ff;border-radius:10px;">
+            <tr>
+              <td style="padding:10px 12px;">
+                <div style="font-weight:700;font-size:13px;color:#274b8f;margin-bottom:6px;">Pre-Packaged App Demos</div>
+                ${offlineList}
+              </td>
+            </tr>
+          </table>
+
+          <!-- ONLINE APPS -->
+          <table width="100%" style="margin:0;border:1px solid #d6f5e5;border-radius:10px;">
+            <tr>
+              <td style="padding:10px 12px;">
+                <div style="font-weight:700;font-size:13px;color:#274b8f;margin-bottom:6px;">Managed App Store Demos</div>
+                ${onlineList}
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+
+    </table>
+  </td>
+</tr>
+
 
             <!-- REQUESTOR DETAILS -->
             <tr>
@@ -310,8 +509,8 @@ export async function GET(req) {
         <td colspan="2" style="padding:12px 16px;">
           <div style="font-size:12px;color:#6b7b86;">Return Date</div>
           <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-            ${esc(order.return_date || "N/A")}
-          </div>
+         ${returnDate}
+         </div>
         </td>
       </tr>
 
@@ -394,7 +593,8 @@ export async function GET(req) {
   </body>
 </html>`;
 
-    // SEND EMAIL
+
+ // SEND EMAIL
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
       port: 465,
@@ -404,6 +604,8 @@ export async function GET(req) {
         pass: "Sherlock.holmes1",
       },
     });
+
+
 
     const logoPath = path.join(process.cwd(), "public", "meta-logo.png");
 

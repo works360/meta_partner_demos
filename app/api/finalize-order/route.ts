@@ -114,36 +114,42 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               </td>
             </tr>
 
-                <!-- ORDER PROGRESS -->
+             <!-- ORDER PROGRESS -->
             <tr>
-              <td style="padding:18px 24px 8px;">
-                <div style="text-align:center;font-size:16px;font-weight:700;margin-bottom:30px;">
+              <td style="padding:24px 24px 4px;">
+                <div style="font-size:16px;font-weight:700;color:#0b1f2a;text-align:center;margin-bottom:30px;">
                   Order Progress
                 </div>
 
-                <table width="100%">
+                <table width="100%" style="table-layout:fixed;">
                   <tr>
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">1</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">New Order</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
+                                  line-height:36px;font-weight:700;display:inline-block;">1</div>
+                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">New Order</div>
                     </td>
+
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">2</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">2</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Approved</div>
+                    </td>
+
+                    <td align="center">
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">3</div>
                       <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Shipped</div>
                     </td>
+
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;margin-top:6px;color:#0b1f2a;">Feedback Due</div>
-                    </td>
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">4</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">4</div>
                       <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Returned</div>
                     </td>
                   </tr>
                 </table>
-
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
-                  <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">10-Day Overdue</span>
+                  <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">New Order</span>
                 </div>
               </td>
             </tr>
@@ -151,9 +157,9 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
             <!-- MESSAGE FOR USER -->
           <tr>
             <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;color:#334b59;line-height:20px;">
-              Your demo order has been successfully submitted.<br>
-              Our warehouse team will prepare and ship your kit shortly.<br><br>
-              You will receive shipping and tracking updates once the order is dispatched.
+              We have received your order on<a href="http://metapartnerdemos.vercel.app" 
+                 style="font-weight:700;color:#0066ff;"> www.metapartnerdemos.com </a>Order will be processed by our team and shipped within the next 7 days. You will receive a shipping email with tracking details once the order ships.<br>
+              Feel free to contact us at<a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;"> support@metapartnerdemos.com </a>if you have any questions. 
             </td>
           </tr>
 
@@ -403,12 +409,25 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
 
 
 
-
-            <!-- FOOTER -->
+  <!-- FOOTER -->
             <tr>
-              <td style="padding:20px;text-align:center;font-size:12px;color:#6b7b86;background:#f1f6ff;">
-                This is an automated order confirmation.<br>
-                Need help? <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">support@metapartnerdemos.com</a>
+              <td style="padding:14px 24px;background:#f1f6ff;border-top:1px solid #eef3f7;">
+                <table width="100%">
+                  <tr>
+                    <td style="font-size:12px;color:#6b7b86;">
+                      Need help? Contact us:<br>
+                      <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">
+                        support@metapartnerdemos.com
+                      </a>
+                    </td>
+                    <td align="right" style="font-size:12px;color:#6b7b86;">
+                      Visit our website:<br>
+                      <a href="https://www.metapartnerdemos.com" style="color:#2563eb;">
+                        www.metapartnerdemos.com
+                      </a>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
 
@@ -449,34 +468,40 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               </td>
             </tr>
 
-                <!-- ORDER PROGRESS -->
+             <!-- ORDER PROGRESS -->
             <tr>
-              <td style="padding:18px 24px 8px;">
-                <div style="text-align:center;font-size:16px;font-weight:700;margin-bottom:30px;">
+              <td style="padding:24px 24px 4px;">
+                <div style="font-size:16px;font-weight:700;color:#0b1f2a;text-align:center;margin-bottom:30px;">
                   Order Progress
                 </div>
 
-                <table width="100%">
+                <table width="100%" style="table-layout:fixed;">
                   <tr>
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">1</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">New Order</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
+                                  line-height:36px;font-weight:700;display:inline-block;">1</div>
+                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">New Order</div>
                     </td>
+
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">2</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">2</div>
+                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Approved</div>
+                    </td>
+
+                    <td align="center">
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">3</div>
                       <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Shipped</div>
                     </td>
+
                     <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;margin-top:6px;color:#0b1f2a;">Feedback Due</div>
-                    </td>
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;line-height:36px;font-weight:700;color:#7b8a95;">4</div>
+                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
+                                  line-height:36px;font-weight:700;">4</div>
                       <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Returned</div>
                     </td>
                   </tr>
                 </table>
-
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
                   <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">New Order</span>
                 </div>
@@ -486,7 +511,12 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
           <!-- ADMIN TEXT -->
           <tr>
             <td style="padding:22px 24px;font-size:14px;color:#334b59;line-height:20px;border-bottom:1px solid #eef3f7;">
-              You have received a new order from metapartnerdemos.com.Please click on the<a href="http://metapartnerdemos.vercel.app/kit-updateorder?orderid=${orderId}" 
+              Hello Team,<br><br>
+              You have received a new order from<a href="http://metapartnerdemos.vercel.app" 
+                 style="font-weight:700;color:#0066ff;">
+                metapartnerdemos.com.
+              </a>
+              Please click on the<a href="http://metapartnerdemos.vercel.app/kit-updateorder?orderid=${orderId}" 
                  style="font-weight:700;color:#0066ff;">
                link
               </a> to Review and Approve/Reject.
@@ -743,9 +773,23 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
 
             <!-- FOOTER -->
             <tr>
-              <td style="padding:20px;text-align:center;font-size:12px;color:#6b7b86;background:#f1f6ff;">
-                This is an automated order confirmation.<br>
-                Need help? <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">support@metapartnerdemos.com</a>
+              <td style="padding:14px 24px;background:#f1f6ff;border-top:1px solid #eef3f7;">
+                <table width="100%">
+                  <tr>
+                    <td style="font-size:12px;color:#6b7b86;">
+                      Need help? Contact us:<br>
+                      <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">
+                        support@metapartnerdemos.com
+                      </a>
+                    </td>
+                    <td align="right" style="font-size:12px;color:#6b7b86;">
+                      Visit our website:<br>
+                      <a href="https://www.metapartnerdemos.com" style="color:#2563eb;">
+                        www.metapartnerdemos.com
+                      </a>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
 

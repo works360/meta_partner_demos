@@ -1,24 +1,17 @@
 import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const connection = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      password: "",
-      database: "metapartnerdemos",
-    });
-
-    // ✅ Only fetch "Event" and "Other" demo purposes
-    const [orders] = await connection.execute(
+    // Fetch only Event & Other
+    const [orders] = await db.execute(
       "SELECT * FROM orders WHERE demo_purpose IN ('Event', 'Other') ORDER BY id DESC"
     );
 
     const results: any[] = [];
 
     for (const order of orders as any[]) {
-      const [items] = await connection.execute(
+      const [items] = await db.execute(
         `SELECT p.product_name, p.category, oi.quantity
          FROM order_items oi
          JOIN products p ON oi.product_id = p.id
@@ -32,7 +25,6 @@ export async function GET() {
       });
     }
 
-    await connection.end();
     return NextResponse.json(results);
   } catch (error) {
     console.error("❌ Fetch Event Orders Error:", error);
