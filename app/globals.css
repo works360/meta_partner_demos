@@ -1,6 +1,10 @@
 /* your custom global styles below */
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 body {
-  font-family: 'Poppins';
+  font-family: "Poppins", sans-serif;
 }
 .poppins-thin {
   font-family: "Poppins", sans-serif;
