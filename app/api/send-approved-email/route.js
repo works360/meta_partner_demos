@@ -107,7 +107,7 @@ export async function GET(req) {
             <tr>
               <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;">
                 <div style="font-size:20px;font-weight:700;color:#0b1f2a;">
-                  Your Order #${orderId} Has Been Approved
+                  Approved Order #${orderId}
                 </div>
                 <div style="margin-top:6px;font-size:12px;color:#6b7b86;">
                   Placed on ${placedOn}
@@ -115,20 +115,7 @@ export async function GET(req) {
               </td>
             </tr>
 
-            <!-- INTRO -->
-            <tr>
-              <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;line-height:20px;color:#334b59;">
-                Hi <strong>${shipName}</strong>,<br><br>
-                We are pleased to inform you that your demo kit order <strong>#${orderId}</strong> 
-                has been <strong style="color:#2563eb;">approved</strong>.<br><br>
-                Our team will now begin preparing your demo kit for shipment. You will receive 
-                another email as soon as your kit is dispatched.<br><br>
-                For any questions, feel free to contact us at 
-                <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">support@metapartnerdemos.com</a>.
-              </td>
-            </tr>
-
-            <!-- ORDER PROGRESS -->
+                      <!-- ORDER PROGRESS -->
             <tr>
               <td style="padding:24px 24px 4px;">
                 <div style="font-size:16px;font-weight:700;color:#0b1f2a;text-align:center;margin-bottom:30px;">
@@ -165,6 +152,15 @@ export async function GET(req) {
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
                   <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">Approved</span>
                 </div>
+              </td>
+            </tr>
+
+            <!-- INTRO -->
+            <tr>
+              <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;font-size:14px;line-height:20px;color:#334b59;">
+                Your order on<a href="https://www.metapartnerdemos.com" style="color:#2563eb;">metapartnerdemos.com/ </a>has been approved. Once your package ships, you will receive a shipping email with tracking information for your order.<br>
+                If you have any questions please contact us at <a href="mailto:support@metapartnerdemos.com" style="color:#2563eb;">support@metapartnerdemos.com</a>.
+              
               </td>
             </tr>
 
