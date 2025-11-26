@@ -304,7 +304,7 @@ export default function ManagedAppsPage() {
                 <span className="block sm:inline"> {error}</span>
               </div>
             )}
-
+            
             {!isLoading && !error && filteredApps.length > 0 && (
               <div className="apps-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {filteredApps.map((app) => (
