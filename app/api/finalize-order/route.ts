@@ -100,7 +100,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               <table width="100%">
                 <tr>
                   <td><img src="cid:logoimg" width="170"></td>
-                  <td align="right" style="font-size:20px;font-weight:700;">Order Confirmation — #${orderId}</td>
+                  <td align="right" style="font-size:20px;font-weight:700;">New Order #${orderId} | Meta Partner Demos</td>
                 </tr>
               </table>
             </td>
@@ -454,7 +454,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               <table width="100%">
                 <tr>
                   <td><img src="cid:logoimg" width="170"></td>
-                  <td align="right" style="font-size:20px;font-weight:700;">New Order — #${orderId}</td>
+                  <td align="right" style="font-size:20px;font-weight:700;">New Order — #${orderId} | Meta Partner Demos</td>
                 </tr>
               </table>
             </td>
