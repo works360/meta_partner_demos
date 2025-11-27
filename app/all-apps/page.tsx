@@ -34,21 +34,23 @@ export default function AllAppsPage() {
   const [error, setError] = useState<string | null>(null);
   const [filterSource, setFilterSource] = useState<"all" | AppSource>("all");
 
-  // Helper: normalize usecase → array<string>
   const normalizeUseCase = (value: RawAppItem["usecase"]): string[] => {
     if (!value) return [];
-    if (Array.isArray(value)) return value;
+    if (Array.isArray(value)) return value.filter(Boolean).map((v) => String(v).trim()).filter((v) => v.length > 0);
     if (typeof value === "string" && value.trim().length > 0) {
-      return value.split(",").map((v) => v.trim());
+      return value
+        .split(/[•,;]+/)
+        .map((v) => v.trim())
+        .filter((v) => v.length > 0);
     }
     return [];
   };
 
-  // Helper: build label line under app name
   const buildLabel = (useCase: string[]): string => {
     if (!useCase || useCase.length === 0) return "Apps";
-    // Match your screenshot style: "Apps • Productivity"
-    return `Apps • ${useCase[0]}`;
+    const parts = useCase.filter(Boolean).map((s) => s.trim()).filter((s) => s.length > 0);
+    const top = parts.slice(0, 2).join(" • ");
+    return `Apps • ${top}`;
   };
 
   useEffect(() => {
@@ -144,7 +146,7 @@ export default function AllAppsPage() {
         </header>
 
         {/* Filter Bar (Show all / Offline / Online) */}
-        <section className="flex items-center justify-between flex-wrap gap-4 mb-6">
+        <section className="flex items-center justify-between flex-wrap gap-4 mb-8">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <span style={{ fontWeight: 500, color: "#555" }}>FILTER BY:</span>
             <select
@@ -152,6 +154,7 @@ export default function AllAppsPage() {
               onChange={(e) =>
                 setFilterSource(e.target.value as "all" | AppSource)
               }
+              aria-label="Filter apps by source"
               className="border border-gray-300 rounded-full px-4 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               style={{ minWidth: "140px" }}
             >
@@ -190,7 +193,7 @@ export default function AllAppsPage() {
             {filteredApps.map((app) => (
               <div
                 key={`${app.source}-${app.id}`}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden cursor-default"
+                className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden cursor-default"
               >
                 {/* Image */}
                 <div className="h-40 bg-gray-100 overflow-hidden flex items-center justify-center">
@@ -229,6 +232,9 @@ export default function AllAppsPage() {
             No apps found for the current filter.
           </div>
         )}
+        <footer className="mt-12 text-center text-xs text-gray-500">
+          © 2025 All Rights Reserved. Design by Works360
+        </footer>
       </div>
     </div>
   );
