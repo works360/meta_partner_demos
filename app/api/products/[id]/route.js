@@ -56,26 +56,26 @@ export async function PUT(req, context) {
     }
 
     // ✅ SQL update (fixed syntax + id)
-    await db.execute(
-      `UPDATE products
-       SET product_name=?, product_sku=?, product_qty=?, total_inventory=?, description=?, category=?, usecase=?, level=?, wifi=?,
-           image=COALESCE(?, image), gallery_images=COALESCE(?, gallery_images)
-       WHERE id=?`,
-      [
-        product_name,
-        product_sku,
-        product_qty,
-        total_inventory,
-        description,
-        category,
-        usecase,
-        level,
-        wifi,
-        filename,
-        galleryNames.join(","),
-        id,
-      ]
-    );
+await db.execute(
+  `UPDATE products
+   SET product_name=?, product_sku=?, product_qty=?, total_inventory=?, description=?, category=?, usecase=?, level=?, wifi=?,
+       image=COALESCE(?, image), gallery_images=COALESCE(?, gallery_images)
+   WHERE id=?`,
+  [
+    product_name,
+    product_sku,
+    product_qty,
+    total_inventory,
+    description,
+    category,
+    usecase,
+    level,
+    wifi,
+    filename,
+    galleryNames.join(","),
+    id,
+  ]
+);
 
     return NextResponse.json({ success: true, message: "✅ Product updated successfully" });
   } catch (error) {

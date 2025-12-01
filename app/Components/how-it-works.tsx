@@ -10,7 +10,7 @@ import {
 
 export function HowItWorks() {
   const steps = [
-    { id: 1, number: "1", title: "Login after Training & Registration", description: "Login to the Meta Partner Demos portal once you’ve completed the Meta Demo Certification Training and have been registered.", icon: faFileLines },
+    { id: 1, number: "1", title: "Login after Registration", description: "Login to the Meta Partner Demos portal once you’ve completed the Meta Demo Certification Training and have been registered.", icon: faFileLines },
     { id: 2, number: "2", title: "Pick Headset", description: "Create a 30-day demo kit; start by choosing a Meta Quest headset that suits your needs.", icon: faVrCardboard },
     { id: 3, number: "3", title: "Select Apps", description: "Pick relevant apps that will match appropriate use cases for your event or meeting.", icon: faLayerGroup },
     { id: 4, number: "4", title: "Review & Checkout", description: "Fill details on checkout – kits can only be sent to users who have completed the Meta Demo Certification.", icon: faClipboardCheck },
