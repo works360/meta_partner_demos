@@ -18,6 +18,29 @@ function esc(s) {
     .replace(/'/g, "&#39;");
 }
 
+function formatDate(dateString) {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${month}/${day}/${year}`;
+}
+
+function fieldBlock(label, value) {
+  if (!value || value.trim() === "") return ""; // hide field
+  return `
+    <td width="50%" style="padding:12px 16px;">
+      <div style="font-size:12px;color:#6b7b86;">${label}</div>
+      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
+        ${value}
+      </div>
+    </td>
+  `;
+}
+
+
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -73,6 +96,7 @@ export async function GET(req) {
     const usecase = esc(order.use_case || "");
     const metaReg = esc(order.meta_registered || "");
     const dealId = esc(order.deal_id || "");
+    const returnDateFormatted = formatDate(order.return_date);
 
     // ---------------------------------------------------
     // FULL HTML TEMPLATE (MATCHING APPROVED EMAIL)
@@ -116,7 +140,7 @@ export async function GET(req) {
               </td>
             </tr>
             
-            <!-- REQUESTOR DETAILS -->
+              <!-- REQUESTOR DETAILS -->
             <tr>
               <td style="padding:14px 24px 0;">
                 <table width="100%" style="border:1px solid #e7edf2;border-radius:12px;">
@@ -155,66 +179,152 @@ export async function GET(req) {
               </td>
             </tr>
 
-            <!-- OPPORTUNITY DETAILS -->
-            <tr>
-              <td style="padding:14px 24px 0;">
-                <table width="100%" style="border:1px solid #e7edf2;border-radius:12px;">
-                  <tr>
-                    <td colspan="2" style="padding:12px 16px;font-weight:700;font-size:18px;">
-                      Opportunity Details
-                    </td>
-                  </tr>
+   <!-- OPPORTUNITY DETAILS -->
+<tr>
+  <td style="padding:14px 24px;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+           style="border:1px solid #e7edf2;border-radius:12px;overflow:hidden;">
 
-                  <tr>
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Company</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${company}
-                      </div>
-                    </td>
+      <!-- Section Header -->
+      <tr>
+        <td colspan="2"
+            style="padding:12px 16px;font-weight:700;font-size:18px;">
+          Opportunity Details
+        </td>
+      </tr>
 
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Opportunity Size</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${opportunity}
-                      </div>
-                    </td>
-                  </tr>
+      <!-- DEMO PURPOSE (always shown) -->
+      <tr>
+        <td colspan="2" style="padding:0 16px 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Demo Purpose</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.demo_purpose || "")}
+          </div>
+        </td>
+      </tr>
 
-                  <tr>
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Revenue Size</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${revenue}
-                      </div>
-                    </td>
+      ${
+        order.demo_purpose !== "Prospect/Meeting"
+          ? `
+      <!-- EVENT / OTHER LOGIC -->
 
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Use Case</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${usecase}
-                      </div>
-                    </td>
-                  </tr>
+      <!-- Intended Audience -->
+      <tr>
+        <td width="50%" valign="top" style="padding:0 16px 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Intended Demo Audience</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.intended_audience || "")}
+          </div>
+        </td>
+        <td></td>
+      </tr>
 
-                  <tr>
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Meta Registered</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${metaReg}
-                      </div>
-                    </td>
+      <!-- Expected Demos (ALSO shown for Event/Other) -->
+      <tr>
+        <td width="50%" valign="top" style="padding:0 16px 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Expected Demos</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.expected_demos || "")}
+          </div>
+        </td>
+        <td></td>
+      </tr>
 
-                    <td width="50%" style="padding:12px 16px;">
-                      <div style="font-size:12px;color:#6b7b86;">Deal ID</div>
-                      <div style="margin-top:6px;padding:10px;border:1px solid #e7edf2;border-radius:8px;">
-                        ${dealId}
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
+      `
+          : `
+      <!-- PROSPECT / MEETING LOGIC -->
+
+      <!-- Company + Expected Demos -->
+      <tr>
+        <td width="50%" valign="top" style="padding:0 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Company</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.company || "")}
+          </div>
+        </td>
+
+        <td width="50%" valign="top" style="padding:0 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Expected Demos</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.expected_demos || "")}
+          </div>
+        </td>
+      </tr>
+
+      <!-- Opportunity Size + Revenue Size -->
+      <tr>
+        <td width="50%" valign="top" style="padding:12px 16px 0;">
+          <div style="font-size:12px;color:#6b7b86;">Opportunity Size</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.opportunity_size || "")}
+          </div>
+        </td>
+
+        <td width="50%" valign="top" style="padding:12px 16px 0;">
+          <div style="font-size:12px;color:#6b7b86;">Revenue Size</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.revenue_size || "")}
+          </div>
+        </td>
+      </tr>
+
+      <!-- Use Case + Meta Registered -->
+      <tr>
+        <td width="50%" valign="top" style="padding:12px 16px 0;">
+          <div style="font-size:12px;color:#6b7b86;">Use Case(s)</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.use_case || "")}
+          </div>
+        </td>
+
+        <td width="50%" valign="top" style="padding:12px 16px 0;">
+          <div style="font-size:12px;color:#6b7b86;">Meta Registered?</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.meta_registered || "")}
+          </div>
+        </td>
+      </tr>
+
+      <!-- Deal ID -->
+      <tr>
+        <td width="50%" valign="top" style="padding:12px 16px 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Deal ID</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+            ${esc(order.deal_id || "")}
+          </div>
+        </td>
+        <td></td>
+      </tr>
+      `
+      }
+
+      <!-- RETURN DATE -->
+      <tr>
+        <td colspan="2" style="padding:0 16px 16px;">
+          <div style="font-size:12px;color:#6b7b86;">Expected Return Date</div>
+          <div style="margin-top:6px;padding:10px 12px;border:1px solid #e7edf2;
+                      border-radius:8px;font-size:13px;color:#0b1f2a;">
+             ${esc(returnDateFormatted)}
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </td>
+</tr>
+
+
+
 
             <!-- SHIPPING DETAILS -->
             <tr>
