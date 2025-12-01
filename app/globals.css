@@ -265,7 +265,7 @@ h1.bannerhead {
   background: #0066ff !important;
   color: #fff !important;
   border-radius: 30px !important;
-  padding: 9px 30px !important;
+  padding: 10px 35px !important;
   border: 1px solid transparent !important;
   display: inline-block !important;
   transition: 
@@ -274,9 +274,7 @@ h1.bannerhead {
     border 0.25s ease,
     transform 0.25s ease,
     box-shadow 0.25s ease !important;
-    font-weight: 500 !important;
     font-family: 'Poppins' !important;
-    font-size: 15px !important;
 }
 
 .create-kit:hover {
@@ -546,7 +544,7 @@ h1.bannerhead {
 
 .nav-item {
   text-decoration: none;
-  color: #000;
+  color: #2c2c2c;
   font-weight: 500;
   font-size: 14px;
   transition: color 0.3s ease;
@@ -802,6 +800,7 @@ h1.bannerhead {
   color: #1a1a1a;
   transition: color 0.3s ease;
   text-decoration: underline;
+  font-weight: 500;
 }
 
 .option-desc {
@@ -1308,11 +1307,11 @@ section .container h1 {
   color: #383838;
     cursor: pointer !important;
     background: #fff;
-    border: 1.3px solid #06f;
+    border: 1.4px solid #06f;
     border-radius: 30px;
     align-items: center;
-    gap: .2rem !important;
-    padding: 7px 20px;
+    gap: .3rem !important;
+    padding: 6px 20px 6px 23px;
     font-weight: 500;
     transition: all .3s;
     display: flex;
@@ -1418,7 +1417,7 @@ section .container h1 {
   padding: 0 1rem;
   display: grid;
   grid-template-columns: 280px 1fr;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 /* Filters Sidebar */
@@ -1595,7 +1594,7 @@ section .container h1 {
 
 .app-name {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
   margin: 0;
   line-height: 1.4;

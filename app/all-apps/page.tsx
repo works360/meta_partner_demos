@@ -1,209 +1,131 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import "./page.css"
+import { useState, useEffect, useRef } from "react";
+import "./page.css";
 
 interface AppCard {
-  id: number
-  name: string
-  categories: string[]
-  bgColor: string
-  image: string
+  id: number;
+  name: string;
+  category: "Online" | "Offline";
+  image: string;
+  link?: string; // <-- added link support
 }
 
 export default function AllAppsPage() {
-  const [filterOpen, setFilterOpen] = useState(false)
-  const [selectedFilter, setSelectedFilter] = useState("Show all")
-  const [selectedApps, setSelectedApps] = useState<number[]>([])
-  const [appsData, setAppsData] = useState<AppCard[]>([]) // State for fetched apps
-  const [isLoading, setIsLoading] = useState<boolean>(true) // Loading state
-  const [error, setError] = useState<string | null>(null) // Error state
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("Show all");
+  const [apps, setApps] = useState<AppCard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch apps data based on selected filter
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const fetchAppsData = async () => {
-      setIsLoading(true) // Set loading state to true while fetching data
-
-      let url = "/api/getOfflineApps"; // Default to Offline apps
-      if (selectedFilter === "Online apps") {
-        url = "/api/getOnlineApps"; // Change to Online apps if selected
-
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setFilterOpen(false);
       }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
+  // Load apps
+  useEffect(() => {
+    const fetchApps = async () => {
       try {
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Failed to fetch apps data");
-        }
-        const data = await response.json();
-        setAppsData(data); // Update apps data from API
-      } catch (error: any) {
-        setError(error.message); // If an error occurs, set the error message
+        const offlineData = await fetch("/api/getOfflineApps", { cache: "no-store" }).then(r => r.json());
+        const onlineData = await fetch("/api/getOnlineApps", { cache: "no-store" }).then(r => r.json());
+
+        setApps([...offlineData, ...onlineData]);
+      } catch (err) {
+        console.error("Failed to load apps", err);
       } finally {
-        setIsLoading(false); // Set loading state to false after the data is fetched
+        setIsLoading(false);
       }
     };
 
-    fetchAppsData();
-  }, [selectedFilter]); // Effect will run when selectedFilter changes
+    fetchApps();
+  }, []);
 
-  const handleFilterChange = (value: string) => {
-    setSelectedFilter(value); // Update the selected filter
-    setFilterOpen(false); // Close the dropdown after selection
-  };
-
-  const handleClearAll = () => {
-    setSelectedFilter("Show all"); // Reset the filter to 'Show all'
-  };
-
-  // ⭐ FILTER LOGIC
-  const filteredApps = appsData.filter((app) => {
-    if (selectedFilter === "Show all") return true;
-    if (selectedFilter === "Offline apps") return app.categories.includes("Offline");
-    if (selectedFilter === "Online apps") return app.categories.includes("Online");
-    return true;
+  // Filter Logic
+  const filteredApps = apps.filter(app => {
+    if (selectedFilter === "Online apps") return app.category === "Online";
+    if (selectedFilter === "Offline apps") return app.category === "Offline";
+    return true; // Show all
   });
 
-  const toggleAppSelection = (id: number) => {
-    setSelectedApps((prev) =>
-      prev.includes(id)
-        ? prev.filter((appId) => appId !== id)
-        : [...prev, id]
-    );
-  };
-
   return (
-    <main className="all-apps-container">
-      <header>
-        <h1 className="page-header mb-8">Apps</h1>
+    <main>
+      <header className="page-header mb-8">
+        <h1 className="text-3xl font-extrabold text-gray-900">Apps</h1>
       </header>
 
-      {/* Description */}
-      <div className="page-description p-6 rounded-xl shadow-md mb-8">
-        <p className="text-gray-600">
-          Explore the education applications of mixed reality with Meta and
-          discover opportunities to boost innovation.
-        </p>
-      </div>
+      <p className="apps-description">
+        Explore the education applications of mixed reality with Meta and discover opportunities to boost innovation.
+      </p>
 
-      <section className="content-wrapper">
-        {/* ⭐ LEFT–RIGHT LAYOUT */}
-        <div className="apps-layout">
-          {/* RIGHT SIDE */}
-          <div className="apps-right">
-            {/* FILTER SECTION */}
-            <div className="filter-section">
-              <label className="filter-label">FILTER BY:</label>
+      <div className="container all-apps-section">
 
-              <div className="filter-controls">
-                <div className="filter-dropdown-wrapper">
-                  <button
-                    className="filter-dropdown"
-                    onClick={() => setFilterOpen(!filterOpen)}
-                    aria-haspopup="listbox"
-                    aria-expanded={filterOpen ? "true" : "false"} // Updated aria-expanded
-                  >
-                    <span>{selectedFilter}</span>
-                    <svg
-                      className="dropdown-icon"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                    >
-                      <path
-                        d="M4 6L8 10L12 6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
+        {/* FILTER ROW */}
+        <div className="apps-filter-row" ref={dropdownRef}>
+          <label className="filter-label">FILTER BY:</label>
 
-                  {/* ⭐ DROPDOWN OPTIONS */}
-                  {filterOpen && (
-                    <div className="dropdown-menu">
-                      <button
-                        className="dropdown-item"
-                        onClick={() => handleFilterChange("Show all")}
-                      >
-                        Show all
-                      </button>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => handleFilterChange("Offline apps")}
-                      >
-                        Offline apps
-                      </button>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => handleFilterChange("Online apps")}
-                      >
-                        Online apps
-                      </button>
-                    </div>
-                  )}
-                </div>
+          <div className="filter-dropdown-wrapper">
+            <button
+              className="filter-dropdown"
+              onClick={() => setFilterOpen(!filterOpen)}
+            >
+              {selectedFilter}
+              <span className="arrow">▾</span>
+            </button>
 
-                <button className="clear-all-btn" onClick={handleClearAll}>
-                  Clear all
+            {filterOpen && (
+              <div className="dropdown-menu">
+                <button className="dropdown-item" onClick={() => { setSelectedFilter("Show all"); setFilterOpen(false); }}>
+                  Show all
+                </button>
+                <button className="dropdown-item" onClick={() => { setSelectedFilter("Online apps"); setFilterOpen(false); }}>
+                  Online apps
+                </button>
+                <button className="dropdown-item" onClick={() => { setSelectedFilter("Offline apps"); setFilterOpen(false); }}>
+                  Offline apps
                 </button>
               </div>
-            </div>
-
-            {/* ⭐ APPS GRID (Using filtered list) */}
-            <div className="apps-grid">
-              {isLoading && <p>Loading apps...</p>}
-              {error && <div className="error-message">{error}</div>}
-              {!isLoading && !error && filteredApps.length === 0 && (
-                <p>No apps found</p>
-              )}
-              {!isLoading && !error && filteredApps.length > 0 && (
-                <div className="apps-grid-container">
-                  {filteredApps.map((app) => (
-                    <div
-                      key={app.id}
-                      className={`app-card relative bg-white rounded-xl overflow-hidden transition-all duration-300 cursor-pointer ${
-                        selectedApps.includes(app.id)
-                          ? "ring-4 ring-blue-500 transform scale-[1.02]"
-                          : "hover:shadow-xl hover:ring-2 hover:ring-gray-300"
-                      }`}
-                      onClick={() => toggleAppSelection(app.id)}
-                    >
-                      <div className="app-image h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
-                        <img
-                          src={app.image ? `/productimages/${app.image}` : "https://placehold.co/400x160/cbd5e1/475569?text=App+Image"}
-                          alt={app.name}
-                          className="w-full h-full object-cover transition-opacity duration-300"
-                        />
-                      </div>
-
-                      <div className="app-info text-left">
-                        <h4
-                          className="app-name text-lg font-semibold text-gray-900 truncate"
-                          title={app.name}
-                        >
-                          {app.name}
-                        </h4>
-
-                        <div className="flex justify-left items-center space-x-2">
-                          <input
-                            type="checkbox"
-                            readOnly
-                            checked={selectedApps.includes(app.id)}
-                            className="form-checkbox h-5 w-5 text-blue-600 rounded-md border-gray-400 cursor-pointer"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
           </div>
+
+          <button className="clear-all-btn" onClick={() => setSelectedFilter("Show all")}>Clear all</button>
         </div>
-      </section>
+
+        {/* APPS GRID */}
+        <div className="apps-grid">
+          {isLoading && <p>Loading apps...</p>}
+
+          {!isLoading &&
+            filteredApps.map(app => (
+              <a
+                key={app.id}
+                className="app-card"
+                href={app.link ? app.link : "#"} 
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={app.image ? `/productimages/${app.image}` : "/placeholder.png"}
+                  className="app-card-image"
+                  alt={app.name}
+                />
+
+                <div className="app-card-info">
+                  <h3 className="app-name">{app.name}</h3>
+                  <p className="app-category">Apps • {app.category}</p>
+                </div>
+              </a>
+            ))}
+        </div>
+
+      </div>
     </main>
   );
 }

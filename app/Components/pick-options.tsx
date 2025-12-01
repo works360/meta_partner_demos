@@ -18,7 +18,7 @@ export function PickOptions() {
       id: "apps",
       title: "Select Apps",
       desc: "Pick relevant apps that will match appropriate use cases for your event or meeting.",
-      img: "/Appp.webp",
+      img: "/Apps.png",
       link: "/create-kit",
     },
   ]

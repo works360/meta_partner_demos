@@ -53,12 +53,22 @@ export function HeadsetCards() {
                     </Link>
 
                     <div className="learn-more-section" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <div>
-                        <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
-                      </div>
-                      <Link href={`/single-product?id=${headset.productId}`} className="learn-more hover-underline-animation left">
-                        Learn More
-                      </Link>
+                      <a
+                  className="hover-underline-animation left"
+                  href={`/single-product?id=${headset.id}`}
+                  style={{
+                    color: "#0066ff",
+                    textDecoration: "none",
+                    fontWeight: "500",
+                    fontSize: "0.95rem",
+                    cursor: "pointer",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+                  <span className="underline-text">Learn More</span>
+                  
+                </a>
                     </div>
 
                   </div>
