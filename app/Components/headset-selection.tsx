@@ -58,8 +58,8 @@ export default function HeadsetSelection() {
     <div style={{ paddingTop: "55px", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div
         style={{
-          background: "linear-gradient(to right, #fff3f7, #e0f0ff, #edfff9)",
-          padding: "0.5rem",
+          background: "linear-gradient(to right, #f9e5f0 0%, #d7eaf9 41% 73%, #daf5eb 100%)",
+          padding: "1rem",
           textAlign: "center",
         }}
       >
@@ -197,22 +197,24 @@ export default function HeadsetSelection() {
                       {headset.specs}
                     </p>
 
-               <a
-                  className="hover-underline-animation left"
-                  href={`/single-product?id=${headset.id}`}
-                  style={{
-                    color: "#0066ff",
-                    textDecoration: "none",
-                    fontWeight: "500",
-                    fontSize: "0.95rem",
-                    cursor: "pointer",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  <span className="underline-text">Learn More</span>
-                  <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
-                </a>
-
+              <a
+                className="hover-underline-animation left"
+                href={`/single-product?id=${headset.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()} // <-- Prevent selecting headset
+                style={{
+                  color: "#0066ff",
+                  textDecoration: "none",
+                  fontWeight: "500",
+                  fontSize: "0.95rem",
+                  cursor: "pointer",
+                  alignSelf: "flex-start",
+                }}
+              >
+                <span className="underline-text">Learn More</span>
+                <img src="/Arrow.png" alt="arrow" style={{ width: "2rem", height: "auto" }} />
+              </a>
                   </div>
                   
                   {/* Divider */}

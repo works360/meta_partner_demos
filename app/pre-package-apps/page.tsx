@@ -227,12 +227,6 @@ export default function AppDemosPage() {
             className="filters-sidebar lg:col-span-1 bg-white p-6 rounded-xl h-fit sticky top-6"
             style={{ boxShadow: "0 2px 8px #0000002b" }}
           >
-            <h2
-              className="text-xl font-bold text-gray-900 mb-4 border-b pb-2"
-              style={{ fontSize: "20px" }}
-            >
-              Filter Apps
-            </h2>
 
             {Object.entries(FILTER_OPTIONS).map(([key, options]) => (
               <div key={key} className="filter-section mb-6">
@@ -292,6 +286,31 @@ export default function AppDemosPage() {
                       }`}
                     onClick={() => toggleAppSelection(app.id)}
                   >
+                    {/* Selection Circle */}
+                      <div
+                        className="select-circle absolute top-3 left-3 z-20 w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all"
+                        style={{
+                          borderColor: selectedApps.includes(app.id) ? "#0064e0" : "#cacacaff",
+                          backgroundColor: selectedApps.includes(app.id) ? "#0064e0" : "transparent",
+                          border: selectedApps.includes(app.id) ? "none" : "#4b4b4bff",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleAppSelection(app.id);
+                        }}
+                      >
+                        {selectedApps.includes(app.id) && (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="white"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M20.285 2.859l-11.85 11.859-4.715-4.718-2.285 2.285 7 7 14-14z" />
+                          </svg>
+                        )}
+                      </div>
                     <div className="app-image h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
                       <img
                         src={app.image}
@@ -313,14 +332,14 @@ export default function AppDemosPage() {
                         {app.name}
                       </h4>
 
-                      <div className="flex justify-left items-center space-x-2">
+                      {/* <div className="flex justify-left items-center space-x-2">
                         <input
                           type="checkbox"
                           readOnly
                           checked={selectedApps.includes(app.id)}
                           className="form-checkbox h-5 w-5 text-blue-600 rounded-md border-gray-400 cursor-pointer"
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}

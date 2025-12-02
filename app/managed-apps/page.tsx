@@ -188,7 +188,7 @@ export default function ManagedAppsPage() {
       <div className="max-w-7xl mx-auto">
         <div className="page-header mb-8">
           <h1 className="text-3xl font-extrabold text-gray-900">
-            Managed (Online) Apps
+            Managed App Store Demos
           </h1>
         </div>
 
@@ -247,12 +247,6 @@ export default function ManagedAppsPage() {
             className="filters-sidebar lg:col-span-1 bg-white p-6 rounded-xl h-fit sticky top-6"
             style={{ boxShadow: "0 2px 8px #0000002b" }}
           >
-            <h2
-              className="text-xl font-bold text-gray-900 mb-4 border-b pb-2"
-              style={{ fontSize: "20px" }}
-            >
-              Filter Apps
-            </h2>
 
             {Object.entries(FILTER_OPTIONS).map(([key, options]) => (
               <div key={key} className="filter-section mb-6">

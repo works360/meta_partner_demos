@@ -903,7 +903,7 @@ section .container h1 {
 /* Text */
 .card-step h3 {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -1277,8 +1277,8 @@ section .container h1 {
 
 /* Page Header */
 .page-header {
-  background: linear-gradient(to right, #fff3f7, #e0f0ff, #edfff9);
-  padding: 4rem 0 0.4rem 0;
+  background: linear-gradient(  to right,  #F9E5F0 0%,  #D7EAF9 41%,  #D7EAF9 73%,  #DAF5EB 100%);
+  padding: 4.5rem 0 1.1rem 0;
   text-align: center;
   color: rgb(31, 31, 31);
 }
@@ -1408,6 +1408,8 @@ section .container h1 {
   line-height: 1.6;
   max-width: 800px;
   margin: 0 auto;
+  text-align: start;
+  word-spacing: 2px;
 }
 
 /* Content Wrapper */
@@ -1428,6 +1430,7 @@ section .container h1 {
   height: fit-content;
   position: sticky;
   top: 100px;
+  margin-top: 60px;
 }
 
 .filter-section {
@@ -1459,14 +1462,14 @@ section .container h1 {
 }
 
 .filter-checkbox input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
   accent-color: #0066ff;
 }
 
 .filter-checkbox span {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #495057;
   user-select: none;
 }
@@ -1511,7 +1514,7 @@ section .container h1 {
 .apps-content {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .apps-header {
@@ -1545,7 +1548,7 @@ section .container h1 {
 }
 
 .app-card:hover {
-  border-color: #0066ff;
+  border-color: #81b4ff;
   box-shadow: 0 4px 12px rgba(0, 102, 255, 0.15);
   transform: translateY(-2px);
 }
@@ -1593,7 +1596,7 @@ section .container h1 {
 }
 
 .app-name {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: #333;
   margin: 0;
@@ -1616,7 +1619,7 @@ section .container h1 {
 }
 
 .no-results p {
-  font-size: 1.125rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -1817,5 +1820,20 @@ section .container h1 {
   border: 1px solid #0066ff;
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
+}
+
+.select-circle {
+  position: absolute;
+  top: -8px;             /* slight overlap above image */
+  left: 0px;            /* aligned like screenshot */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  box-shadow: 0 0 6px #000000a6;  /* soft floating shadow */
+  transition: all 0.2s ease;
 }
 
