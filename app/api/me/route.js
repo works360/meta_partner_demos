@@ -13,15 +13,14 @@ export async function GET(req) {
     const user = JSON.parse(session.value);
     const email = (user?.email || "").toLowerCase();
 
-    // ⬇️ Fetch role + profile fields from users table
-    // 👉 Adjust column names (sales_executive, reseller, username) to match your schema
+
     const [rows] = await db.query(
       `
       SELECT 
         user_role,
-        sales_executive,      -- Sales Executive name
-        username,       -- Login email
-        reseller        -- Reseller name
+        sales_executive,      
+        username,      
+        reseller       
       FROM users 
       WHERE LOWER(username) = ? 
       LIMIT 1
@@ -50,10 +49,10 @@ export async function GET(req) {
       JSON.stringify({
         loggedIn: true,
         email: salesEmail,
-        role,             // direct role
-        salesExecutive,   // for Sales Executive *
-        salesEmail,       // for Sales Executive Email *
-        reseller,         // for Reseller *
+        role,            
+        salesExecutive,   
+        salesEmail,       
+        reseller,        
       }),
       { status: 200 }
     );

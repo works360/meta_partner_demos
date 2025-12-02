@@ -259,7 +259,7 @@ export default function Login() {
 
                 <div style={{ textAlign: "center" }}>
                   <a
-                    href="#"
+                    href="/reset-password"
                     style={{
                       color: "#999",
                       textDecoration: "none",
