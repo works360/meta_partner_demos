@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import fs from "fs";
 import path from "path";
+import { put } from "@vercel/blob";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public/returnlabelimages");
 
@@ -95,17 +96,39 @@ export async function POST(req) {
     let return_label = formData.get("existing_label") || "";
 
     // Handle return label upload
-    const uploaded = formData.get("return_label");
-    if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
-      if (!fs.existsSync(UPLOAD_DIR))
-        fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    // const uploaded = formData.get("return_label");
+    // if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
+    //   if (!fs.existsSync(UPLOAD_DIR))
+    //     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-      const buffer = Buffer.from(await uploaded.arrayBuffer());
-      const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
-      const filename = `returnlabel_${Date.now()}_${safeName}`;
-      fs.writeFileSync(path.join(UPLOAD_DIR, filename), buffer);
-      return_label = filename;
-    }
+    //   const buffer = Buffer.from(await uploaded.arrayBuffer());
+    //   const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+    //   const filename = `returnlabel_${Date.now()}_${safeName}`;
+    //   fs.writeFileSync(path.join(UPLOAD_DIR, filename), buffer);
+    //   return_label = filename;
+    // }
+
+  const uploaded = formData.get("return_label");
+  const orderID = formData.get("id"); // ← Dynamic folder
+
+  if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
+    // Clean filename
+    const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+
+    // Build folder + filename path
+    const filename = `returnlabel_${Date.now()}_${safeName}`;
+    const blobPath = `${orderID}/${filename}`;
+
+    // Upload to Vercel Blob
+    const blob = await put(blobPath, uploaded, {
+      access: "public",
+      addRandomSuffix: true,     // Optional
+    });
+
+    // Store the final URL in your DB or return object
+    return_label = blob.url;
+    console.log("✅ Uploaded return label to Vercel Blob:", blob.url);
+  }
 
     // 🔎 Fetch existing approval/rejection fields
     const [rows] = await db.query(

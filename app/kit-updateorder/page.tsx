@@ -510,7 +510,7 @@ await fetch(`/api/send-rejected-email?orderid=${order.id}`);
                       <small className="d-block mt-1">
                         Uploaded:{" "}
                         <a
-                          href={`/returnlabelimages/${order.return_label}`}
+                          href={order.return_label}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
