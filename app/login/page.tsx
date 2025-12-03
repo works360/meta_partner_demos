@@ -66,8 +66,6 @@ export default function Login() {
               justifyContent: "center",
               paddingLeft: 0,
               paddingRight: 0,
-              width: "100vw",     // 👈 Forces full width
-              marginLeft: "calc(50% - 50vw)", // 👈 Removes page side padding from Next.js layouts
             }}>
         <div className="row g-4 container">
           {/* Left Section - Welcome Content */}
@@ -82,7 +80,7 @@ export default function Login() {
             </h1>
 
             <div className="mb-4">
-              <p style={{ fontSize: "1rem", fontFamily: "poppins", }}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins", marginBottom: "0rem" }}>
                 Register on our{" "}
                 <a
                   href="https://view-su2.highspot.com/viewer/78dd45d6490a4b2f7294515b1762ef2f"
@@ -98,7 +96,7 @@ export default function Login() {
             </div>
 
             <div className="mb-4">
-              <p style={{ fontSize: "1rem", fontFamily: "poppins"}}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins", marginBottom: "0rem"}}>
                 Complete the Partner{" "}
                 <a
                   href="https://meta.highspot.com/signin#/training/learner"
@@ -112,13 +110,13 @@ export default function Login() {
                   Meta Demo Certification Training
                 </a>
               </p>
-              <p style={{ fontSize: "1rem", fontFamily: "poppins", lineHeight: "0.6"}}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins",marginBottom: "0rem"}}>
                 (a short 10-15 minute module) available on the Partner Portal
               </p>
             </div>
 
             <div>
-              <p style={{ fontSize: "1rem", fontFamily: "poppins", paddingBottom: "1.5rem"}}>
+              <p style={{ fontSize: "1rem", fontFamily: "poppins"}}>
                 Once both steps are complete, please reach out to your Meta
                 point of contact or{" "}
                 <a

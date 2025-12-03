@@ -1789,7 +1789,7 @@ section .container h1 {
 .login-center-container {
   flex: 1;
   display: flex;
-  align-items: center;      /* vertical center */
+  align-items: start;      /* vertical center */
   justify-content: center;  /* horizontal center */
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -1835,4 +1835,3 @@ section .container h1 {
   z-index: 20;
   transition: all 0.2s ease;
 }
-

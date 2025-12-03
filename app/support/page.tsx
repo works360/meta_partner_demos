@@ -534,15 +534,15 @@ export default function SupportPage() {
         }
         .faq-title {
           text-align: center;
-          font-weight: bold;
+          font-weight: 500;
           font-size: 36px;
           margin-bottom: 30px;
           margin-top: 30px;
           color: #222;
         }
         .accordion-button {
-          font-weight: 600;
-          font-size: 20px;
+          font-weight: 500;
+          font-size: 18px;
           padding: 20px 36px;
         }
         .accordion-body {
