@@ -175,3 +175,85 @@
   border-top: 1px solid #ddd;
   font-size: 14px;
 }
+/* IMAGE SLIDER ARROWS INSIDE MAIN IMAGE BOX */
+.main-image-box {
+  position: relative;
+}
+
+.img-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.img-arrow:hover {
+  background: white;
+}
+
+.arrow-left {
+  left: 10px;     /* inside the box */
+}
+
+.arrow-right {
+  right: 10px;    /* inside the box */
+}
+/* ZOOM ICON */
+.zoom-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 6;
+  transition: 0.15s ease;
+}
+
+.zoom-icon:hover {
+  background: white;
+}
+
+/* ZOOM WRAPPER  */
+.zoom-container {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* DEFAULT IMAGE */
+.main-image {
+  width: 100%;
+  height: 420px;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+/* HOVER ZOOM ACTIVE */
+.zoom-active {
+  transform: scale(1.4);   /* zoom amount */
+  cursor: zoom-in;
+}
