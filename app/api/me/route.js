@@ -1,5 +1,3 @@
-// app/api/me/route.js
-
 import { db } from "@/lib/db";
 
 export async function GET(req) {
@@ -13,20 +11,19 @@ export async function GET(req) {
     const user = JSON.parse(session.value);
     const email = (user?.email || "").toLowerCase();
 
-
-    const [rows] = await db.query(
-      `
+    // ⭐ CLEAN SQL (no hidden chars)
+    const sql = `
       SELECT 
         user_role,
-        sales_executive,      
-        username,      
-        reseller       
-      FROM users 
-      WHERE LOWER(username) = ? 
+        sales_executive,
+        username,
+        reseller
+      FROM users
+      WHERE LOWER(username) = ?
       LIMIT 1
-      `,
-      [email]
-    );
+    `;
+
+    const [rows] = await db.query(sql, [email]);
 
     let role = "user";
     let salesExecutive = "";
@@ -49,10 +46,10 @@ export async function GET(req) {
       JSON.stringify({
         loggedIn: true,
         email: salesEmail,
-        role,            
-        salesExecutive,   
-        salesEmail,       
-        reseller,        
+        role,
+        salesExecutive,
+        salesEmail,
+        reseller,
       }),
       { status: 200 }
     );
