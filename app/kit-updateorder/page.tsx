@@ -186,7 +186,7 @@ const isEmbed = params.get("embed") === "1";
   const showRejectedInfo = !isAwaiting && !!order.rejected_by;
 
   return (
-    <main className={isEmbed ? "p-0 m-0 w-100" : "container py-5"}>
+    <main className={isEmbed ? "p-0 m-2 w-100" : "container py-5"}>
       <h4 className={isEmbed ? "mb-4 mt-2" : "mb-4 mt-5"}>
   Order #{order.id}
 </h4>
