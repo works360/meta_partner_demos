@@ -5,7 +5,7 @@ import Image from "next/image"
 export function HeadsetCards() {
   const headsets = [
     {
-      id: 1,
+      id: 4,
       name: "Meta Quest 3S",
       description:
         "Meta Quest 3S offers endless possibilities to collaborate, create and learn at an incredible price, so now the whole team can experience its power.",
@@ -13,7 +13,7 @@ export function HeadsetCards() {
       productId: 4,
     },
     {
-      id: 2,
+      id: 6,
       name: "Meta Quest 3",
       description:
         "Meta Quest 3 is where high performance meets incredible value. Discover the inspiring new way to create together, work together or just be together in mixed reality.",
@@ -56,7 +56,7 @@ export function HeadsetCards() {
                       <a
                   className="hover-underline-animation left"
                   href={`/single-product?id=${headset.id}`}
-                target="_blank"
+                  target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                   style={{
