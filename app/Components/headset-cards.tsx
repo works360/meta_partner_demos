@@ -56,6 +56,9 @@ export function HeadsetCards() {
                       <a
                   className="hover-underline-animation left"
                   href={`/single-product?id=${headset.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                   style={{
                     color: "#0066ff",
                     textDecoration: "none",
