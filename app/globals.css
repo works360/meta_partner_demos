@@ -347,10 +347,10 @@ h1.bannerhead {
   height: 100%;
 }
 
-.headset-card:hover {
+/* .headset-card:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   transform: translateY(-4px);
-}
+} */
 
 /* Image container */
 .headset-image {
@@ -877,10 +877,10 @@ section .container h1 {
     box-shadow: 0 4px 20px #0000001f;
 }
 
-.card-step:hover {
+/* .card-step:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   transform: translateY(-4px);
-}
+} */
 
 /* Icon Container */
 .card-icon {
@@ -1139,10 +1139,10 @@ section .container h1 {
   width: 100%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-.headset-card:hover {
+/* .headset-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+} */
 .headset-card.selected {
   border: 2px solid #0064e0;
   box-shadow: 0 0 10px rgba(0, 100, 224, 0.3);
