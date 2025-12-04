@@ -137,10 +137,10 @@ const DashboardPage: React.FC = () => {
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
                 id="reloadBtn"
-                title="Reload"
+                title="Back"
                 onClick={handleReload}
               >
-                Reload
+                Back
               </button>
             </div>
             <div className="content-body">
@@ -227,6 +227,7 @@ const DashboardPage: React.FC = () => {
           overflow: hidden;
           height: calc(100vh - 32px);
           display: flex;
+          margin-top: 50px;
           flex-direction: column;
         }
         .content-header {
