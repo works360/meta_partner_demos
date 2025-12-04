@@ -1410,6 +1410,7 @@ section .container h1 {
   margin: 0 auto;
   text-align: start;
   word-spacing: 2px;
+  margin-left: 19.5rem;
 }
 
 /* Content Wrapper */
@@ -1430,7 +1431,7 @@ section .container h1 {
   height: fit-content;
   position: sticky;
   top: 100px;
-  margin-top: 60px;
+  margin-top: -5rem;
 }
 
 .filter-section {
@@ -1666,6 +1667,7 @@ section .container h1 {
   .filters-sidebar {
     position: static;
     margin-bottom: 1.5rem;
+    margin-top: 0rem;
   }
 
   .filter-section {
@@ -1733,9 +1735,10 @@ section .container h1 {
 
 @media (max-width: 576px) {
   .stepper {
+    padding: 0 .5rem;
     overflow-x: auto;
-    justify-content: flex-start;
-    padding: 0 0.5rem;
+    height: 5rem;
+    width: 12rem;
   }
 
   .step-label {
@@ -1758,6 +1761,7 @@ section .container h1 {
 
   .page-description p {
     font-size: 0.9rem;
+    margin-left: 0px;
   }
 
   .apps-content {
@@ -1824,14 +1828,14 @@ section .container h1 {
 
 .select-circle {
   position: absolute;
-  top: -8px;             /* slight overlap above image */
-  left: 0px;            /* aligned like screenshot */
+  top: -15px;   /* pull circle OUTSIDE the card */
+  left: 12px;   /* shift slightly right for perfect alignment */
   width: 30px;
   height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  z-index: 30;  /* ensures it sits above card border */
   transition: all 0.2s ease;
 }

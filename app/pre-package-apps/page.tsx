@@ -288,11 +288,10 @@ export default function AppDemosPage() {
                   >
                     {/* Selection Circle */}
                       <div
-                        className="select-circle absolute top-3 left-3 z-20 w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all"
+                        className="select-circle absolute"
                         style={{
-                          borderColor: selectedApps.includes(app.id) ? "#0064e0" : "#cacacaff",
+                          borderColor: selectedApps.includes(app.id) ? "#0064e0" : "#cfcfcf",
                           backgroundColor: selectedApps.includes(app.id) ? "#0064e0" : "transparent",
-                          border: selectedApps.includes(app.id) ? "none" : "#4b4b4bff",
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
