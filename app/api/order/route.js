@@ -108,27 +108,52 @@ export async function POST(req) {
     //   return_label = filename;
     // }
 
-  const uploaded = formData.get("return_label");
-  const orderID = formData.get("id"); // ← Dynamic folder
+ // const uploaded = formData.get("return_label");
+  //const orderID = formData.get("id"); // ← Dynamic folder
 
-  if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
+  //if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
     // Clean filename
-    const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+  //  const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
 
     // Build folder + filename path
-    const filename = `returnlabel_${Date.now()}_${safeName}`;
-    const blobPath = `${orderID}/${filename}`;
+   // const filename = `returnlabel_${Date.now()}_${safeName}`;
+   // const blobPath = `${orderID}/${filename}`;
 
     // Upload to Vercel Blob
-    const blob = await put(blobPath, uploaded, {
-      access: "public",
-      addRandomSuffix: true,     // Optional
-    });
+  //  const blob = await put(blobPath, uploaded, {
+   //   access: "public",
+    //  addRandomSuffix: true,     // Optional
+    //});
 
     // Store the final URL in your DB or return object
-    return_label = blob.url;
-    console.log("✅ Uploaded return label to Vercel Blob:", blob.url);
-  }
+   // return_label = blob.url;
+   // console.log("✅ Uploaded return label to Vercel Blob:", blob.url);
+  //}
+
+  // ⭐ FIX: Convert file to buffer BEFORE calling `put()`
+// Otherwise Vercel tries to read the locked Request stream → error happens
+
+const uploaded = formData.get("return_label");
+const orderID = formData.get("id");
+
+if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
+  const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
+  const filename = `returnlabel_${Date.now()}_${safeName}`;
+  const blobPath = `${orderID}/${filename}`;
+
+  // ⭐ Convert the File to a buffer (this avoids stream locking errors)
+  const arrayBuffer = await uploaded.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  // ⭐ Upload using the buffer instead of File
+  const blob = await put(blobPath, buffer, {
+    access: "public",
+  });
+
+  return_label = blob.url;
+  console.log("✅ Uploaded return label to Vercel Blob:", blob.url);
+}
+
 
     // 🔎 Fetch existing approval/rejection fields
     const [rows] = await db.query(

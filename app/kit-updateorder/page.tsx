@@ -55,7 +55,7 @@ export default function KitUpdateOrderPage() {
   const router = useRouter();
   const params = useSearchParams();
   const orderId = params.get("orderid");
-
+const isEmbed = params.get("embed") === "1";
   // ---- 1️⃣ Load user role and email from /api/me
   useEffect(() => {
     const fetchUser = async () => {
@@ -186,8 +186,10 @@ export default function KitUpdateOrderPage() {
   const showRejectedInfo = !isAwaiting && !!order.rejected_by;
 
   return (
-    <main className="container py-5">
-      <h4 className="mb-4 mt-5">Order #{order.id}</h4>
+    <main className={isEmbed ? "p-0 m-0 w-100" : "container py-5"}>
+      <h4 className={isEmbed ? "mb-4 mt-2" : "mb-4 mt-5"}>
+  Order #{order.id}
+</h4>
 
       {/* === Program Manager Approval Buttons (only when awaiting approval) === */}
       {userRole?.toLowerCase() === "program manager" && isAwaiting && (

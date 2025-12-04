@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface OrderItem {
   product_name: string;
@@ -35,22 +35,30 @@ interface Order {
 export default function KitOrderDetailsPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
-  // ✅ Check authentication
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 🔹 Embed mode inside dashboard iframe
+  const isEmbed = searchParams.get("embed") === "1";
+
+  // 🔹 Login check only when NOT embedded
   useEffect(() => {
     const userEmail =
-      localStorage.getItem("userEmail") || sessionStorage.getItem("userEmail");
+      typeof window !== "undefined"
+        ? localStorage.getItem("userEmail") ||
+          sessionStorage.getItem("userEmail")
+        : null;
 
-    if (!userEmail) {
+    if (!isEmbed && !userEmail) {
       router.push("/login");
       return;
     }
 
     fetchOrders();
-  }, []);
+  }, [isEmbed]);
 
-  // ✅ Fetch orders from API
+  // 🔹 Fetch Kit Orders
   const fetchOrders = async () => {
     try {
       const res = await fetch("/api/orders");
@@ -63,40 +71,38 @@ export default function KitOrderDetailsPage() {
     }
   };
 
-  // ✅ Export table to Excel
-const exportToExcel = () => {
-  const table = document.getElementById("datatable") as HTMLTableElement | null;
-  if (!table) return;
+  // 🔹 Export to Excel
+  const exportToExcel = () => {
+    const table = document.getElementById("datatable") as HTMLTableElement | null;
+    if (!table) return;
 
-  const rows: string[][] = [];
+    const rows: string[][] = [];
+    const headers = Array.from(table.querySelectorAll("thead th")).map(
+      (th) => th.textContent?.trim() || ""
+    );
+    rows.push(headers);
 
-  // ✅ Get headers
-  const headers = Array.from(table.querySelectorAll("thead th")).map(
-    (th) => th.textContent?.trim() || ""
-  );
-  rows.push(headers);
+    const bodyRows = Array.from(
+      table.querySelectorAll("tbody tr")
+    ) as HTMLTableRowElement[];
 
-  // ✅ Get all rows safely
-  const bodyRows = Array.from(
-    table.querySelectorAll("tbody tr")
-  ) as HTMLTableRowElement[];
+    bodyRows.forEach((tr) => {
+      const cells = Array.from(tr.cells) as HTMLTableCellElement[];
+      const row = cells.map((td) => td.textContent?.trim() || "");
+      rows.push(row);
+    });
 
-  bodyRows.forEach((tr) => {
-    const cells = Array.from(tr.cells) as HTMLTableCellElement[];
-    const row = cells.map((td) => td.textContent?.trim() || "");
-    rows.push(row);
-  });
-
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Kit Orders");
-  XLSX.writeFile(wb, "kit-orders.xlsx");
-};
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Kit Orders");
+    XLSX.writeFile(wb, "kit-orders.xlsx");
+  };
 
   if (loading) return <div className="text-center mt-5">Loading...</div>;
 
   return (
-    <main className="container mt-5">
+    // ⭐ Use same structure as event-orderdetails
+    <main className={isEmbed ? "embed-layout" : "container mt-5"}>
       <div className="card shadow-sm">
         <div className="card-header d-flex justify-content-between align-items-center">
           <h3 className="card-title mb-0">Kit Order Details</h3>
@@ -105,7 +111,7 @@ const exportToExcel = () => {
               src="/productimages/excelicon.png"
               className="icon"
               alt="Excel"
-            />{" "}
+            />
             Export to Excel
           </button>
         </div>
@@ -155,7 +161,8 @@ const exportToExcel = () => {
                   return (
                     <tr key={order.id}>
                       <td>
-                        <Link href={`/kit-updateorder?orderid=${order.id}`}>
+                        {/* ⭐ Add embed=1 so it loads properly inside iframe */}
+                        <Link href={`/kit-updateorder?orderid=${order.id}&embed=1`}>
                           {order.id}
                         </Link>
                       </td>
@@ -208,6 +215,17 @@ const exportToExcel = () => {
       </div>
 
       <style jsx>{`
+        .embed-layout {
+          padding: 0;
+          margin: 0;
+        }
+        .embed-layout .card {
+          border-radius: 0;
+          border-left: 0;
+          border-right: 0;
+          border-bottom: 0;
+          box-shadow: none;
+        }
         .card-title {
           font-weight: 600;
           font-size: 22px;

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface OrderItem {
   product_name: string;
@@ -36,17 +36,27 @@ export default function EventOrderDetailsPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // ✅ Require login before viewing
+  // 🔹 Are we inside the dashboard iframe?
+  const isEmbed = searchParams.get("embed") === "1";
+
+  // ✅ Require login only when NOT embedded
   useEffect(() => {
     const userEmail =
-      localStorage.getItem("userEmail") || sessionStorage.getItem("userEmail");
-    if (!userEmail) {
+      typeof window !== "undefined"
+        ? localStorage.getItem("userEmail") ||
+          sessionStorage.getItem("userEmail")
+        : null;
+
+    if (!isEmbed && !userEmail) {
       router.push("/login");
       return;
     }
+
     fetchOrders();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmbed, router]);
 
   // ✅ Fetch orders
   const fetchOrders = async () => {
@@ -63,7 +73,9 @@ export default function EventOrderDetailsPage() {
 
   // ✅ Export to Excel
   const exportToExcel = () => {
-    const table = document.getElementById("datatable") as HTMLTableElement | null;
+    const table = document.getElementById(
+      "datatable"
+    ) as HTMLTableElement | null;
     if (!table) return;
 
     const rows: string[][] = [];
@@ -91,7 +103,8 @@ export default function EventOrderDetailsPage() {
   if (loading) return <div className="text-center mt-5">Loading...</div>;
 
   return (
-    <main className="container mt-5">
+    // 🔹 When embedded, use a minimal wrapper; when normal, use container + margin
+    <main className={isEmbed ? "embed-layout" : "container mt-5"}>
       <div className="card shadow-sm">
         <div className="card-header d-flex justify-content-between align-items-center">
           <h3 className="card-title mb-0">Event Order Details</h3>
@@ -150,7 +163,7 @@ export default function EventOrderDetailsPage() {
                   return (
                     <tr key={order.id}>
                       <td>
-                        <Link href={`/kit-updateorder?orderid=${order.id}`}>
+                        <Link href={`/kit-updateorder?orderid=${order.id}&embed=1`}>
                           {order.id}
                         </Link>
                       </td>
@@ -203,6 +216,17 @@ export default function EventOrderDetailsPage() {
       </div>
 
       <style jsx>{`
+        .embed-layout {
+          padding: 0;
+          margin: 0;
+        }
+        .embed-layout .card {
+          border-radius: 0;
+          border-left: 0;
+          border-right: 0;
+          border-bottom: 0;
+          box-shadow: none;
+        }
         .card-title {
           font-weight: 600;
           font-size: 22px;

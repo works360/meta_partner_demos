@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import ClientLayout from "./ClientLayout";
 import type React from "react";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";       // ⭐ Add Poppins
@@ -40,9 +41,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>  
       <body className="font-sans antialiased">
-        <Navbar />
-        {children}
-        <Footer />
+<ClientLayout>
+  {children}
+</ClientLayout>
         <Analytics />
 
         <Script

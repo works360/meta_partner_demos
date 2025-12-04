@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 const ROUTES = {
   summary: "summary-data-url", // will be replaced by encoded summary page
   inventory: "/live-inventory?embed=1",
-  orders: "/kits-orderdetails?embed=1",
-  ordersevents: "/event-orderdetails?embed=1",
+  prospectorders: "/kit-orderdetails?embed=1",
+  eventorders: "/event-orderdetails?embed=1",
   returns: "/return-tracking?embed=1",
   users: "/alluser?embed=1",
   overdue: "/overdue-orders?embed=1",
@@ -18,8 +18,8 @@ const ROUTES = {
 const TITLES: Record<keyof typeof ROUTES, string> = {
   summary: "Summary Page",
   inventory: "Live Inventory",
-  orders: "Order Details Prospects",
-  ordersevents: "Order Details Events",
+  prospectorders: "Order Details Prospects",
+  eventorders: "Order Details Events",
   returns: "Return Tracking",
   users: "User List",
   overdue: "Overdue Orders",
