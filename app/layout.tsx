@@ -1,22 +1,20 @@
 export const dynamic = "force-dynamic";
 
-import ClientLayout from "./ClientLayout";
 import type React from "react";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";       // ⭐ Add Poppins
+import { Poppins } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Script from "next/script";
-import { Footer } from "./Components/footer";
-import { Navbar } from "./Components/navbar";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
+import ClientLayout from "./ClientLayout";   // ⭐ ADDED
+
 config.autoAddCss = false;
 
-// ⭐ Load Poppins globally
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -35,15 +33,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={poppins.className}>  
+    <html lang="en" className={poppins.className}>
       <body className="font-sans antialiased">
-<ClientLayout>
-  {children}
-</ClientLayout>
+
+        {/* ⭐ NOW NAV + FOOTER ARE CONTROLLED HERE */}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
+
         <Analytics />
 
         <Script
