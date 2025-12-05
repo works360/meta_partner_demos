@@ -50,23 +50,30 @@ export default function ManagedAppsPage() {
         if (!response.ok) throw new Error("Failed to fetch apps from API");
         const data = await response.json();
 
-        const formattedData = data
-          .filter((item: any) => item.category?.toLowerCase().includes("online"))
-          .map((item: any) => ({
-            id: String(item.id ?? ""),
-            name: item.name ?? "Unnamed App",
-            image: item.image
-              ? `/productimages/${item.image}`
-              : "https://placehold.co/400x160/cbd5e1/475569?text=No+Image",
-            level: item.level || "",
-            useCase: Array.isArray(item.usecase)
-              ? item.usecase
-              : typeof item.usecase === "string" && item.usecase.length > 0
-              ? item.usecase.split(",").map((v: string) => v.trim())
-              : [],
-            wifi: item.wifi || "",
-            category: item.category || "",
-          }));
+     const formattedData = data
+  .filter((item: any) => item.category?.toLowerCase().includes("online"))
+  .map((item: any) => ({
+    id: String(item.id ?? ""),
+    name: item.name ?? "Unnamed App",
+
+    // ✅ FIXED IMAGE HANDLING (supports blob + old folder)
+    image:
+      item.image && item.image.startsWith("http")
+        ? item.image
+        : item.image
+        ? `/productimages/${item.image}`
+        : "https://placehold.co/400x160/cbd5e1/475569?text=No+Image",
+
+    level: item.level || "",
+    useCase: Array.isArray(item.usecase)
+      ? item.usecase
+      : typeof item.usecase === "string" && item.usecase.length > 0
+      ? item.usecase.split(",").map((v: string) => v.trim())
+      : [],
+    wifi: item.wifi || "",
+    category: item.category || "",
+  }));
+
 
         setAppsData(formattedData);
       } catch (e) {

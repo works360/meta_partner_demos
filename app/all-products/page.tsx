@@ -9,15 +9,18 @@ export default function AllProducts() {
   const router = useRouter();
 
   // ✅ Fetch all products
-  useEffect(() => {
-    fetch("/api/products")
-      .then(async (res) => {
-        const data = await res.json();
-        console.log("Fetched products:", data);
-        setProducts(data);
-      })
-      .catch((err) => console.error("Fetch error:", err));
-  }, []);
+useEffect(() => {
+  fetch("/api/products")
+    .then(async (res) => {
+      const data = await res.json();
+      console.log("Fetched products:", data);
+
+      // ✅ ALWAYS ensure it's an array
+      setProducts(Array.isArray(data) ? data : []);
+    })
+    .catch((err) => console.error("Fetch error:", err));
+}, []);
+
 
   // ✅ Delete product
   const deleteProduct = async (id: number) => {
@@ -63,7 +66,8 @@ export default function AllProducts() {
             </thead>
 
             <tbody>
-              {products.map((p: any) => (
+              {Array.isArray(products) && products.map((p: any) => (
+
                 <tr
                   key={p.id}
                   className="border-b hover:bg-gray-50 transition-colors"
@@ -80,24 +84,25 @@ export default function AllProducts() {
                   <td className="py-2 px-4">{p.product_qty}</td>
 
                   <td className="py-2 px-4">
-                    {p.image ? (
-                      <div className="w-[50px] h-[50px] flex items-center justify-center overflow-hidden rounded-md">
-                        <img
-                          src={`/productimages/${p.image}`}
-                          alt={p.product_name}
-                          className="w-[50px] h-[50px] object-cover"
-                          style={{
-                            minWidth: "50px",
-                            minHeight: "50px",
-                            maxWidth: "50px",
-                            maxHeight: "50px",
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <span className="text-gray-400">No image</span>
-                    )}
-                  </td>
+  {p.image ? (
+    <div className="w-[50px] h-[50px] flex items-center justify-center overflow-hidden rounded-md">
+      <img
+        src={p.image}   // 👈 FIXED
+        alt={p.product_name}
+        className="w-[50px] h-[50px] object-cover"
+        style={{
+          minWidth: "50px",
+          minHeight: "50px",
+          maxWidth: "50px",
+          maxHeight: "50px",
+        }}
+      />
+    </div>
+  ) : (
+    <span className="text-gray-400">No image</span>
+  )}
+</td>
+
 
                   <td className="py-2 px-4 text-center">
                     <div className="flex justify-center gap-4">

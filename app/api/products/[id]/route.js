@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { db } from "@/lib/db";
 
-// ------------------------------------------------------
-// ⭐ GET ONE PRODUCT  → REQUIRED FOR EDIT PAGE
-// ------------------------------------------------------
-export async function GET(req, context) {
-  const { id } = context.params;
+// -----------------------------------------
+// GET ONE PRODUCT
+// -----------------------------------------
+export async function GET(req, { params }) {
+  const { id } = await params;
 
   try {
     const [rows] = await db.execute("SELECT * FROM products WHERE id = ?", [id]);
@@ -25,16 +25,15 @@ export async function GET(req, context) {
   }
 }
 
-// ------------------------------------------------------
-// ⭐ UPDATE PRODUCT (PUT)
-// ------------------------------------------------------
-export async function PUT(req, context) {
-  const { id } = context.params;
+// -----------------------------------------
+// UPDATE PRODUCT
+// -----------------------------------------
+export async function PUT(req, { params }) {
+  const { id } = await params;
 
   try {
     const formData = await req.formData();
 
-    // Get existing product
     const [rows] = await db.execute("SELECT * FROM products WHERE id = ?", [id]);
     if (!rows.length) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
@@ -56,9 +55,8 @@ export async function PUT(req, context) {
     const galleryFiles = formData.getAll("gallery_images[]");
 
     let mainImageURL = existing.image;
-    let galleryURLs = existing.gallery_images ? existing.gallery_images.split(",") : [];
 
-    // ⭐ Upload new main image
+    // ⭐ Upload main image if new
     if (mainFile && typeof mainFile === "object" && mainFile.size > 0) {
       const safeName = mainFile.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
       const filename = `product_${Date.now()}_${safeName}`;
@@ -69,26 +67,36 @@ export async function PUT(req, context) {
 
     // ⭐ Upload new gallery images
     const newGalleryURLs = [];
-
     for (const g of galleryFiles) {
       if (g && typeof g === "object" && g.size > 0) {
         const safeName = g.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
         const filename = `gallery_${Date.now()}_${safeName}`;
         const buffer = Buffer.from(await g.arrayBuffer());
-        const uploaded = await put(`products/gallery/${filename}`, buffer, { access: "public" });
+        const uploaded = await put(`products/gallery/${filename}`, buffer, {
+          access: "public",
+        });
         newGalleryURLs.push(uploaded.url);
       }
     }
 
+    let finalGalleryURLs = [];
+
+    // ⭐ If user uploaded new gallery → REPLACE old gallery
     if (newGalleryURLs.length > 0) {
-      galleryURLs = [...galleryURLs, ...newGalleryURLs];
+      finalGalleryURLs = newGalleryURLs;
+    } else {
+      // else keep existing gallery
+      finalGalleryURLs = existing.gallery_images
+        ? existing.gallery_images.split(",")
+        : [];
     }
 
+    // ⭐ Update DB
     await db.execute(
-      `UPDATE products
-       SET product_name=?, product_sku=?, product_qty=?, total_inventory=?, description=?, 
-           category=?, usecase=?, level=?, wifi=?, image=?, gallery_images=?
-       WHERE id=?`,
+      `UPDATE products SET 
+        product_name=?, product_sku=?, product_qty=?, total_inventory=?, description=?,
+        category=?, usecase=?, level=?, wifi=?, image=?, gallery_images=?
+        WHERE id=?`,
       [
         product_name,
         product_sku,
@@ -100,17 +108,68 @@ export async function PUT(req, context) {
         level,
         wifi,
         mainImageURL,
-        galleryURLs.join(","),
+        finalGalleryURLs.join(","),
         id,
       ]
     );
 
-    return NextResponse.json({ success: true, message: "Product updated successfully ✨" });
+    return NextResponse.json({
+      success: true,
+      message: "Product updated successfully ✨",
+    });
 
   } catch (error) {
     console.error("PUT /api/products/[id] error:", error);
     return NextResponse.json(
       { error: "Failed to update product", details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+
+// -----------------------------------------
+// DELETE PRODUCT
+// -----------------------------------------
+export async function DELETE(req, { params }) {
+  const { id } = await params;
+
+  try {
+    // Fetch product before deleting (for image cleanup later)
+    const [rows] = await db.execute(
+      "SELECT image, gallery_images FROM products WHERE id = ?",
+      [id]
+    );
+
+    if (!rows.length) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
+    const { image, gallery_images } = rows[0];
+
+    // Delete from database
+    await db.execute("DELETE FROM products WHERE id = ?", [id]);
+
+    // OPTIONAL: Delete images from Vercel Blob
+    // (uncomment if you want storage cleanup)
+    /*
+    if (image) await del(image);
+    if (gallery_images) {
+      for (const url of gallery_images.split(",")) {
+        if (url) await del(url);
+      }
+    }
+    */
+
+    return NextResponse.json({
+      success: true,
+      message: "Product deleted successfully ❌🗑️",
+    });
+
+  } catch (error) {
+    console.error("DELETE /api/products/[id] error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete product", details: error.message },
       { status: 500 }
     );
   }
