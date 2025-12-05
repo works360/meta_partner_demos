@@ -19,10 +19,10 @@ export default function EditProduct() {
         const data = await res.json();
         setProduct(data);
 
-        if (data.image) setPreview(`/productimages/${data.image}`);
+        if (data.image) setPreview(data.image);
         if (data.gallery_images)
           setGalleryPreview(
-            data.gallery_images.split(",").map((img: string) => `/productimages/${img}`)
+            setGalleryPreview(data.gallery_images.split(","));
           );
       } catch (err) {
         console.error("Error fetching product:", err);
