@@ -19,11 +19,12 @@ export default function EditProduct() {
         const data = await res.json();
         setProduct(data);
 
+        // ⭐ Blob URLs — use them directly
         if (data.image) setPreview(data.image);
-        if (data.gallery_images)
-          setGalleryPreview(
-            setGalleryPreview(data.gallery_images.split(","));
-          );
+
+        if (data.gallery_images) {
+          setGalleryPreview(data.gallery_images.split(","));
+        }
       } catch (err) {
         console.error("Error fetching product:", err);
       }
@@ -33,7 +34,7 @@ export default function EditProduct() {
 
   if (!product) return <p className="p-5 text-center">Loading product...</p>;
 
-  // ✅ Handle image previews
+  // ✅ Handle main image preview
   const handleMainImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -41,13 +42,15 @@ export default function EditProduct() {
       reader.onload = (r) => setPreview(r.target?.result as string);
       reader.readAsDataURL(file);
     } else {
-      setPreview(product.image ? `/productimages/${product.image}` : null);
+      setPreview(product.image);
     }
   };
 
+  // ✅ Handle gallery preview
   const handleGalleryChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const urls: string[] = [];
+
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (r) => {
@@ -58,7 +61,7 @@ export default function EditProduct() {
     });
   };
 
-  // ✅ Handle form submit
+  // ✅ Submit form
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -82,7 +85,11 @@ export default function EditProduct() {
     <div className="container py-5">
       <h2 className="mb-4 text-center">Edit Product</h2>
 
-      <form onSubmit={handleSubmit} encType="multipart/form-data" className="card p-4 shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="card p-4 shadow-sm"
+      >
         <div className="row">
           {/* LEFT SIDE */}
           <div className="col-lg-8">
@@ -95,6 +102,7 @@ export default function EditProduct() {
                 className="form-control"
               />
             </div>
+
             <div className="mb-3">
               <label>Product SKU</label>
               <input
@@ -103,6 +111,7 @@ export default function EditProduct() {
                 className="form-control"
               />
             </div>
+
             <div className="mb-3">
               <label>Product Quantity</label>
               <input
@@ -112,6 +121,7 @@ export default function EditProduct() {
                 className="form-control"
               />
             </div>
+
             <div className="mb-3">
               <label>Total Inventory</label>
               <input
@@ -121,6 +131,7 @@ export default function EditProduct() {
                 className="form-control"
               />
             </div>
+
             <div className="mb-3">
               <label>Description</label>
               <input
@@ -129,9 +140,14 @@ export default function EditProduct() {
                 className="form-control"
               />
             </div>
+
             <div className="mb-3">
               <label>Category</label>
-              <select name="category" defaultValue={product.category} className="form-control">
+              <select
+                name="category"
+                defaultValue={product.category}
+                className="form-control"
+              >
                 <option value="">Select Category</option>
                 <option value="Headset">Headset</option>
                 <option value="Offline Apps">Offline Apps</option>
@@ -139,13 +155,13 @@ export default function EditProduct() {
               </select>
             </div>
 
-            {/* ✅ Usecase */}
+            {/* Usecase */}
             <div className="mb-3">
               <label>Usecase</label>
               <select
                 name="usecase[]"
                 multiple
-                defaultValue={product.usecase ? product.usecase.split(",") : []}
+                defaultValue={product.usecase?.split(",") || []}
                 className="form-select"
               >
                 <option>Creativity & Design</option>
@@ -157,13 +173,13 @@ export default function EditProduct() {
               </select>
             </div>
 
-            {/* ✅ Level */}
+            {/* Level */}
             <div className="mb-3">
               <label>Level</label>
               <select
                 name="level[]"
                 multiple
-                defaultValue={product.level ? product.level.split(",") : []}
+                defaultValue={product.level?.split(",") || []}
                 className="form-select"
               >
                 <option>Beginner</option>
@@ -172,13 +188,13 @@ export default function EditProduct() {
               </select>
             </div>
 
-            {/* ✅ Wi-Fi */}
+            {/* Wi-Fi */}
             <div className="mb-3">
               <label>Requires Wi-Fi?</label>
               <select
                 name="wifi[]"
                 multiple
-                defaultValue={product.wifi ? product.wifi.split(",") : []}
+                defaultValue={product.wifi?.split(",") || []}
                 className="form-select"
               >
                 <option>Yes</option>
@@ -198,6 +214,7 @@ export default function EditProduct() {
                 className="form-control"
                 onChange={handleMainImageChange}
               />
+
               {preview && (
                 <img
                   src={preview}
@@ -208,7 +225,7 @@ export default function EditProduct() {
             </div>
 
             <div className="mb-3">
-              <label>Gallery Images (up to 4)</label>
+              <label>Gallery Images</label>
               <input
                 type="file"
                 name="gallery_images[]"
@@ -217,13 +234,26 @@ export default function EditProduct() {
                 className="form-control"
                 onChange={handleGalleryChange}
               />
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: 10 }}>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                  marginTop: 10,
+                }}
+              >
                 {galleryPreview.map((src, i) => (
                   <img
                     key={i}
                     src={src}
                     alt=""
-                    style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 5 }}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      objectFit: "cover",
+                      borderRadius: 5,
+                    }}
                   />
                 ))}
               </div>
@@ -235,6 +265,7 @@ export default function EditProduct() {
           <button type="submit" className="btn btn-primary px-4">
             Update Product
           </button>
+
           <button
             type="button"
             className="btn btn-secondary px-4 ms-2"
