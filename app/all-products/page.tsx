@@ -4,22 +4,28 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
+interface Product {
+  id: number;
+  product_name: string;
+  product_sku: string;
+  category: string;
+  product_qty: number;
+  image: string;
+}
+
 export default function AllProducts() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
 
-  // ✅ Fetch all products
-useEffect(() => {
-  fetch("/api/products")
-    .then(async (res) => {
-      const data = await res.json();
-      console.log("Fetched products:", data);
+  useEffect(() => {
+    fetch("/api/products")
+      .then(async (res) => {
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
 
-      // ✅ ALWAYS ensure it's an array
-      setProducts(Array.isArray(data) ? data : []);
-    })
-    .catch((err) => console.error("Fetch error:", err));
-}, []);
 
 
   // ✅ Delete product
