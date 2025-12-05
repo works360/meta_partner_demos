@@ -92,10 +92,10 @@ export default function SingleProductPage() {
     <div className="single-product-body">
       <div className="product-wrapper" style={{ marginTop: "3rem" }}>
         <div className="header-row">
-          <button className="back-btn" onClick={() => router.push("/")}>
+          {/* <button className="back-btn" onClick={() => router.push("/")}>
             <img src="/back-arrow.png" alt="Back" width={18} />
             Back
-          </button>
+          </button> */}
         </div>
 
         <div className="product-card">
