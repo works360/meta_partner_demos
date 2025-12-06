@@ -13,8 +13,8 @@ interface Product {
   usecase: string;
   level: string;
   description: string;
-  image: string;
-  gallery_images: string[];
+  image: string;              // FULL BLOB URL
+  gallery_images: string[];   // ARRAY OF FULL BLOB URLs
 }
 
 export default function SingleProductPage() {
@@ -32,7 +32,6 @@ export default function SingleProductPage() {
 
   const handleZoom = (e: MouseEvent<HTMLDivElement>) => {
     if (!imgRef.current) return;
-
     const rect = imgRef.current.getBoundingClientRect();
     setZoom(true);
 
@@ -42,15 +41,18 @@ export default function SingleProductPage() {
     imgRef.current.style.transformOrigin = `${x}% ${y}%`;
   };
 
+  // Load product
   useEffect(() => {
     async function fetchProduct() {
       if (!id) return;
+
       try {
         const res = await fetch(`/api/get-singleproduct?id=${id}`);
         const data = await res.json();
+
         if (res.ok) {
           setProduct(data);
-          setMainImage(`/productimages/${data.image}`);
+          setMainImage(data.image); // ⭐ Blob URL directly
           setCurrentIndex(0);
         }
       } catch (err) {
@@ -61,16 +63,15 @@ export default function SingleProductPage() {
     fetchProduct();
   }, [id]);
 
+  // Wait for product to load
   if (!product) {
     return <div className="loading-screen">Loading product details...</div>;
   }
 
-  // Combine all images for slider
-  const allImages = [
-    `/productimages/${product.image}`,
-    ...product.gallery_images.map((img) => `/productimages/${img}`),
-  ];
+  // ⭐ COMBINE IMAGES (NO /productimages)
+  const allImages = [product.image, ...product.gallery_images];
 
+  // Slider logic
   const handleNext = () => {
     const newIndex = (currentIndex + 1) % allImages.length;
     setCurrentIndex(newIndex);
