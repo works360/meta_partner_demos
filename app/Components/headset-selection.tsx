@@ -180,14 +180,19 @@ export default function HeadsetSelection() {
                     </span>
 
                     <div style={{ marginBottom: "1.5rem", textAlign: "center" }}>
-                      <Image
-                        src={headset.image}
-                        alt={headset.name}
-                        width={650}
-                        height={650}
-                        style={{ maxWidth: "100%", height: "auto" }}
-                      />
-                    </div>
+  <Image
+    src={headset.image}   // full URL from DB
+    alt={headset.name}
+    width={650}
+    height={650}
+    unoptimized
+    onError={(e: any) => {
+      e.currentTarget.src = "https://placehold.co/600x400?text=No+Image";
+    }}
+    style={{ maxWidth: "100%", height: "auto" }}
+  />
+</div>
+
 
                     <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#1a1a1a", marginBottom: "1rem" }}>
                       {headset.name}

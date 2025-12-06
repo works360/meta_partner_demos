@@ -17,11 +17,11 @@ export async function GET() {
          OR product_name LIKE '%Meta Quest%'
     `);
 
-    // ✅ Format image path correctly
+    // ✅ DO NOT PREFIX BLOB URLs — use them directly
     const formatted = rows.map((item) => ({
       ...item,
       image: item.image
-        ? `/productimages/${item.image}`
+        ? item.image // <-- full Vercel Blob URL from DB
         : "https://placehold.co/400x160/cbd5e1/475569?text=No+Image",
     }));
 
