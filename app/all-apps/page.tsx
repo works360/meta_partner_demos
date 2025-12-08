@@ -112,10 +112,13 @@ export default function AllAppsPage() {
                 rel="noopener noreferrer"
               >
                 <img
-                  src={app.image ? `/productimages/${app.image}` : "/placeholder.png"}
-                  className="app-card-image"
-                  alt={app.name}
-                />
+  src={app.image || "https://placehold.co/400x200?text=No+Image"}
+  className="app-card-image"
+  alt={app.name}
+  onError={(e) => {
+    e.currentTarget.src = "https://placehold.co/400x200?text=No+Image";
+  }}
+/>
 
                 <div className="app-card-info">
                   <h3 className="app-name">{app.name}</h3>
