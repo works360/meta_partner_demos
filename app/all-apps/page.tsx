@@ -58,16 +58,18 @@ export default function AllAppsPage() {
 
   // FILTER LOGIC
   const filteredApps = apps.filter(app => {
-    // DROPDOWN FILTER
-    if (selectedFilter === "online" && app.category !== "Online Apps") return false;
-    if (selectedFilter === "offline" && app.category !== "Offline Apps") return false;
+  // DROPDOWN FILTER
+  if (selectedFilter === "online" && app.category !== "Online Apps") return false;
+  if (selectedFilter === "offline" && app.category !== "Offline Apps") return false;
 
-    // TOGGLE FILTER
+  // TOGGLE FILTER — ONLY APPLY WHEN selectedFilter = "all"
+  if (selectedFilter === "all") {
     if (selectedToggle === "Pre-Packaged" && app.category !== "Offline Apps") return false;
     if (selectedToggle === "Managed" && app.category !== "Online Apps") return false;
+  }
 
-    return true;
-  });
+  return true;
+});
 
   // DYNAMIC USECASE BASED ON FILTERED RESULTS
   const selectedUsecase = filteredApps[0]?.usecase || "Usecase";
@@ -111,15 +113,21 @@ export default function AllAppsPage() {
               )}
             </div>
 
-            <button className="clear-all-btn" onClick={() => setSelectedFilter("all")}>
-              Clear all
-            </button>
+            <button
+                  className="clear-all-btn"
+                  onClick={() => {
+                    setSelectedFilter("all");
+                    setSelectedToggle("All");   // <-- ADD THIS
+                  }}
+                >
+                  Clear all
+                </button>
           </div>
 
           {/* RIGHT SIDE — TOGGLE BUTTONS */}
           <div className="apps-toggle-wrapper">
             <button
-              className={`toggle-btn ${selectedToggle === "All" ? "active" : ""}`}
+              className={`toggle-btn-hide ${selectedToggle === "All" ? "active" : ""}`}
               onClick={() => setSelectedToggle("All")}
             >
               All Apps
@@ -147,14 +155,10 @@ export default function AllAppsPage() {
 
           {!isLoading &&
             filteredApps.map(app => (
-              <a
-                key={app.id}
+              <div
                 className="app-page-card"
-                onClick={() => {
-                if (app.link) window.open(app.link, "_blank");
-              }}
-              style={{ cursor: "pointer" }}
-                rel="noopener noreferrer"
+                onClick={() => app.link && window.open(app.link, "_blank")}
+                style={{ cursor: "pointer" }}
               >
                 <img
                   src={app.image || "https://placehold.co/400x200?text=No+Image"}
@@ -183,10 +187,10 @@ export default function AllAppsPage() {
               >
                 <img src="/Arrow.png" alt="arrow" style={{ width: "1.6rem", height: "auto" }} />
                 <span className="underline-text">Learn More</span>
-                
-              </a>
+                 </a>
+             
                 </div>
-              </a>
+                </div>
             ))}
         </div>
         
