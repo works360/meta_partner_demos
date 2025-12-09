@@ -110,19 +110,14 @@
 }
 
 .app-card-info {
-  padding: 15px;
+  padding-top: 10px;
 }
 
 .app-name {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   color: #222;
-  margin-bottom: 4px;
-}
-
-.app-category {
-  font-size: 13px;
-  color: #777;
+  margin-bottom: -8px;
 }
 
 /* RESPONSIVENESS */
@@ -143,4 +138,76 @@
 }
 .all-apps-section {
     max-width: 1200px;
+}
+/* TOP ROW layout */
+.apps-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+/* Filter section stays left */
+.apps-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Toggle buttons on right */
+.apps-toggle-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+.toggle-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #bfc5d2;
+  background: #f7f8fb;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.toggle-btn:hover {
+  background: #e9ecf3;
+}
+
+.toggle-btn.active {
+  background: #ffffff;
+  border: 1px solid #2e5eff;
+  color: #2e5eff;
+}
+
+/* GRID fixes for spacing like screenshot */
+.apps-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 20px;
+}
+
+/* Card styling improvements (matching screenshot) */
+.app-page-card {
+  text-decoration: none;
+}
+
+.app-card:hover {
+  transform: translateY(-5px);
+}
+
+.app-card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.app-category {
+  font-size: 14px;
+  color: #7c8495;
+  margin-bottom: 9px;
+}
+span.underline-text {
+    font-size: 14px !important;
 }

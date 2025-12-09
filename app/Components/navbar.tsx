@@ -56,7 +56,8 @@ export function Navbar() {
             <Link href="/returns" className="nav-item">Returns</Link>
             <Link href="/support" className="nav-item">Support</Link>
             <Link href="/t&c" className="nav-item">T&Cs</Link>
-            {/* <Link href="/dashboard" className="nav-item">360Dashboard</Link> */}
+            <Link href="/all-apps" className="nav-item">Apps</Link>
+            <Link href="/dashboard" className="nav-item">360Dashboard</Link>
           </nav>
 
           {/* Mobile Hamburger Button */}

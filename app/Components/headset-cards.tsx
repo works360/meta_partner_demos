@@ -8,10 +8,10 @@ export function HeadsetCards() {
       id: 4,
       name: "Meta Quest 3S",
       description:
-        "Meta Quest 3S offers endless possibilities to collaborate, create and learn at an incredible price, so now the whole team can experience its power.",
+        "Meta Quest 3S offers endless possibilities to collaborate, create and learn at an incredible price, so now the whole team can experience its power together and effortlessly.",
       image: "/Meta-3s.webp",
       productId: 4,
-    },
+      },
     {
       id: 6,
       name: "Meta Quest 3",
@@ -44,7 +44,7 @@ export function HeadsetCards() {
                 {/* Text */}
                 <div className="headset-content">
                   <h3 className="headset-name">{headset.name}</h3>
-                  <p className="headset-desc">{headset.description}</p>
+                  <p style={{ whiteSpace: "pre-line" }} className="headset-desc">{headset.description}</p>
 
                   {/* Buttons */}
                   <div className="headset-buttons">

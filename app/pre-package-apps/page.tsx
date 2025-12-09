@@ -293,7 +293,7 @@ const formattedData = data.map((item: any) => ({
                       }`}
                     onClick={() => toggleAppSelection(app.id)}
                   >
-                    {/* Selection Circle
+                    {/* Selection Circle */}
                       <div
                         className="select-circle absolute"
                         style={{
@@ -316,7 +316,7 @@ const formattedData = data.map((item: any) => ({
                             <path d="M20.285 2.859l-11.85 11.859-4.715-4.718-2.285 2.285 7 7 14-14z" />
                           </svg>
                         )}
-                      </div> */}
+                      </div>
                     <div className="app-image h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
                       <img
                         src={app.image}
@@ -338,14 +338,14 @@ const formattedData = data.map((item: any) => ({
                         {app.name}
                       </h4>
 
-                      <div className="flex justify-left items-center space-x-2">
+                      {/* <div className="flex justify-left items-center space-x-2">
                         <input
                           type="checkbox"
                           readOnly
                           checked={selectedApps.includes(app.id)}
                           className="form-checkbox h-5 w-5 text-blue-600 rounded-md border-gray-400 cursor-pointer"
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}
