@@ -528,12 +528,12 @@ await fetch(`/api/send-rejected-email?orderid=${order.id}`);
                   </>
                 ) : order.return_label ? (
                   <a
-  href={order.return_label}
-  target="_blank"
-  rel="noopener noreferrer"
->
-  View File
-</a>
+                   href={order.return_label}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                  >
+                  View File
+                  </a>
 
                 ) : (
                   "N/A"
