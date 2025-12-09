@@ -24,7 +24,6 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 25px;
 }
 
 .filter-label {
@@ -148,13 +147,6 @@
   align-items: center;
   margin-bottom: 25px;
   width: 100%;
-}
-
-/* Filter section stays left */
-.apps-filter-row {
-  display: flex;
-  align-items: center;
-  gap: 15px;
 }
 
 /* Toggle buttons on right */

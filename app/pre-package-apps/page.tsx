@@ -285,7 +285,7 @@ const formattedData = data.map((item: any) => ({
                 {filteredApps.map((app) => (
                   <div
                     key={app.id}
-                    className={`app-card relative bg-white rounded-xl overflow-hidden transition-all duration-300 cursor-pointer 
+                    className={`app-card relative bg-white rounded-xl overflow-visible transition-all duration-300 cursor-pointer 
                       ${
                         selectedApps.includes(app.id)
                           ? "ring-4 ring-blue-500 transform scale-[1.02]"
