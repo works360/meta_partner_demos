@@ -130,9 +130,9 @@ const DashboardPage: React.FC = () => {
         <main className="content-area">
           <div className="content-card">
             <div className="content-header">
-              <h3 className="content-title" id="contentTitle">
+              {/* <h3 className="content-title" id="contentTitle">
                 {TITLES[currentView]}
-              </h3>
+              </h3> */}
               <button
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
