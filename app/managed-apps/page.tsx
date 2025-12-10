@@ -310,44 +310,69 @@ export default function ManagedAppsPage() {
               <div className="apps-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {filteredApps.map((app) => (
                   <div
-                    key={app.id}
-                    className={`app-card relative bg-white rounded-xl overflow-hidden transition-all duration-300 cursor-pointer 
-                      ${
-                        selectedApps.includes(app.id)
-                          ? "ring-4 ring-blue-500 transform scale-[1.02]"
-                          : "hover:shadow-xl hover:ring-2 hover:ring-gray-300"
-                      }`}
-                    onClick={() => toggleAppSelection(app.id)}
-                  >
-                    <div className="app-image h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
-                      <img
-                        src={app.image}
-                        alt={app.name}
-                        className="w-full h-full object-cover transition-opacity duration-300"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src =
-                            "https://placehold.co/400x160/cbd5e1/475569?text=App+Image";
-                        }}
-                      />
-                    </div>
+  key={app.id}
+  className={`app-card relative bg-white rounded-xl overflow-visible transition-all duration-300 cursor-pointer 
+    ${
+      selectedApps.includes(app.id)
+        ? "ring-4 ring-blue-500 transform scale-[1.02]"
+        : "hover:shadow-xl hover:ring-2 hover:ring-gray-300"
+    }`}
+  onClick={() => toggleAppSelection(app.id)}
+>
 
-                    <div className="app-info text-left">
-                      <h4
-                        className="app-name text-lg font-semibold text-gray-900 truncate"
-                        title={app.name}
-                      >
-                        {app.name}
-                      </h4>
+  {/* SELECT CIRCLE */}
+  <div
+    className="select-circle absolute"
+    style={{
+      top: "-13px",
+      left: "-9px",
+      width: "30px",
+      height: "30px",
+      borderRadius: "50%",
+      borderColor: selectedApps.includes(app.id) ? "#0064e0" : "",
+      backgroundColor: selectedApps.includes(app.id) ? "#0064e0" : "",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 20,
+    }}
+    onClick={(e) => {
+      e.stopPropagation();
+      toggleAppSelection(app.id);
+    }}
+  >
+    {selectedApps.includes(app.id) && (
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
+        <path d="M20.285 2.859l-11.85 11.859-4.715-4.718-2.285 2.285 7 7 14-14z" />
+      </svg>
+    )}
+  </div>
 
-                      <div className="flex justify-left items-center space-x-2">
+  {/* IMAGE */}
+  <div className="app-image h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+    <img
+      src={app.image}
+      alt={app.name}
+      className="w-full h-full object-cover"
+      onError={(e) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = "https://placehold.co/400x160/cbd5e1/475569?text=App+Image";
+      }}
+    />
+  </div>
+
+  {/* APP NAME */}
+  <div className="app-info text-left p-3">
+    <h4 className="app-name text-lg font-semibold text-gray-900 truncate">{app.name}</h4>
+
+                      {/* <div className="flex justify-left items-center space-x-2">
                         <input
                           type="checkbox"
                           readOnly
                           checked={selectedApps.includes(app.id)}
                           className="form-checkbox h-5 w-5 text-blue-600 rounded-md border-gray-400 cursor-pointer"
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}

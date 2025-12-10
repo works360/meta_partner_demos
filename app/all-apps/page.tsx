@@ -7,7 +7,7 @@ interface AppCard {
   id: number;
   name: string;
   category: "Online Apps" | "Offline Apps";
-  usecase: string;  // <-- IMPORTANT
+  usecase: string;
   image: string;
   link?: string;
 }
@@ -15,12 +15,15 @@ interface AppCard {
 export default function AllAppsPage() {
   const [filterOpen, setFilterOpen] = useState(false);
 
-  // FILTER BY (Dropdown)
+  // CATEGORY FILTER (all, online, offline)
   const [selectedFilter, setSelectedFilter] = useState<
     "all" | "online" | "offline"
   >("all");
 
-  // TOGGLE BUTTONS
+  // USECASE FILTER
+  const [selectedUsecaseFilter, setSelectedUsecaseFilter] = useState<string>("all");
+
+  // TOGGLE BUTTON FILTER
   const [selectedToggle, setSelectedToggle] = useState<
     "All" | "Pre-Packaged" | "Managed"
   >("All");
@@ -29,7 +32,11 @@ export default function AllAppsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
+  // helper: normalize strings for comparison
+  const normalize = (value: string | undefined | null) =>
+    (value || "").trim().toLowerCase();
+
+  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -40,13 +47,23 @@ export default function AllAppsPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Load apps from API
+  // Load apps
   useEffect(() => {
     const fetchApps = async () => {
       try {
         const offlineData = await fetch("/api/getOfflineApps", { cache: "no-store" }).then(r => r.json());
         const onlineData = await fetch("/api/getOnlineApps", { cache: "no-store" }).then(r => r.json());
-        setApps([...offlineData, ...onlineData]);
+        const combined = [...offlineData, ...onlineData];
+
+        // optional debug: see usecases coming from API
+        console.log("Loaded apps:", combined.map((a: AppCard) => ({
+          id: a.id,
+          name: a.name,
+          category: a.category,
+          usecase: a.usecase
+        })));
+
+        setApps(combined);
       } catch (err) {
         console.error("Failed to load apps", err);
       } finally {
@@ -58,21 +75,29 @@ export default function AllAppsPage() {
 
   // FILTER LOGIC
   const filteredApps = apps.filter(app => {
-  // DROPDOWN FILTER
-  if (selectedFilter === "online" && app.category !== "Online Apps") return false;
-  if (selectedFilter === "offline" && app.category !== "Offline Apps") return false;
+    // If a usecase is selected, ONLY filter by usecase (ignore category & toggle)
+    if (selectedUsecaseFilter !== "all") {
+      return normalize(app.usecase) === normalize(selectedUsecaseFilter);
+    }
 
-  // TOGGLE FILTER — ONLY APPLY WHEN selectedFilter = "all"
-  if (selectedFilter === "all") {
-    if (selectedToggle === "Pre-Packaged" && app.category !== "Offline Apps") return false;
-    if (selectedToggle === "Managed" && app.category !== "Online Apps") return false;
-  }
+    // Otherwise apply category filter
+    if (selectedFilter === "online" && app.category !== "Online Apps") return false;
+    if (selectedFilter === "offline" && app.category !== "Offline Apps") return false;
 
-  return true;
-});
+    // Then toggle filter — only when no usecase is selected and category = all
+    if (selectedFilter === "all") {
+      if (selectedToggle === "Pre-Packaged" && app.category !== "Offline Apps") return false;
+      if (selectedToggle === "Managed" && app.category !== "Online Apps") return false;
+    }
 
-  // DYNAMIC USECASE BASED ON FILTERED RESULTS
-  const selectedUsecase = filteredApps[0]?.usecase || "Usecase";
+    return true;
+  });
+
+  // Dropdown label
+  const selectedUsecaseName =
+    selectedUsecaseFilter !== "all"
+      ? selectedUsecaseFilter
+      : filteredApps[0]?.usecase || "Usecase";
 
   return (
     <main>
@@ -88,43 +113,118 @@ export default function AllAppsPage() {
 
         <div className="apps-top-row">
           
-          {/* LEFT SIDE — FILTER DROPDOWN */}
+          {/* FILTER DROPDOWN */}
           <div className="apps-filter-row" ref={dropdownRef}>
             <label className="filter-label">FILTER BY:</label>
 
             <div className="filter-dropdown-wrapper">
-              <button className="filter-dropdown" onClick={() => setFilterOpen(!filterOpen)}>
-                {selectedUsecase}
+              <button
+                className="filter-dropdown"
+                onClick={() => setFilterOpen(!filterOpen)}
+              >
+                {selectedUsecaseName}
                 <span className="arrow">▾</span>
               </button>
 
               {filterOpen && (
                 <div className="dropdown-menu">
-                  <button onClick={() => { setSelectedFilter("all"); setFilterOpen(false); }}>
+
+                  {/* CATEGORY FILTERS */}
+                  <button
+                    onClick={() => {
+                      setSelectedFilter("all");
+                      setSelectedUsecaseFilter("all");
+                      setFilterOpen(false);
+                    }}
+                  >
                     Show all
                   </button>
-                  <button onClick={() => { setSelectedFilter("online"); setFilterOpen(false); }}>
+
+                  <button
+                    onClick={() => {
+                      setSelectedFilter("online");
+                      setSelectedUsecaseFilter("all");
+                      setFilterOpen(false);
+                    }}
+                  >
                     Online apps
                   </button>
-                  <button onClick={() => { setSelectedFilter("offline"); setFilterOpen(false); }}>
+
+                  <button
+                    onClick={() => {
+                      setSelectedFilter("offline");
+                      setSelectedUsecaseFilter("all");
+                      setFilterOpen(false);
+                    }}
+                  >
                     Offline apps
                   </button>
+
+                  <hr />
+
+                  {/* USECASE FILTERS */}
+                  <button
+                    onClick={() => {
+                      setSelectedUsecaseFilter("Creativity & Design");
+                      setFilterOpen(false);
+                    }}
+                  >
+                    Creativity & Design
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedUsecaseFilter("Meetings & Collaboration");
+                      setFilterOpen(false);
+                    }}
+                  >
+                    Meetings & Collaboration
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedUsecaseFilter("Education");
+                      setFilterOpen(false);
+                    }}
+                  >
+                    Education
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedUsecaseFilter("Learning & Training");
+                      setFilterOpen(false);
+                    }}
+                  >
+                    Learning & Training
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSelectedUsecaseFilter("Building Community");
+                      setFilterOpen(false);
+                    }}
+                  >
+                    Building Community
+                  </button>
+
                 </div>
               )}
             </div>
 
             <button
-                  className="clear-all-btn"
-                  onClick={() => {
-                    setSelectedFilter("all");
-                    setSelectedToggle("All");   // <-- ADD THIS
-                  }}
-                >
-                  Clear all
-                </button>
+              className="clear-all-btn"
+              onClick={() => {
+                setSelectedFilter("all");
+                setSelectedToggle("All");
+                setSelectedUsecaseFilter("all");
+              }}
+            >
+              Clear all
+            </button>
           </div>
 
-          {/* RIGHT SIDE — TOGGLE BUTTONS */}
+          {/* TOGGLE BUTTONS */}
           <div className="apps-toggle-wrapper">
             <button
               className={`toggle-btn-hide ${selectedToggle === "All" ? "active" : ""}`}
@@ -153,9 +253,14 @@ export default function AllAppsPage() {
         <div className="apps-grid">
           {isLoading && <p>Loading apps...</p>}
 
+          {!isLoading && filteredApps.length === 0 && (
+            <p>No apps found for this filter.</p>
+          )}
+
           {!isLoading &&
             filteredApps.map(app => (
               <div
+                key={app.id}
                 className="app-page-card"
                 onClick={() => app.link && window.open(app.link, "_blank")}
                 style={{ cursor: "pointer" }}
@@ -168,33 +273,36 @@ export default function AllAppsPage() {
                     e.currentTarget.src = "https://placehold.co/400x200?text=No+Image";
                   }}
                 />
+
                 <div className="app-card-info">
                   <h3 className="app-name">{app.name}</h3>
                   <p className="app-category">Apps • {app.category}</p>
+
                   <a
-                className="hover-underline-animation left"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()} // <-- Prevent selecting headset
-                style={{
-                  color: "#0066ff",
-                  textDecoration: "none",
-                  fontWeight: "500",
-                  fontSize: "0.95rem",
-                  cursor: "pointer",
-                  alignSelf: "flex-start",
-                }}
-              >
-                <img src="/Arrow.png" alt="arrow" style={{ width: "1.6rem", height: "auto" }} />
-                <span className="underline-text">Learn More</span>
-                 </a>
-             
+                    className="hover-underline-animation left"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      color: "#0066ff",
+                      textDecoration: "none",
+                      fontWeight: "500",
+                      fontSize: "0.95rem",
+                      cursor: "pointer",
+                      alignSelf: "flex-start",
+                    }}
+                  >
+                    <img
+                      src="/Arrow.png"
+                      alt="arrow"
+                      style={{ width: "1.6rem", height: "auto" }}
+                    />
+                    <span className="underline-text">Learn More</span>
+                  </a>
                 </div>
-                </div>
+              </div>
             ))}
         </div>
-        
-
       </div>
     </main>
   );
