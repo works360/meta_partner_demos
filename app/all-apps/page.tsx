@@ -105,9 +105,9 @@ export default function AllAppsPage() {
         <h1 className="text-3xl font-extrabold text-gray-900">Apps</h1>
       </header>
 
-      <p className="apps-description">
+      {/* <p className="apps-description">
         Explore the education applications of mixed reality with Meta and discover opportunities to boost innovation.
-      </p>
+      </p> */}
 
       <div className="container all-apps-section">
 
@@ -281,6 +281,7 @@ export default function AllAppsPage() {
                   <a
                     className="hover-underline-animation left"
                     target="_blank"
+                    href={app.link}
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                     style={{

@@ -14,6 +14,7 @@ export async function GET() {
         usecase,
         level,
         wifi,
+        link,
         image,
         gallery_images
       FROM products
