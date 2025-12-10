@@ -140,7 +140,7 @@ const DashboardPage: React.FC = () => {
                 title="Back"
                 onClick={handleReload}
               >
-                Back
+                Reload
               </button>
             </div>
             <div className="content-body">

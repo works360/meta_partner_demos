@@ -7,6 +7,28 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
+async function restoreStock(orderId) {
+  const [items] = await db.query(
+    `SELECT product_id, quantity 
+     FROM order_items 
+     WHERE order_id = ?`,
+    [orderId]
+  );
+
+  for (const item of items) {
+    await db.query(
+      `UPDATE products 
+       SET product_qty = product_qty + ? 
+       WHERE id = ?`,
+      [item.quantity, item.product_id]
+    );
+  }
+
+  console.log(`Stock restored for rejected order #${orderId}`);
+}
+
+
 // Escape HTML
 function esc(s) {
   if (!s) return "";
@@ -60,12 +82,15 @@ export async function GET(req) {
 
     const order = orders[0];
 
-    if (order.order_status.toLowerCase() !== "cancelled") {
-      return NextResponse.json(
-        { error: "Order is not rejected." },
-        { status: 400 }
-      );
-    }
+  if (order.order_status.toLowerCase() !== "cancelled") {
+  return NextResponse.json(
+    { error: "Order is not rejected." },
+    { status: 400 }
+  );
+}
+
+// ⭐ RESTORE STOCK FOR REJECTED ORDER ⭐
+await restoreStock(orderId);
 
     // ---------------------------------------------------
     // REJECTED EMAIL SPECIFIC DATA
