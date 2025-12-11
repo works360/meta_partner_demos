@@ -24,6 +24,10 @@
   display: flex;
   align-items: center;
   gap: 15px;
+
+  /* Required for dropdown */
+  position: relative;
+  overflow: visible !important;
 }
 
 .filter-label {
@@ -34,7 +38,8 @@
 
 .filter-dropdown-wrapper {
   position: relative;
-  z-index: 10;
+  display: inline-block;
+  z-index: 9999 !important;
 }
 
 .filter-dropdown {
@@ -50,23 +55,32 @@
   margin-left: 8px;
 }
 
+/* DROPDOWN MENU */
 .dropdown-menu {
   position: absolute;
+  top: 110%;
+  left: 0;
+
+  width: 200px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: 150px;
+
+  padding: 8px 0;
   margin-top: 5px;
-  z-index: 9999 !important;
+
+  z-index: 999999 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
 .dropdown-item {
-  padding: 10px;
+  padding: 10px 14px;
   width: 100%;
   text-align: left;
   background: none;
   border: none;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .dropdown-item:hover {
@@ -81,65 +95,6 @@
   cursor: pointer;
 }
 
-/* GRID OF APPS (4 PER ROW) */
-.apps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-}
-
-.app-card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: 0.25s;
-  cursor: pointer;
-}
-
-.app-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.app-card-image {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-}
-
-.app-card-info {
-  padding-top: 10px;
-}
-
-.app-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #222;
-  margin-bottom: -5px;
-}
-
-/* RESPONSIVENESS */
-@media (max-width: 1024px) {
-  .apps-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (max-width: 768px) {
-  .apps-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 480px) {
-  .apps-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-.all-apps-section {
-    max-width: 1200px;
-}
 /* TOP ROW layout */
 .apps-top-row {
   display: flex;
@@ -147,16 +102,23 @@
   align-items: center;
   margin-bottom: 25px;
   width: 100%;
+
+  position: relative;
+  overflow: visible !important;
 }
 
-/* Toggle buttons on right */
+/* Toggle buttons */
 .apps-toggle-wrapper {
-    gap: 12px;
-    display: flex;
-    background: rgb(255, 255, 255);
-    border: 1px solid #969696;
-    border-radius: 30px;
-    padding: 5px;
+  gap: 12px;
+  display: flex;
+  background: #fff;
+  border: 1px solid #969696;
+  border-radius: 30px;
+  padding: 5px;
+
+  /* Must be lower z-index so dropdown appears above */
+  position: relative;
+  z-index: 1 !important;
 }
 
 .toggle-btn {
@@ -175,11 +137,14 @@
 
 .toggle-btn.active {
   background: #E0E5F6;
-  /* border: 1px solid #656565; */
   color: #656565;
 }
 
-/* GRID fixes for spacing like screenshot */
+button.toggle-btn-hide {
+  display: none;
+}
+
+/* APPS GRID */
 .apps-grid {
   display: grid;
   gap: 24px;
@@ -187,13 +152,19 @@
   margin-top: 20px;
 }
 
-/* Card styling improvements (matching screenshot) */
 .app-page-card {
   text-decoration: none;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.app-card:hover {
+.app-page-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
 .app-card-image {
@@ -201,14 +172,84 @@
   height: 160px;
   object-fit: cover;
 }
+
+.app-card-info {
+  padding: 10px;
+}
+
+.app-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
 .app-category {
   font-size: 14px;
   color: #7c8495;
   margin-bottom: 9px;
 }
+
 span.underline-text {
-    font-size: 14px !important;
+  font-size: 14px !important;
 }
-button.toggle-btn-hide {
-    display: none;
+
+/* RESPONSIVENESS */
+@media (max-width: 1024px) {
+  .apps-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
+
+@media (max-width: 768px) {
+  .apps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .apps-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.all-apps-section {
+  max-width: 1200px;
+}
+
+/* === FORCE DROPDOWN TO APPEAR ABOVE ALL ELEMENTS === */
+
+.filter-dropdown-wrapper {
+  position: relative !important;
+  z-index: 999999 !important;
+}
+
+.dropdown-menu {
+  position: absolute !important;
+  top: 110% !important;
+  left: 0 !important;
+
+  width: 220px !important;
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  padding: 8px 0 !important;
+
+  z-index: 99999999 !important;
+  display: block !important;
+  visibility: visible !important;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.20) !important;
+}
+
+/* Fix parent containers blocking dropdown */
+.apps-filter-row,
+.apps-top-row,
+.all-apps-section,
+.container,
+main {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: auto !important;
+}
+
+

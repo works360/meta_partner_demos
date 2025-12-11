@@ -15,31 +15,33 @@ interface AppCard {
 export default function AllAppsPage() {
   const [filterOpen, setFilterOpen] = useState(false);
 
-  // CATEGORY FILTER (all, online, offline)
   const [selectedFilter, setSelectedFilter] = useState<
     "all" | "online" | "offline"
   >("all");
 
-  // USECASE FILTER
   const [selectedUsecaseFilter, setSelectedUsecaseFilter] = useState<string>("all");
 
-  // TOGGLE BUTTON FILTER
   const [selectedToggle, setSelectedToggle] = useState<
     "All" | "Pre-Packaged" | "Managed"
   >("All");
 
   const [apps, setApps] = useState<AppCard[]>([]);
+  const [usecases, setUsecases] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // FIX: ref ONLY around dropdown menu
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // helper: normalize strings for comparison
   const normalize = (value: string | undefined | null) =>
     (value || "").trim().toLowerCase();
 
-  // Close dropdown on outside click
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setFilterOpen(false);
       }
     }
@@ -47,57 +49,76 @@ export default function AllAppsPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Load apps
+  // Load apps + DB usecases
   useEffect(() => {
     const fetchApps = async () => {
       try {
-        const offlineData = await fetch("/api/getOfflineApps", { cache: "no-store" }).then(r => r.json());
-        const onlineData = await fetch("/api/getOnlineApps", { cache: "no-store" }).then(r => r.json());
-        const combined = [...offlineData, ...onlineData];
+        const offline = await fetch("/api/getOfflineApps", {
+          cache: "no-store",
+        }).then((r) => r.json());
 
-        // optional debug: see usecases coming from API
-        console.log("Loaded apps:", combined.map((a: AppCard) => ({
-          id: a.id,
-          name: a.name,
-          category: a.category,
-          usecase: a.usecase
-        })));
+        const online = await fetch("/api/getOnlineApps", {
+          cache: "no-store",
+        }).then((r) => r.json());
 
-        setApps(combined);
+        setApps([...offline, ...online]);
       } catch (err) {
         console.error("Failed to load apps", err);
       } finally {
         setIsLoading(false);
       }
     };
+
+    const fetchUsecases = async () => {
+      try {
+        const values = await fetch("/api/getUsecases", {
+          cache: "no-store",
+        }).then((r) => r.json());
+        setUsecases(values);
+      } catch (err) {
+        console.error("Failed to load usecases", err);
+      }
+    };
+
     fetchApps();
+    fetchUsecases();
   }, []);
 
   // FILTER LOGIC
-  const filteredApps = apps.filter(app => {
-    // If a usecase is selected, ONLY filter by usecase (ignore category & toggle)
-    if (selectedUsecaseFilter !== "all") {
-      return normalize(app.usecase) === normalize(selectedUsecaseFilter);
+const filteredApps = apps.filter((app) => {
+  // 1️⃣ USECASE FILTER (if selected)
+  if (selectedUsecaseFilter !== "all") {
+    if (normalize(app.usecase) !== normalize(selectedUsecaseFilter)) {
+      return false;
     }
+  }
 
-    // Otherwise apply category filter
-    if (selectedFilter === "online" && app.category !== "Online Apps") return false;
-    if (selectedFilter === "offline" && app.category !== "Offline Apps") return false;
+  // 2️⃣ CATEGORY FILTER (online/offline — NOT from dropdown anymore)
+  if (selectedFilter === "online" && app.category !== "Online Apps") {
+    return false;
+  }
 
-    // Then toggle filter — only when no usecase is selected and category = all
-    if (selectedFilter === "all") {
-      if (selectedToggle === "Pre-Packaged" && app.category !== "Offline Apps") return false;
-      if (selectedToggle === "Managed" && app.category !== "Online Apps") return false;
-    }
+  if (selectedFilter === "offline" && app.category !== "Offline Apps") {
+    return false;
+  }
 
-    return true;
-  });
+  // 3️⃣ TOGGLE FILTER (Pre-Packaged = Offline, Managed = Online)
+  if (selectedToggle === "Pre-Packaged" && app.category !== "Offline Apps") {
+    return false;
+  }
 
-  // Dropdown label
+  if (selectedToggle === "Managed" && app.category !== "Online Apps") {
+    return false;
+  }
+
+  return true;
+});
+
+
   const selectedUsecaseName =
-    selectedUsecaseFilter !== "all"
-      ? selectedUsecaseFilter
-      : filteredApps[0]?.usecase || "Usecase";
+    selectedUsecaseFilter !== "all" ? selectedUsecaseFilter : "Usecase";
+      // DEBUG: check if dropdown state is changing
+  console.log("filterOpen =", filterOpen);
 
   return (
     <main>
@@ -105,19 +126,14 @@ export default function AllAppsPage() {
         <h1 className="text-3xl font-extrabold text-gray-900">Apps</h1>
       </header>
 
-      {/* <p className="apps-description">
-        Explore the education applications of mixed reality with Meta and discover opportunities to boost innovation.
-      </p> */}
-
       <div className="container all-apps-section">
-
         <div className="apps-top-row">
-          
           {/* FILTER DROPDOWN */}
-          <div className="apps-filter-row" ref={dropdownRef}>
+          <div className="apps-filter-row" style={{ position: "relative", zIndex: 9999 }}>
             <label className="filter-label">FILTER BY:</label>
 
-            <div className="filter-dropdown-wrapper">
+            {/* THE FIX: ref moved here */}
+            <div className="filter-dropdown-wrapper" ref={dropdownRef}>
               <button
                 className="filter-dropdown"
                 onClick={() => setFilterOpen(!filterOpen)}
@@ -128,9 +144,9 @@ export default function AllAppsPage() {
 
               {filterOpen && (
                 <div className="dropdown-menu">
-
                   {/* CATEGORY FILTERS */}
                   <button
+                    className="dropdown-item"
                     onClick={() => {
                       setSelectedFilter("all");
                       setSelectedUsecaseFilter("all");
@@ -140,74 +156,25 @@ export default function AllAppsPage() {
                     Show all
                   </button>
 
-                  <button
-                    onClick={() => {
-                      setSelectedFilter("online");
-                      setSelectedUsecaseFilter("all");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Online apps
-                  </button>
+                
 
-                  <button
-                    onClick={() => {
-                      setSelectedFilter("offline");
-                      setSelectedUsecaseFilter("all");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Offline apps
-                  </button>
-
-                  <hr />
-
-                  {/* USECASE FILTERS */}
-                  <button
-                    onClick={() => {
-                      setSelectedUsecaseFilter("Creativity & Design");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Creativity & Design
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedUsecaseFilter("Meetings & Collaboration");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Meetings & Collaboration
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedUsecaseFilter("Education");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Education
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedUsecaseFilter("Learning & Training");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Learning & Training
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setSelectedUsecaseFilter("Building Community");
-                      setFilterOpen(false);
-                    }}
-                  >
-                    Building Community
-                  </button>
-
+                  {/* 🔥 USECASES FROM DATABASE */}
+                  {usecases.length > 0 ? (
+                    usecases.map((usecase) => (
+                      <button
+                        key={usecase}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setSelectedUsecaseFilter(usecase);
+                          setFilterOpen(false);
+                        }}
+                      >
+                        {usecase}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="dropdown-item">Loading...</p>
+                  )}
                 </div>
               )}
             </div>
@@ -227,21 +194,27 @@ export default function AllAppsPage() {
           {/* TOGGLE BUTTONS */}
           <div className="apps-toggle-wrapper">
             <button
-              className={`toggle-btn-hide ${selectedToggle === "All" ? "active" : ""}`}
+              className={`toggle-btn-hide ${
+                selectedToggle === "All" ? "active" : ""
+              }`}
               onClick={() => setSelectedToggle("All")}
             >
               All Apps
             </button>
 
             <button
-              className={`toggle-btn ${selectedToggle === "Pre-Packaged" ? "active" : ""}`}
+              className={`toggle-btn ${
+                selectedToggle === "Pre-Packaged" ? "active" : ""
+              }`}
               onClick={() => setSelectedToggle("Pre-Packaged")}
             >
               Pre-Packaged App Demos
             </button>
 
             <button
-              className={`toggle-btn ${selectedToggle === "Managed" ? "active" : ""}`}
+              className={`toggle-btn ${
+                selectedToggle === "Managed" ? "active" : ""
+              }`}
               onClick={() => setSelectedToggle("Managed")}
             >
               Managed App Store Demos
@@ -258,20 +231,16 @@ export default function AllAppsPage() {
           )}
 
           {!isLoading &&
-            filteredApps.map(app => (
+            filteredApps.map((app) => (
               <div
                 key={app.id}
                 className="app-page-card"
                 onClick={() => app.link && window.open(app.link, "_blank")}
-                style={{ cursor: "pointer" }}
               >
                 <img
                   src={app.image || "https://placehold.co/400x200?text=No+Image"}
                   className="app-card-image"
                   alt={app.name}
-                  onError={(e) => {
-                    e.currentTarget.src = "https://placehold.co/400x200?text=No+Image";
-                  }}
                 />
 
                 <div className="app-card-info">
@@ -280,23 +249,15 @@ export default function AllAppsPage() {
 
                   <a
                     className="hover-underline-animation left"
-                    target="_blank"
                     href={app.link}
+                    target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    style={{
-                      color: "#0066ff",
-                      textDecoration: "none",
-                      fontWeight: "500",
-                      fontSize: "0.95rem",
-                      cursor: "pointer",
-                      alignSelf: "flex-start",
-                    }}
                   >
                     <img
                       src="/Arrow.png"
-                      alt="arrow"
-                      style={{ width: "1.6rem", height: "auto" }}
+                      style={{ width: "1.6rem" }}
+                      alt=""
                     />
                     <span className="underline-text">Learn More</span>
                   </a>
