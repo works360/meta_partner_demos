@@ -66,6 +66,7 @@ export default function Login() {
               justifyContent: "center",
               paddingLeft: 0,
               paddingRight: 0,
+              paddingTop: "5rem",
             }}>
         <div className="row g-4 container">
           {/* Left Section - Welcome Content */}

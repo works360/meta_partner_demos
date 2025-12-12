@@ -64,6 +64,15 @@ export default function CheckoutPage() {
 
     fetchMe();
   }, []);
+  useEffect(() => {
+  const selectedHeadsets = JSON.parse(localStorage.getItem("selectedHeadsets") || "[]");
+
+  // If no headset selected → redirect user back
+  if (!Array.isArray(selectedHeadsets) || selectedHeadsets.length === 0) {
+    alert("Please select at least one headset before checkout.");
+    window.location.href = "/create-kit"; 
+  }
+}, []);
 
   // 🧩 Handle input change
   const handleChange = (
@@ -111,10 +120,21 @@ export default function CheckoutPage() {
 
       // ✅ Combine all into one unified products[] array
       const allProducts = [
-        ...selectedHeadsets.map((p: any) => ({ id: p.id, qty: p.qty || 1 })),
-        ...selectedOffline.map((p: any) => ({ id: p.id, qty: 1 })),
-        ...selectedOnline.map((p: any) => ({ id: p.id, qty: 1 })),
-      ];
+            ...selectedHeadsets.map((p: any) => ({
+              id: p.id,
+              qty: p.quantity ?? 1,  // 🔥 correct quantity
+            })),
+
+            ...selectedOffline.map((p: any) => ({
+              id: p.id,
+              qty: 1,
+            })),
+
+            ...selectedOnline.map((p: any) => ({
+              id: p.id,
+              qty: 1,
+            })),
+          ];
 
       // ✅ Append them as products[] and quantity[]
       allProducts.forEach((p) => {

@@ -154,12 +154,13 @@ export default function SingleProductPage() {
 
           <div className="right-section">
             <h2>{product.product_name}</h2>
-            <p>
+            {/* <p>
               <strong>SKU:</strong> {product.product_sku}
-            </p>
-            <p>
-              <strong>Description:</strong> {product.description}
-            </p>
+            </p> */}
+  
+              <strong style={{ fontSize: "1.2rem", fontWeight: "500"}}>Description:</strong> 
+            
+            <p style={{ fontSize: "0.95rem" }}>{product.description}</p>
           </div>
         </div>
       </div>

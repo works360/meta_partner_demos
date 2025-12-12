@@ -113,6 +113,7 @@ export default function ThankYouPage() {
           Track order details on{" "}
           <a
             href="/my-orders"
+            target="blank"
             style={{
               color: "#007bff",
               textDecoration: "none",

@@ -144,7 +144,7 @@ export default function MyOrdersPage() {
                   <td>{order.intended_audience}</td>
                   <td>{order.company}</td>
                   <td>{order.return_date}</td>
-                  <td>
+                  <td style={{ width: "20px"}}>
                     {order.headsets?.length > 0 && (
                       <>
                         {order.headsets.join(", ")} <br />

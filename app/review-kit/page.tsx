@@ -9,6 +9,7 @@ interface Headset {
   sku?: string;
   product_sku?: string;
   sku_id?: string;
+  quantity?: number;
 }
 
 interface App {
@@ -17,51 +18,61 @@ interface App {
 }
 
 export default function ReviewKitPage() {
-  const router = useRouter(); // ⬅️ move this to the top
+  const router = useRouter();
 
   const [headsets, setHeadsets] = useState<Headset[]>([]);
   const [offlineApps, setOfflineApps] = useState<App[]>([]);
   const [onlineApps, setOnlineApps] = useState<App[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  // NEW — controls visibility of checkout button
+  const [canCheckout, setCanCheckout] = useState(true);
+
+  // ✅ VALID useEffect (not nested)
+  
   useEffect(() => {
-    const parseSafe = (key: string) => {
-      try {
-        const data = localStorage.getItem(key);
-        if (!data) return [];
-        const parsed = JSON.parse(data);
-        if (Array.isArray(parsed)) return parsed;
-        if (typeof parsed === "object") return Object.values(parsed);
-        return [];
-      } catch {
-        return [];
-      }
-    };
+ const parseSafe = (key: string) => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
 
-    setHeadsets(parseSafe("selectedHeadsets"));
-    setOfflineApps(parseSafe("selectedOfflineApps"));
-    setOnlineApps(parseSafe("selectedOnlineApps"));
-    setLoaded(true);
-  }, []);
+    // Ensure it is always an array
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
-  if (!loaded)
-    return (
-      <div className="flex justify-center items-center min-h-screen text-gray-500 text-lg">
-        Loading review details...
-      </div>
-    );
+  const rawHeadsets = parseSafe("selectedHeadsets");
 
-  function handleNext(event: React.MouseEvent<HTMLButtonElement>): void {
-    event.preventDefault();
-    router.push("/checkout");
+  // IMPORTANT: Add quantity always
+  const hs = rawHeadsets.map((h: Headset) => ({
+    ...h,
+    quantity: h.quantity ?? 1,
+  }));
+
+  setHeadsets(hs);
+  setOfflineApps(parseSafe("selectedOfflineApps"));
+  setOnlineApps(parseSafe("selectedOnlineApps"));
+
+  // Enable / disable checkout button
+  setCanCheckout(hs.length > 0);
+  setLoaded(true);
+  console.log("Loaded headsets from localStorage:", hs);
+}, []);
+
+
+  // REMOVE HEADSET
+  function removeHeadset(id: string) {
+    const updated = headsets.filter((h) => h.id !== id);
+    setHeadsets(updated);
+    localStorage.setItem("selectedHeadsets", JSON.stringify(updated));
+
+    // update checkout state
+    setCanCheckout(updated.length > 0);
   }
 
- // 🟦 Remove Headset
-function removeHeadset(id: string) {
-  const updated = headsets.filter((h) => h.id !== id);
-  setHeadsets(updated);
-  localStorage.setItem("selectedHeadsets", JSON.stringify(updated));
-}
 
 // 🟦 Remove Offline App
 function removeOfflineApp(id: string) {
@@ -77,6 +88,19 @@ function removeOnlineApp(id: string) {
   localStorage.setItem("selectedOnlineApps", JSON.stringify(updated));
 }
 
+function updateHeadsetQty(id: string, qty: number) {
+  const updated = headsets.map(h =>
+    h.id === id ? { ...h, quantity: qty } : h
+  );
+
+  console.log("Before Update:", headsets);
+  console.log("After Update:", updated);
+
+  setHeadsets(updated);
+
+  // VERY IMPORTANT: Save EXACT object back into localStorage
+  localStorage.setItem("selectedHeadsets", JSON.stringify(updated));
+}
 
   return (
     <div className="app-demos-page p-6 bg-gray-50 min-h-screen font-sans">
@@ -151,80 +175,96 @@ function removeOnlineApp(id: string) {
           </p>
 
           {headsets.length > 0 ? (
-            headsets.map((headset) => {
-              const skuValue = headset.sku || "Not available";
+              headsets.map((headset) => {
+                const skuValue = headset.sku || "Not available";
 
-            
-              return (
-                <div
-                  key={headset.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1.5rem",
-                    borderBottom: "1px solid #eee",
-                    paddingBottom: "1.2rem",
-                    marginBottom: "1.2rem",
-                    position: "relative",
-                  }}
-                >
-                  <img
-                    src={headset.image}
-                    alt={headset.name}
+                return (
+                  <div
+                    key={headset.id}
                     style={{
-                      width: "160px",
-                      height: "130px",
-                      objectFit: "contain",
-                      borderRadius: "10px",
-                      border: "1px solid #ddd",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1.5rem",
+                      borderBottom: "1px solid #eee",
+                      paddingBottom: "1.2rem",
+                      marginBottom: "1.2rem",
+                      position: "relative",
                     }}
-                  />
-                  <div>
-                    <h3
+                  >
+                    <img
+                      src={headset.image}
+                      alt={headset.name}
                       style={{
-                        fontWeight: 600,
-                        fontSize: "1.1rem",
-                        color: "#222",
+                        width: "160px",
+                        height: "130px",
+                        objectFit: "contain",
+                        borderRadius: "10px",
+                        border: "1px solid #ddd",
                       }}
-                    >
-                      {headset.name}
-                    </h3>
-                    <p style={{ color: "#777", fontSize: "0.9rem" }}>
-                      SKU: {skuValue}
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                      }}
-                    >
-                      <input
-                        type="number"
-                        min={1}
-                        max={2}
-                        defaultValue={1}
+                    />
+
+                    <div style={{ flex: 1 }}>
+                      <h3
                         style={{
-                          width: "50px",
-                          textAlign: "center",
-                          borderRadius: "6px",
-                          border: "1px solid #ccc",
+                          fontWeight: 600,
+                          fontSize: "1.1rem",
+                          color: "#222",
                         }}
-                      />
-                      <i
-  className="fa-solid fa-trash"
-  style={{ color: "#bbb", cursor: "pointer" }}
-  title="Remove headset"
-  onClick={() => removeHeadset(headset.id)}
-></i>
+                      >
+                        {headset.name}
+                      </h3>
+
+                      <p style={{ color: "#777", fontSize: "0.9rem" }}>
+                        SKU: {skuValue}
+                      </p>
+
+                      {/* Quantity + Delete Basket Icon */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.75rem",
+                          marginTop: "0.3rem",
+                        }}
+                      >
+                        <input
+                          type="number"
+                          min={1}
+                          max={2}
+                          value={headset.quantity ?? 1}
+                          onChange={(e) => updateHeadsetQty(headset.id, Number(e.target.value))}
+                          style={{
+                            width: "50px",
+                            textAlign: "center",
+                            borderRadius: "6px",
+                            border: "1px solid #ccc",
+                            padding: "5px 0",
+                          }}
+                        />
+
+                        {/* Delete Basket Icon */}
+                        <svg
+                          onClick={() => removeHeadset(headset.id)}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="#888"
+                          viewBox="0 0 24 24"
+                          style={{ cursor: "pointer" }}
+                          onMouseEnter={(e) => (e.currentTarget.style.fill = "#e63946")}
+                          onMouseLeave={(e) => (e.currentTarget.style.fill = "#888")}
+                        >
+                          <path d="M3 6h18M9 6V4h6v2m-8 4v10m4-10v10m4-10v10M5 6l1 14h12l1-14" />
+                        </svg>
+                      </div>
                     </div>
+
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <p>No headsets selected.</p>
-          )}
+                );
+              })
+            ) : (
+              <p>No headsets selected.</p>
+            )}
 
           {/* Pre-Packaged App Demos */}
           {offlineApps.length > 0 && (
@@ -391,38 +431,53 @@ function removeOnlineApp(id: string) {
             <span>Shipment Method</span> <span>Next-Day</span>
           </p>
 
-          <button
-              onClick={() => (window.location.href = "/checkout")}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "#0066ff";
-                e.currentTarget.style.transform = "scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 102, 255, 0.2)";
-                e.currentTarget.style.border = "1px solid #0066ff";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0066ff";
-                e.currentTarget.style.color = "#fff";
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.border = "none";
-              }}
-              style={{
-                width: "100%",
-                background: "#0066ff",
-                color: "#fff",
-                padding: "10px 0",
-                borderRadius: "30px",
-                marginTop: "1rem",
-                fontWeight: 500,
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.3s ease", // smooth animation
-              }}
-            >
-              Proceed to Checkout
-            </button>
-
+          {canCheckout ? (
+                <button
+                  onClick={() => (window.location.href = "/checkout")}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "#0066ff";
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 102, 255, 0.2)";
+                    e.currentTarget.style.border = "1px solid #0066ff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#0066ff";
+                    e.currentTarget.style.color = "#fff";
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.border = "none";
+                  }}
+                  style={{
+                    width: "100%",
+                    background: "#0066ff",
+                    color: "#fff",
+                    padding: "10px 0",
+                    borderRadius: "30px",
+                    marginTop: "1rem",
+                    fontWeight: 500,
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Proceed to Checkout
+                </button>
+              ) : (
+                <div
+                  style={{
+                    marginTop: "1rem",
+                    padding: "12px",
+                    borderRadius: "10px",
+                    border: "1px dashed #f5b5b5",
+                    background: "#fff5f5",
+                    color: "#c53030",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  <strong>Heads up!</strong> To proceed with your order, please select a headset first.
+                </div>
+              )}
         </div>
       </div>
     </div>
