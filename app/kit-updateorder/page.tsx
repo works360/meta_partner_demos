@@ -191,6 +191,20 @@ const isEmbed = params.get("embed") === "1";
   const rejectedDateText =
     order.rejected_date && new Date(order.rejected_date).toLocaleString();
 
+
+// ✅ ADD THIS HERE
+const formatCurrencyValue = (value?: string) => {
+  if (!value) return "";
+
+  const num = Number(value);
+  if (isNaN(num)) return value;
+
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num);
+};
+
   // ✅ Only show decision info when NOT Awaiting Approval
   const showApprovedInfo = !isAwaiting && !!order.approved_by;
   const showRejectedInfo = !isAwaiting && !!order.rejected_by;
@@ -395,7 +409,7 @@ await fetch(`/api/send-rejected-email?orderid=${order.id}`);
                 Audience: order.intended_audience,
                 Company: order.company,
                 "Opportunity Size": order.opportunity_size,
-                "Revenue Size": order.revenue_size,
+                "Revenue Size": formatCurrencyValue(order.revenue_size),
                 "Use Case": order.use_case,
                 "Meta Registered": order.meta_registered,
                 "Deal ID": order.deal_id,
