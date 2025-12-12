@@ -124,6 +124,16 @@ const isEmbed = params.get("embed") === "1";
     const formData = new FormData(e.currentTarget);
     formData.append("id", orderId);
 
+  // 👇 READ status FIRST
+  const newStatus = formData.get("order_status");
+
+  // 🚨 BLOCK duplicate Returned submission
+  if (newStatus === "Returned" && hasReturn) {
+    alert("⚠️ This order was already marked as Returned.");
+    return;
+  }
+
+
     try {
       const res = await fetch("/api/order", {
         method: "POST",
@@ -389,7 +399,9 @@ await fetch(`/api/send-rejected-email?orderid=${order.id}`);
                 "Use Case": order.use_case,
                 "Meta Registered": order.meta_registered,
                 "Deal ID": order.deal_id,
-                "Expected Return Date": order.return_date,
+                "Expected Return Date": order.return_date
+  ? new Date(order.return_date).toISOString().split("T")[0]
+  : "",
                 Notes: order.notes,
               }).map(([k, v]) =>
                 v ? (
@@ -449,12 +461,18 @@ await fetch(`/api/send-rejected-email?orderid=${order.id}`);
                     className="form-select"
                     defaultValue={order.order_status}
                   >
-                    <option value="Awaiting Approval">Awaiting Approval</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Returned">Returned</option>
-                    <option value="Cancelled">Cancelled</option>
+                    {/* Always show CURRENT STATUS */}
+                    <option value={order.order_status}>{order.order_status}</option>
+
+                    {/* Shop Manager allowed statuses */}
+                    {userRole?.toLowerCase() === "shop manager" && (
+                      <>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Returned">Returned</option>
+                      </>
+                    )}
                   </select>
+
                 ) : (
                   <div className="border rounded px-3 py-2 bg-light">
                     {order.order_status}

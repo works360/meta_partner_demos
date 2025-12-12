@@ -134,9 +134,9 @@ export default function EventOrderDetailsPage() {
                   <th>Demo Purpose</th>
                   <th>Expected Demos</th>
                   <th>Audience</th>
-                  <th>Company</th>
+                  {/* <th>Company</th> */}
                   <th>Return Date</th>
-                  <th>Products</th>
+                  {/* <th>Products</th> */}
                   <th>Contact</th>
                   <th>Order Status</th>
                   <th>Shipping Address</th>
@@ -178,9 +178,13 @@ export default function EventOrderDetailsPage() {
                       <td>{order.demo_purpose}</td>
                       <td>{order.expected_demos}</td>
                       <td>{order.intended_audience}</td>
-                      <td>{order.company}</td>
-                      <td>{order.return_date}</td>
+                      {/* <td>{order.company}</td> */}
                       <td>
+  {order.return_date
+    ? new Date(order.return_date).toISOString().split("T")[0]
+    : ""}
+</td>
+                      {/* <td>
                         {headsets.length > 0 && (
                           <>
                             {headsets.join(", ")} <br />
@@ -198,7 +202,7 @@ export default function EventOrderDetailsPage() {
                             {offlineApps.join(", ")}
                           </>
                         )}
-                      </td>
+                      </td> */}
                       <td>{order.contact}</td>
                       <td>{order.order_status}</td>
                       <td>{order.address}</td>

@@ -171,8 +171,19 @@ export async function GET(req) {
     // ====================================================
     // ⭐ RESTORE STOCK HERE ⭐
     // ====================================================
-    await restoreStock(orderId);
+    // 🔒 Check if stock already restored
+if (!order.stock_restored) {
+  await restoreStock(orderId);
 
+  await db.query(
+    `UPDATE orders SET stock_restored = 1 WHERE id = ?`,
+    [orderId]
+  );
+
+  console.log(`✅ Stock restored ONCE for order #${orderId}`);
+} else {
+  console.log(`⚠️ Stock already restored for order #${orderId}, skipping`);
+}
     // ====================================================
     // PREPARE EMAIL DATA
     // ====================================================

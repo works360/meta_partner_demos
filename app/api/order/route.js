@@ -136,23 +136,25 @@ export async function POST(req) {
 const uploaded = formData.get("return_label");
 const orderID = formData.get("id");
 
-if (uploaded && typeof uploaded === "object" && uploaded.size > 0) {
+// Only process IF real file was selected
+if (
+  uploaded &&
+  typeof uploaded === "object" &&
+  uploaded.size &&
+  uploaded.size > 0
+) {
   const safeName = uploaded.name.replace(/[^a-zA-Z0-9_.-]/g, "_");
   const filename = `returnlabel_${Date.now()}_${safeName}`;
   const blobPath = `${orderID}/${filename}`;
 
-  // ⭐ Convert the File to a buffer (this avoids stream locking errors)
-  const arrayBuffer = await uploaded.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(await uploaded.arrayBuffer());
 
-  // ⭐ Upload using the buffer instead of File
-  const blob = await put(blobPath, buffer, {
-    access: "public",
-  });
+  const blob = await put(blobPath, buffer, { access: "public" });
 
   return_label = blob.url;
   console.log("✅ Uploaded return label to Vercel Blob:", blob.url);
 }
+
 
 
     // 🔎 Fetch existing approval/rejection fields
