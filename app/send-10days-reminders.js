@@ -534,15 +534,15 @@ async function sendEmail(order, grouped) {
   </body>
 </html>`;
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "admin@shiworkspacebuilder.com",
-      pass: "Sherlock.holmes1",
-    },
-  });
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: process.env.SMTP_SECURE === "true",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
   await transporter.sendMail({
     from: '"Meta Partner Demos" <admin@shiworkspacebuilder.com>',
