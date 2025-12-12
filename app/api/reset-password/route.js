@@ -28,16 +28,16 @@ export async function POST(req) {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://metapartnerdemos.vercel.app"; // <-- set this env
     const resetUrl = `${baseUrl}/update-password?token=${encodeURIComponent(token)}`;
 
-    // 4) Configure SMTP (same as your PHP)
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "admin@shiworkspacebuilder.com",
-        pass: "Sherlock.holmes1",
-      },
-    });
+    //send email
+ const transporter = nodemailer.createTransport({
+   host: process.env.SMTP_HOST,
+   port: Number(process.env.SMTP_PORT || 465),
+   secure: process.env.SMTP_SECURE === "true",
+   auth: {
+     user: process.env.SMTP_USER,
+     pass: process.env.SMTP_PASS,
+   },
+ });
 
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-US", {
