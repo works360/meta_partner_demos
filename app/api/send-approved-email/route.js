@@ -18,6 +18,92 @@ function esc(s) {
     .replace(/'/g, "&#39;");
 }
 
+// ---------- PRODUCT HELPERS ----------
+async function fetchItemsForOrder(orderId) {
+  const sql = `
+    SELECT p.product_name, p.category, p.product_sku, oi.quantity
+    FROM order_items oi
+    JOIN products p ON p.id = oi.product_id
+    WHERE oi.order_id = ?
+  `;
+  const [rows] = await db.query(sql, [orderId]);
+  return rows;
+}
+
+function buildHeadsetAndAppGroups(items) {
+  const headsets = [];
+  const onlineApps = [];
+  const offlineApps = [];
+
+  for (const row of items) {
+    const name = row.product_name || "";
+    const cat = row.category || "";
+    const sku = row.product_sku || "—";
+    const qty = Number(row.quantity || 0);
+
+    if (!name || qty <= 0) continue;
+
+    if (cat === "Headset") {
+      headsets.push({ name, sku, qty });
+    } else if (cat === "Online Apps") {
+      onlineApps.push(name);
+    } else if (cat === "Offline Apps") {
+      offlineApps.push(name);
+    } else {
+      onlineApps.push(name);
+    }
+  }
+
+  return { headsets, onlineApps, offlineApps };
+}
+
+function buildChipList(apps) {
+  const chipStyle =
+    "display:inline-block;margin:4px 0;padding:4px;font-size:12px;";
+  const separator = '<span style="font-size:12px;">, </span>';
+
+  if (!apps || apps.length === 0)
+    return '<span style="color:#6b7b86;">None</span>';
+
+  return apps
+    .map((app) => `<span style="${chipStyle}">${esc(app)}</span>`)
+    .join(separator);
+}
+
+function buildHeadsetRows(headsets) {
+  if (!headsets || headsets.length === 0) {
+    return `<tr><td style="padding:16px;color:#7b8a95;">No headsets</td><td></td></tr>`;
+  }
+
+  let html = "";
+
+  headsets.forEach((h, idx) => {
+    html += `
+      <tr>
+        <td style="padding:16px;">
+          <div style="border-left:3px solid Blue;padding-left:10px;">
+            <div style="font-weight:700;font-size:17px;">${esc(h.name)}</div>
+            <div style="font-size:11px;color:#7b8a95;">SKU: ${esc(h.sku)}</div>
+          </div>
+        </td>
+        <td align="right" style="padding:16px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:#eef3ff;
+                      color:#0b1f2a;line-height:34px;text-align:center;font-weight:700;">
+            ${h.qty}
+          </div>
+        </td>
+      </tr>
+    `;
+
+    if (idx < headsets.length - 1) {
+      html += `<tr><td colspan="2" style="height:1px;background:#eef3f7;"></td></tr>`;
+    }
+  });
+
+  return html;
+}
+
+
 function formatDate(dateString) {
   if (!dateString) return "";
   const d = new Date(dateString);
@@ -96,6 +182,13 @@ const metaReg = esc(order.meta_registered || "");
 const dealId = esc(order.deal_id || "");
 const returnDateFormatted = formatDate(order.return_date);
 
+// FETCH PRODUCT ITEMS (same as shipped email)
+const items = await fetchItemsForOrder(orderId);
+const { headsets, onlineApps, offlineApps } = buildHeadsetAndAppGroups(items);
+
+const headsetsHtml = buildHeadsetRows(headsets);
+const offlineList = buildChipList(offlineApps);
+const onlineList = buildChipList(onlineApps);
 
     // ---------------------
     // MASTER HTML TEMPLATE
@@ -186,6 +279,64 @@ const returnDateFormatted = formatDate(order.return_date);
               
               </td>
             </tr>
+<!-- ORDER DETAILS -->
+<tr>
+  <td style="padding:12px 24px 2px;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" 
+           style="border:1px solid #e7edf2;border-radius:12px;overflow:hidden;">
+
+      <tr>
+        <td colspan="2" style="padding:12px 16px;font-weight:700;font-size:18px;">
+          Order Details
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:12px 16px;font-weight:700;border-bottom:1px solid #eeeeee;">
+          Product
+        </td>
+        <td align="right" style="padding:12px 16px;font-weight:700;border-bottom:1px solid #eeeeee;">
+          Quantity
+        </td>
+      </tr>
+
+      <!-- HEADSETS -->
+      ${headsetsHtml}
+
+      <!-- APPS BOXES -->
+      <tr>
+        <td colspan="2" style="padding:0 16px 16px;">
+
+          <!-- OFFLINE APPS -->
+          <table width="100%" style="margin:8px 0;border:1px solid #dbe7ff;border-radius:10px;">
+            <tr>
+              <td style="padding:10px 12px;">
+                <div style="font-weight:700;font-size:13px;color:#274b8f;margin-bottom:6px;">
+                  Pre-Packaged App Demos
+                </div>
+                ${offlineList}
+              </td>
+            </tr>
+          </table>
+
+          <!-- ONLINE APPS -->
+          <table width="100%" style="margin:0;border:1px solid #d6f5e5;border-radius:10px;">
+            <tr>
+              <td style="padding:10px 12px;">
+                <div style="font-weight:700;font-size:13px;color:#274b8f;margin-bottom:6px;">
+                  Managed App Store Demos
+                </div>
+                ${onlineList}
+              </td>
+            </tr>
+          </table>
+
+        </td>
+      </tr>
+
+    </table>
+  </td>
+</tr>
 
             <!-- REQUESTOR DETAILS -->
             <tr>
