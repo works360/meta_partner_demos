@@ -219,7 +219,7 @@ export default function UpdatePassword() {
                         className="btn btn-primary d-grid"
                         disabled={loading}
                         style={{
-                          width: "50%",
+                          width: "100%",
                           backgroundColor: "#1463FF",
                           border: "none",
                           borderRadius: "50px",

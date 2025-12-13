@@ -146,7 +146,7 @@ export default function ResetPassword() {
                         disabled={loading}
                         className="btn btn-primary d-grid"
                         style={{
-                          width: "50%",
+                          width: "100%",
                           backgroundColor: "#1463FF",
                           border: "none",
                           borderRadius: "50px",
