@@ -161,10 +161,18 @@ export default function KitOrderDetailsPage() {
                   return (
                     <tr key={order.id}>
                       <td>
-                        {/* ⭐ Add embed=1 so it loads properly inside iframe */}
-                        <Link href={`/kit-updateorder?orderid=${order.id}&embed=1`}>
+                        <span
+                          onClick={() =>
+                            router.push(`/kit-updateorder?orderid=${order.id}&embed=1`)
+                          }
+                          style={{
+                            cursor: "pointer",
+                            color: "#0d6efd",
+                            textDecoration: "underline",
+                          }}
+                        >
                           {order.id}
-                        </Link>
+                        </span>
                       </td>
                       <td>
                         {order.created_at
