@@ -123,7 +123,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
 
                 <table width="100%" style="table-layout:fixed;">
                   <td style="text-align:center;">
-    <img src="http://localhost:3000/emailstep1.png"  alt="Order Progress Step 1">
+    <img src="https://metapartnerdemos.vercel.app/emailstep1.png"  alt="Order Progress Step 1">
   </td>
                 </table>
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
