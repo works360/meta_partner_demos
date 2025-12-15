@@ -29,12 +29,10 @@ export async function POST(req) {
         reseller: user.reseller || "",
         sales_executive: user.sales_executive || "",
       }),
-        {
+      {
         httpOnly: true,
         path: "/",
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        // ❌ No maxAge → expires when browser closes
+        maxAge: 60 * 60 * 24 * 7, // 7 days
       }
     );
 
