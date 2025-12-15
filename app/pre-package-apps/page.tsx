@@ -336,16 +336,17 @@ const formattedData = data.map((item: any) => ({
                         title={app.name}
                       >
                         {app.name}
+                        {app.useCase}
                       </h4>
 
-                      <div className="flex justify-left items-center space-x-2">
+                      {/* <div className="flex justify-left items-center space-x-2">
                         <input
                           type="checkbox"
                           readOnly
                           checked={selectedApps.includes(app.id)}
                           className="form-checkbox h-5 w-5 text-blue-600 rounded-md border-gray-400 cursor-pointer"
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}
