@@ -50,7 +50,7 @@ export function Navbar() {
 
           {/* Desktop Links */}
           <nav className="navbar-links d-none d-md-flex">
-            <Link href="/" className="nav-item">Home</Link>
+            {/* <Link href="/" className="nav-item">Home</Link> */}
             <Link href="/how-it-works" className="nav-item">How it Works</Link>
             <Link href="/create-kit" className="nav-item">Create Demo Kit</Link>
             <Link href="/returns" className="nav-item">Returns</Link>
@@ -95,12 +95,13 @@ export function Navbar() {
 
       {/* MOBILE SLIDE MENU */}
       <div className={`mobile-menu ${mobileMenu ? "open" : ""}`}>
-        <Link href="/" onClick={() => setMobileMenu(false)}>Home</Link>
+        {/* <Link href="/" onClick={() => setMobileMenu(false)}>Home</Link> */}
         <Link href="/how-it-works" onClick={() => setMobileMenu(false)}>How it Works</Link>
         <Link href="/create-kit" onClick={() => setMobileMenu(false)}>Create Demo Kit</Link>
         <Link href="/returns" onClick={() => setMobileMenu(false)}>Returns</Link>
         <Link href="/support" onClick={() => setMobileMenu(false)}>Support</Link>
         <Link href="/t&c" onClick={() => setMobileMenu(false)}>T&C</Link>
+        <Link href="/apps" onClick={() => setMobileMenu(false)}>Apps</Link>
         <Link href="/dashboard" onClick={() => setMobileMenu(false)}>360Dashboard</Link>
 
         {/* USER OPTIONS IN MOBILE */}

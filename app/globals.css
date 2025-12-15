@@ -1839,3 +1839,28 @@ section .container h1 {
   z-index: 20;  /* ensures it sits above card border */
   transition: all 0.2s ease;
 }
+
+.sub-button {
+    color: #fff;
+    cursor: pointer;
+    background: #06f;
+    border: none;
+    border-radius: 9999px;
+    grid-column: span 2;
+    justify-self: center;
+    margin-top: 20px;
+    padding: 10px 85px !important;
+    font-weight: 500;
+    transition: all .25s;
+    font-size: 16px;
+}
+
+.sub-button:hover {
+  scale: (1.05);
+    cursor: pointer;
+    background: transparent !important;
+    border: 1px solid #06f;
+    transition: all .3s;
+    box-shadow: 0 4px 12px #06f3 !important;
+    color: #06f !important;
+}

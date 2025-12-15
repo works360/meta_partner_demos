@@ -509,8 +509,7 @@ export default function SupportPage() {
                 <div className="col-12 text-center">
                   <button
                     type="submit"
-                    className="btn btn-primary btn-lg px-5"
-                    style={{ width: "25%", borderRadius: "25px" }}
+                    className="btn btn-primary btn-lg px-5 sub-button"
                     disabled={submitting}
                   >
                     {submitting ? "Submitting..." : "Submit"}
