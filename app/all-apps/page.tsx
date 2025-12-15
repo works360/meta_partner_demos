@@ -145,7 +145,7 @@ const filteredApps = apps.filter((app) => {
               {filterOpen && (
                 <div className="dropdown-menu">
                   {/* CATEGORY FILTERS */}
-                  <button
+                  {/* <button
                     className="dropdown-item"
                     onClick={() => {
                       setSelectedFilter("all");
@@ -153,10 +153,7 @@ const filteredApps = apps.filter((app) => {
                       setFilterOpen(false);
                     }}
                   >
-                    Show all
-                  </button>
-
-                
+                  </button> */}
 
                   {/* 🔥 USECASES FROM DATABASE */}
                   {usecases.length > 0 ? (
