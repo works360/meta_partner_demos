@@ -18,6 +18,7 @@ export default function proxy(req) {
     "/finalize-order",
     "/dashboard",
     "/returns",
+    "/all-apps",
   ];
 
   // 🔐 Block access to protected pages if not logged in
