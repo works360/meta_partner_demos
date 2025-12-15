@@ -186,7 +186,7 @@ button.toggle-btn-hide {
 .app-category {
   font-size: 14px;
   color: #7c8495;
-  margin-bottom: 9px;
+  margin: 9px 0;
 }
 
 span.underline-text {
