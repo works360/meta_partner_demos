@@ -245,7 +245,7 @@ const filteredApps = apps.filter((app) => {
 
                 <div className="app-card-info">
                   <h3 className="app-name">{app.name}</h3>
-                  <p className="app-category">Apps • {app.category}</p>
+                  <p className="app-category">Apps • {app.usecase}</p>
 
                   <a
                     className="hover-underline-animation left"

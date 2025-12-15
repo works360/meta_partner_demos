@@ -336,7 +336,6 @@ const formattedData = data.map((item: any) => ({
                         title={app.name}
                       >
                         {app.name}
-                        {app.useCase}
                       </h4>
 
                       {/* <div className="flex justify-left items-center space-x-2">
