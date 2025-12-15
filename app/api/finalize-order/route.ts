@@ -100,7 +100,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               <table width="100%">
                 <tr>
                   <td><img src="cid:logoimg" width="170"></td>
-                  <td align="right" style="font-size:20px;font-weight:700;">New Order #${orderId} | Meta Partner Demos</td>
+                  <td align="right" style="font-size:20px;font-weight:700;"></td>
                 </tr>
               </table>
             </td>
@@ -109,7 +109,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
            <!-- TITLE -->
             <tr>
               <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;">
-                <div style="font-size:20px;font-weight:700;">Order #${orderId} — Meta Partner Demos</div>
+                <div style="font-size:20px;font-weight:700;">New Order #${orderId}</div>
                 <div style="font-size:12px;color:#6b7b86;margin-top:6px;">Placed on ${placedOn}</div>
               </td>
             </tr>
@@ -122,31 +122,9 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
                 </div>
 
                 <table width="100%" style="table-layout:fixed;">
-                  <tr>
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
-                                  line-height:36px;font-weight:700;display:inline-block;">1</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">New Order</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">2</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Approved</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Shipped</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">4</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Returned</div>
-                    </td>
-                  </tr>
+                  <td style="text-align:center;">
+    <img src="http://localhost:3000/emailstep1.png"  alt="Order Progress Step 1">
+  </td>
                 </table>
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
                   <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">New Order</span>
@@ -454,7 +432,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
               <table width="100%">
                 <tr>
                   <td><img src="cid:logoimg" width="170"></td>
-                  <td align="right" style="font-size:20px;font-weight:700;">New Order — #${orderId} | Meta Partner Demos</td>
+                  <td align="right" style="font-size:20px;font-weight:700;"></td>
                 </tr>
               </table>
             </td>
@@ -463,7 +441,7 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
   <!-- TITLE -->
             <tr>
               <td style="padding:22px 24px;border-bottom:1px solid #eef3f7;">
-                <div style="font-size:20px;font-weight:700;">Order #${orderId} — Meta Partner Demos</div>
+                <div style="font-size:20px;font-weight:700;">New Order #${orderId}</div>
                 <div style="font-size:12px;color:#6b7b86;margin-top:6px;">Placed on ${placedOn}</div>
               </td>
             </tr>
@@ -476,31 +454,9 @@ async function sendNewOrderEmail(orderId: number, orderData: any, summary: any) 
                 </div>
 
                 <table width="100%" style="table-layout:fixed;">
-                  <tr>
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#2563eb;color:#fff;
-                                  line-height:36px;font-weight:700;display:inline-block;">1</div>
-                      <div style="font-size:12px;color:#0b1f2a;margin-top:6px;">New Order</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">2</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Approved</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">3</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Shipped</div>
-                    </td>
-
-                    <td align="center">
-                      <div style="width:36px;height:36px;border-radius:50%;background:#e9eef5;color:#7b8a95;
-                                  line-height:36px;font-weight:700;">4</div>
-                      <div style="font-size:12px;color:#7b8a95;margin-top:6px;">Returned</div>
-                    </td>
-                  </tr>
+    <td style="text-align:center;">
+    <img src="http://localhost:3000/emailstep1.png"  alt="Order Progress Step 1">
+  </td>
                 </table>
                 <div style="margin-top:33px;padding:15px;border:1px solid #e7edf2;border-radius:10px;text-align:center;font-size:13px;">
                   <strong>Current Status:</strong> <span style="color:#2563eb;font-weight:700;">New Order</span>
