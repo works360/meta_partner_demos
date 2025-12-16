@@ -1212,7 +1212,7 @@ section .container h1 {
   position: absolute;
   width: 100%;
   transform: scaleX(0);
-  height: 2px;
+  height: 1.5px;
   bottom: -2px;
   left: 0;
   background-color: #0066FF;
@@ -1863,4 +1863,13 @@ section .container h1 {
     transition: all .3s;
     box-shadow: 0 4px 12px #06f3 !important;
     color: #06f !important;
+}
+
+.app-category {
+  font-size: 14px;
+  color: #7c8495;
+  margin: 9px 0;
+}
+.app-process-btn {
+    font-size: 14px;
 }

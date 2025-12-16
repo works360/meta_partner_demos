@@ -11,6 +11,7 @@ interface AppData {
   useCase: string[];
   wifi: string;
   category?: string;
+  link?: string;
 }
 
 const FILTER_OPTIONS = {
@@ -364,6 +365,22 @@ export default function ManagedAppsPage() {
   {/* APP NAME */}
   <div className="app-info text-left p-3">
     <h4 className="app-name text-lg font-semibold text-gray-900 truncate">{app.name}</h4>
+    <p className="app-category">{app.useCase}</p>
+
+                      <a
+                    className="hover-underline-animation left"
+                    href={app.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <img
+                      src="/Arrow.png"
+                      style={{ width: "1.5rem" }}
+                      alt=""
+                    />
+                    <span className="underline-text app-process-btn">Learn More</span>
+                  </a>
 
                       {/* <div className="flex justify-left items-center space-x-2">
                         <input

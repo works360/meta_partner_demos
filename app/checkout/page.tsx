@@ -594,7 +594,7 @@ export default function CheckoutPage() {
     >
       Terms & Conditions
     </a>.
-    <span style={{ color: "red", marginLeft: "2px" }}>*</span>
+    <span style={{ color: "red", marginLeft: "2px" }}></span>
   </label>
 </div>
 

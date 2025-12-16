@@ -92,7 +92,7 @@ export default function Login() {
                   }}
                 >
                   Partner Portal / Resource Centre
-                </a>
+                </a>.
               </p>
             </div>
 
@@ -112,7 +112,7 @@ export default function Login() {
                 </a>
               </p>
               <p style={{ fontSize: "1rem", fontFamily: "poppins",marginBottom: "0rem"}}>
-                (a short 10-15 minute module) available on the Partner Portal
+                (a short 10-15 minute module) available on the Partner Portal.
               </p>
             </div>
 

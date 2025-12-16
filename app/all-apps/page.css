@@ -43,7 +43,7 @@
 }
 
 .filter-dropdown {
-  padding: 10px 18px;
+  padding: 10px 50px;
   border: 1px solid #ddd;
   border-radius: 30px;
   background: #fff;
@@ -136,8 +136,8 @@
 }
 
 .toggle-btn.active {
-  background: #E0E5F6;
-  color: #656565;
+  background: #0172ff;
+  color: #ffffff;
 }
 
 button.toggle-btn-hide {
@@ -148,7 +148,8 @@ button.toggle-btn-hide {
 .apps-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  justify-items: start; /* centers all cards */
   margin-top: 20px;
 }
 
@@ -160,6 +161,8 @@ button.toggle-btn-hide {
   cursor: pointer;
   transition: 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-width: 320px;
+  margin: 0 auto; /* center it */
 }
 
 .app-page-card:hover {

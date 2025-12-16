@@ -22,8 +22,8 @@ export default function AllAppsPage() {
   const [selectedUsecaseFilter, setSelectedUsecaseFilter] = useState<string>("all");
 
   const [selectedToggle, setSelectedToggle] = useState<
-    "All" | "Pre-Packaged" | "Managed"
-  >("All");
+  "All" | "Pre-Packaged" | "Managed"
+>("Pre-Packaged");
 
   const [apps, setApps] = useState<AppCard[]>([]);
   const [usecases, setUsecases] = useState<string[]>([]);
@@ -176,7 +176,7 @@ const filteredApps = apps.filter((app) => {
               )}
             </div>
 
-            <button
+            {/* <button
               className="clear-all-btn"
               onClick={() => {
                 setSelectedFilter("all");
@@ -185,19 +185,19 @@ const filteredApps = apps.filter((app) => {
               }}
             >
               Clear all
-            </button>
+            </button> */}
           </div>
 
           {/* TOGGLE BUTTONS */}
           <div className="apps-toggle-wrapper">
-            <button
+            {/* <button
               className={`toggle-btn-hide ${
                 selectedToggle === "All" ? "active" : ""
               }`}
               onClick={() => setSelectedToggle("All")}
             >
               All Apps
-            </button>
+            </button> */}
 
             <button
               className={`toggle-btn ${

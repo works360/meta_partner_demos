@@ -8,13 +8,14 @@ interface AppData {
   name: string;
   image: string;
   level: string;
-  useCase: string[];
+  usecase: string[];
   wifi: string;
+  link?: string;
 }
 
 const FILTER_OPTIONS = {
   level: ["Beginner", "Intermediate"],
-  useCase: [
+  usecase: [
     "Creativity & Design",
     "Meetings & Collaboration",
     "Education",
@@ -48,7 +49,7 @@ export default function AppDemosPage() {
   const [selectedApps, setSelectedApps] = useState<string[]>([]);
   const [filters, setFilters] = useState({
     level: [] as string[],
-    useCase: [] as string[],
+    usecase: [] as string[],
     wifi: [] as string[],
   });
 
@@ -78,7 +79,7 @@ const formattedData = data.map((item: any) => ({
       : "https://placehold.co/400x160/cbd5e1/475569?text=No+Image",
 
   level: item.level || "",
-  useCase: Array.isArray(item.usecase)
+  usecase: Array.isArray(item.usecase)
     ? item.usecase
     : typeof item.usecase === "string" && item.usecase.length > 0
     ? item.usecase.split(",").map((v: string) => v.trim())
@@ -118,7 +119,7 @@ const formattedData = data.map((item: any) => ({
   }, [selectedApps, appsData]);
 
   // --- Handle filter changes ---
-  const handleFilterChange = (category: "level" | "useCase" | "wifi", value: string) => {
+  const handleFilterChange = (category: "level" | "usecase" | "wifi", value: string) => {
     setFilters((prev) => {
       const current = prev[category];
       const updated = current.includes(value)
@@ -134,9 +135,9 @@ const formattedData = data.map((item: any) => ({
       const levelMatch =
         filters.level.length === 0 || filters.level.includes(app.level || "");
       const useCaseMatch =
-        filters.useCase.length === 0 ||
-        filters.useCase.some((uc) =>
-          (app.useCase || []).some((a) => (a || "").includes(uc))
+        filters.usecase.length === 0 ||
+        filters.usecase.some((uc) =>
+          (app.usecase || []).some((a) => (a || "").includes(uc))
         );
       const wifiMatch =
         filters.wifi.length === 0 || filters.wifi.includes(app.wifi || "");
@@ -252,7 +253,7 @@ const formattedData = data.map((item: any) => ({
                       className="form-checkbox h-4 w-4 text-blue-600 rounded"
                       checked={filters[key as keyof typeof filters].includes(value)}
                       onChange={() =>
-                        handleFilterChange(key as "level" | "useCase" | "wifi", value)
+                        handleFilterChange(key as "level" | "usecase" | "wifi", value)
                       }
                     />
                     <span>{value}</span>
@@ -337,6 +338,22 @@ const formattedData = data.map((item: any) => ({
                       >
                         {app.name}
                       </h4>
+                      <p className="app-category">{app.usecase}</p>
+
+                      <a
+                    className="hover-underline-animation left"
+                    href={app.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <img
+                      src="/Arrow.png"
+                      style={{ width: "1.5rem" }}
+                      alt=""
+                    />
+                    <span className="underline-text app-process-btn">Learn More</span>
+                  </a>
 
                       {/* <div className="flex justify-left items-center space-x-2">
                         <input

@@ -204,7 +204,7 @@ export default function SupportPage() {
                     data-bs-toggle="collapse"
                     data-bs-target="#faq5"
                   >
-                    Can I exclude offline apps?
+                    Can I exclude offline apps from my demo?
                   </button>
                 </h2>
                 <div
@@ -342,7 +342,7 @@ export default function SupportPage() {
                     data-bs-toggle="collapse"
                     data-bs-target="#faq11"
                   >
-                    Where is tracking sent?
+                    Where will I receive tracking information?
                   </button>
                 </h2>
                 <div

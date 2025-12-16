@@ -29,8 +29,10 @@ export function PickOptions() {
         <div className="row g-4 justify-content-center align-items-stretch" style={{ marginTop:"5rem"}} >
           {options.map((opt) => (
             <div className="col-md-6 col-lg-5" key={opt.id}>
+              <Link href="/create-kit" style={{ textDecoration: "none" }}>
               <div
                 className={`option-box ${hovered === opt.id ? "hovered" : ""}`}
+                
                 onMouseEnter={() => setHovered(opt.id)}
                 onMouseLeave={() => setHovered(null)}
               >
@@ -53,6 +55,7 @@ export function PickOptions() {
                   <p className="option-desc">{opt.desc}</p>
                 </div>
               </div>
+              </Link>
             </div>
           ))}
         </div>

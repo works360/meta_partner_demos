@@ -222,13 +222,13 @@ export default function ReturnsForm() {
             </div>
 
             <div>
-              <label>Is this opportunity still ongoing?</label>
+              <label style={{ marginTop: "25px"}}>Is this opportunity still ongoing?</label>
               <select
                 value={isOngoing}
                 onChange={(e) => setIsOngoing(e.target.value)}
                 className="w-full border border-gray-300 rounded-md p-2.5"
               >
-                <option value="">Select</option>
+                <option value=""> </option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
@@ -250,7 +250,7 @@ export default function ReturnsForm() {
               </div>
 
               <div>
-                <label>Estimated Opportunity Value</label>
+                <label style={{ marginTop: "25px"}}>Estimated Opportunity Value</label>
                 <input
                   type="text"
                   value={estimatedValue}
@@ -263,13 +263,13 @@ export default function ReturnsForm() {
 
           <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
             <div>
-              <label>Is this opportunity/deal now registered?</label>
+              <label style={{ marginTop: "25px"}}>Is this opportunity/deal now registered?</label>
               <select
                 value={isRegistered}
                 onChange={(e) => setIsRegistered(e.target.value)}
                 className="w-full border border-gray-300 rounded-md p-2.5"
               >
-                <option value="">Select</option>
+                <option value=""></option>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
@@ -277,7 +277,7 @@ export default function ReturnsForm() {
 
             {isRegistered === "yes" && (
               <div>
-                <label>If yes, provide deal reg number</label>
+                <label style={{ marginTop: "25px"}}>If yes, provide deal reg number</label>
                 <input
                   type="text"
                   value={dealRegNumber}
